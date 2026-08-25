@@ -1,0 +1,413 @@
+{
+  "title": "Pink Skies",
+  "artist": "Zach Bryan",
+  "album": "The Great American Bar Scene",
+  "year": 2024,
+  "words": [
+    {
+      "word": "A",
+      "count": 4
+    },
+    {
+      "word": "About",
+      "count": 1
+    },
+    {
+      "word": "All",
+      "count": 4
+    },
+    {
+      "word": "And",
+      "count": 6
+    },
+    {
+      "word": "Are",
+      "count": 4
+    },
+    {
+      "word": "Arm",
+      "count": 1
+    },
+    {
+      "word": "As",
+      "count": 1
+    },
+    {
+      "word": "At",
+      "count": 1
+    },
+    {
+      "word": "Back",
+      "count": 1
+    },
+    {
+      "word": "Bailed",
+      "count": 1
+    },
+    {
+      "word": "Be",
+      "count": 3
+    },
+    {
+      "word": "Beautiful",
+      "count": 3
+    },
+    {
+      "word": "Been",
+      "count": 1
+    },
+    {
+      "word": "Before",
+      "count": 1
+    },
+    {
+      "word": "Bet",
+      "count": 3
+    },
+    {
+      "word": "Blood",
+      "count": 2
+    },
+    {
+      "word": "Broke",
+      "count": 1
+    },
+    {
+      "word": "But",
+      "count": 3
+    },
+    {
+      "word": "Car",
+      "count": 2
+    },
+    {
+      "word": "Clean",
+      "count": 1
+    },
+    {
+      "word": "Clear",
+      "count": 1
+    },
+    {
+      "word": "Comin'",
+      "count": 3
+    },
+    {
+      "word": "Could",
+      "count": 3
+    },
+    {
+      "word": "Day",
+      "count": 1
+    },
+    {
+      "word": "Don't",
+      "count": 1
+    },
+    {
+      "word": "Doorframe",
+      "count": 1
+    },
+    {
+      "word": "Drawers",
+      "count": 1
+    },
+    {
+      "word": "Dry",
+      "count": 2
+    },
+    {
+      "word": "Em",
+      "count": 7
+    },
+    {
+      "word": "Enjoy",
+      "count": 2
+    },
+    {
+      "word": "Ever",
+      "count": 1
+    },
+    {
+      "word": "Eyes",
+      "count": 2
+    },
+    {
+      "word": "Floors",
+      "count": 1
+    },
+    {
+      "word": "For",
+      "count": 3
+    },
+    {
+      "word": "Funeral",
+      "count": 6
+    },
+    {
+      "word": "God",
+      "count": 3
+    },
+    {
+      "word": "Got",
+      "count": 2
+    },
+    {
+      "word": "Grass",
+      "count": 1
+    },
+    {
+      "word": "He's",
+      "count": 1
+    },
+    {
+      "word": "Heard",
+      "count": 3
+    },
+    {
+      "word": "Here",
+      "count": 1
+    },
+    {
+      "word": "Him",
+      "count": 1
+    },
+    {
+      "word": "House",
+      "count": 1
+    },
+    {
+      "word": "I",
+      "count": 5
+    },
+    {
+      "word": "If",
+      "count": 3
+    },
+    {
+      "word": "In",
+      "count": 6
+    },
+    {
+      "word": "Inches",
+      "count": 1
+    },
+    {
+      "word": "Jesus",
+      "count": 1
+    },
+    {
+      "word": "Kid",
+      "count": 1
+    },
+    {
+      "word": "Kids",
+      "count": 3
+    },
+    {
+      "word": "Know",
+      "count": 3
+    },
+    {
+      "word": "Left",
+      "count": 2
+    },
+    {
+      "word": "Like",
+      "count": 1
+    },
+    {
+      "word": "Livin'",
+      "count": 1
+    },
+    {
+      "word": "Mention",
+      "count": 1
+    },
+    {
+      "word": "Mop",
+      "count": 1
+    },
+    {
+      "word": "Never",
+      "count": 1
+    },
+    {
+      "word": "Nights",
+      "count": 2
+    },
+    {
+      "word": "No",
+      "count": 1
+    },
+    {
+      "word": "Now",
+      "count": 3
+    },
+    {
+      "word": "Of",
+      "count": 2
+    },
+    {
+      "word": "On",
+      "count": 3
+    },
+    {
+      "word": "One's",
+      "count": 1
+    },
+    {
+      "word": "Or",
+      "count": 2
+    },
+    {
+      "word": "Out",
+      "count": 2
+    },
+    {
+      "word": "Pack",
+      "count": 2
+    },
+    {
+      "word": "Pink",
+      "count": 2
+    },
+    {
+      "word": "Plenty",
+      "count": 4
+    },
+    {
+      "word": "Proud",
+      "count": 3
+    },
+    {
+      "word": "River",
+      "count": 1
+    },
+    {
+      "word": "Said",
+      "count": 1
+    },
+    {
+      "word": "Same",
+      "count": 1
+    },
+    {
+      "word": "Scraped",
+      "count": 1
+    },
+    {
+      "word": "See",
+      "count": 3
+    },
+    {
+      "word": "Skies",
+      "count": 2
+    },
+    {
+      "word": "Smells",
+      "count": 1
+    },
+    {
+      "word": "So",
+      "count": 3
+    },
+    {
+      "word": "Stand",
+      "count": 1
+    },
+    {
+      "word": "Swingin'",
+      "count": 1
+    },
+    {
+      "word": "Tall",
+      "count": 1
+    },
+    {
+      "word": "Taught",
+      "count": 2
+    },
+    {
+      "word": "That",
+      "count": 2
+    },
+    {
+      "word": "The",
+      "count": 15
+    },
+    {
+      "word": "They",
+      "count": 2
+    },
+    {
+      "word": "They's",
+      "count": 3
+    },
+    {
+      "word": "Thing",
+      "count": 1
+    },
+    {
+      "word": "Think",
+      "count": 3
+    },
+    {
+      "word": "Tiptoed",
+      "count": 1
+    },
+    {
+      "word": "To",
+      "count": 3
+    },
+    {
+      "word": "Town",
+      "count": 3
+    },
+    {
+      "word": "Under",
+      "count": 2
+    },
+    {
+      "word": "Up",
+      "count": 1
+    },
+    {
+      "word": "Was",
+      "count": 3
+    },
+    {
+      "word": "Way",
+      "count": 1
+    },
+    {
+      "word": "We",
+      "count": 1
+    },
+    {
+      "word": "You",
+      "count": 12
+    },
+    {
+      "word": "You'd",
+      "count": 6
+    },
+    {
+      "word": "Young",
+      "count": 2
+    },
+    {
+      "word": "Your",
+      "count": 6
+    },
+    {
+      "word": "Yuppies",
+      "count": 3
+    }
+  ],
+  "punctuation": {
+    "?": 0,
+    "!": 0,
+    ".": 0
+  }
+}
