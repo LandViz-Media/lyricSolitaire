@@ -1,0 +1,445 @@
+{
+  "title": "Quittin' Time",
+  "artist": "Zach Bryan",
+  "album": "Summertime Blues",
+  "year": 2022,
+  "words": [
+    {
+      "word": "A",
+      "count": 1
+    },
+    {
+      "word": "Afford",
+      "count": 1
+    },
+    {
+      "word": "After",
+      "count": 6
+    },
+    {
+      "word": "Ain't",
+      "count": 1
+    },
+    {
+      "word": "All",
+      "count": 2
+    },
+    {
+      "word": "And",
+      "count": 8
+    },
+    {
+      "word": "Are",
+      "count": 2
+    },
+    {
+      "word": "Atop",
+      "count": 1
+    },
+    {
+      "word": "Back",
+      "count": 1
+    },
+    {
+      "word": "Barefoot",
+      "count": 1
+    },
+    {
+      "word": "Barely",
+      "count": 1
+    },
+    {
+      "word": "Be",
+      "count": 4
+    },
+    {
+      "word": "Been",
+      "count": 6
+    },
+    {
+      "word": "Belt",
+      "count": 1
+    },
+    {
+      "word": "Brothers",
+      "count": 1
+    },
+    {
+      "word": "But",
+      "count": 5
+    },
+    {
+      "word": "By",
+      "count": 1
+    },
+    {
+      "word": "Can",
+      "count": 1
+    },
+    {
+      "word": "Can't",
+      "count": 4
+    },
+    {
+      "word": "Cool",
+      "count": 6
+    },
+    {
+      "word": "Dance",
+      "count": 3
+    },
+    {
+      "word": "Dancin'",
+      "count": 1
+    },
+    {
+      "word": "Dark",
+      "count": 6
+    },
+    {
+      "word": "Day",
+      "count": 2
+    },
+    {
+      "word": "Days",
+      "count": 1
+    },
+    {
+      "word": "Desert",
+      "count": 1
+    },
+    {
+      "word": "Doing",
+      "count": 1
+    },
+    {
+      "word": "Down",
+      "count": 1
+    },
+    {
+      "word": "Eyes",
+      "count": 2
+    },
+    {
+      "word": "Finally",
+      "count": 2
+    },
+    {
+      "word": "For",
+      "count": 4
+    },
+    {
+      "word": "Gal",
+      "count": 3
+    },
+    {
+      "word": "Gaze",
+      "count": 1
+    },
+    {
+      "word": "Get",
+      "count": 1
+    },
+    {
+      "word": "Gettin'",
+      "count": 1
+    },
+    {
+      "word": "Got",
+      "count": 1
+    },
+    {
+      "word": "Hand",
+      "count": 1
+    },
+    {
+      "word": "Hardly",
+      "count": 2
+    },
+    {
+      "word": "Head",
+      "count": 1
+    },
+    {
+      "word": "Heart",
+      "count": 2
+    },
+    {
+      "word": "Her",
+      "count": 2
+    },
+    {
+      "word": "Home",
+      "count": 1
+    },
+    {
+      "word": "Homes",
+      "count": 1
+    },
+    {
+      "word": "Hot",
+      "count": 1
+    },
+    {
+      "word": "Houses",
+      "count": 1
+    },
+    {
+      "word": "How",
+      "count": 3
+    },
+    {
+      "word": "I",
+      "count": 9
+    },
+    {
+      "word": "I'll",
+      "count": 2
+    },
+    {
+      "word": "I'm",
+      "count": 3
+    },
+    {
+      "word": "I've",
+      "count": 5
+    },
+    {
+      "word": "In",
+      "count": 1
+    },
+    {
+      "word": "Is",
+      "count": 1
+    },
+    {
+      "word": "It",
+      "count": 3
+    },
+    {
+      "word": "It'll",
+      "count": 2
+    },
+    {
+      "word": "Kind",
+      "count": 2
+    },
+    {
+      "word": "Know",
+      "count": 1
+    },
+    {
+      "word": "Labor",
+      "count": 1
+    },
+    {
+      "word": "Lady's",
+      "count": 1
+    },
+    {
+      "word": "Lord",
+      "count": 1
+    },
+    {
+      "word": "Loving",
+      "count": 1
+    },
+    {
+      "word": "Make",
+      "count": 1
+    },
+    {
+      "word": "Me",
+      "count": 6
+    },
+    {
+      "word": "Mind",
+      "count": 2
+    },
+    {
+      "word": "My",
+      "count": 14
+    },
+    {
+      "word": "No",
+      "count": 1
+    },
+    {
+      "word": "Of",
+      "count": 1
+    },
+    {
+      "word": "Oh",
+      "count": 4
+    },
+    {
+      "word": "On",
+      "count": 5
+    },
+    {
+      "word": "One",
+      "count": 2
+    },
+    {
+      "word": "Or",
+      "count": 1
+    },
+    {
+      "word": "Out",
+      "count": 1
+    },
+    {
+      "word": "Pennies",
+      "count": 1
+    },
+    {
+      "word": "Plant",
+      "count": 1
+    },
+    {
+      "word": "Pray",
+      "count": 2
+    },
+    {
+      "word": "Prayin'",
+      "count": 1
+    },
+    {
+      "word": "Pushing",
+      "count": 1
+    },
+    {
+      "word": "Quittin'",
+      "count": 6
+    },
+    {
+      "word": "Reason",
+      "count": 1
+    },
+    {
+      "word": "Rhyme",
+      "count": 1
+    },
+    {
+      "word": "Rifle",
+      "count": 1
+    },
+    {
+      "word": "Roofing",
+      "count": 1
+    },
+    {
+      "word": "Run",
+      "count": 1
+    },
+    {
+      "word": "Rust",
+      "count": 1
+    },
+    {
+      "word": "Saving",
+      "count": 1
+    },
+    {
+      "word": "She'll",
+      "count": 6
+    },
+    {
+      "word": "Side",
+      "count": 1
+    },
+    {
+      "word": "So",
+      "count": 1
+    },
+    {
+      "word": "Some",
+      "count": 1
+    },
+    {
+      "word": "Steel",
+      "count": 1
+    },
+    {
+      "word": "Sure",
+      "count": 1
+    },
+    {
+      "word": "Sweatin'",
+      "count": 1
+    },
+    {
+      "word": "Sweating",
+      "count": 1
+    },
+    {
+      "word": "Take",
+      "count": 3
+    },
+    {
+      "word": "Taking",
+      "count": 1
+    },
+    {
+      "word": "The",
+      "count": 3
+    },
+    {
+      "word": "This",
+      "count": 2
+    },
+    {
+      "word": "Through",
+      "count": 3
+    },
+    {
+      "word": "Time",
+      "count": 4
+    },
+    {
+      "word": "Time's",
+      "count": 2
+    },
+    {
+      "word": "To",
+      "count": 9
+    },
+    {
+      "word": "Tonight",
+      "count": 1
+    },
+    {
+      "word": "Wages",
+      "count": 2
+    },
+    {
+      "word": "Wait",
+      "count": 3
+    },
+    {
+      "word": "We'll",
+      "count": 1
+    },
+    {
+      "word": "We're",
+      "count": 1
+    },
+    {
+      "word": "We've",
+      "count": 1
+    },
+    {
+      "word": "Woman",
+      "count": 1
+    },
+    {
+      "word": "Working",
+      "count": 1
+    }
+  ],
+  "punctuation": {
+    "?": 0,
+    "!": 0,
+    ".": 0
+  }
+}
