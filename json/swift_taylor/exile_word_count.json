@@ -1,0 +1,509 @@
+{
+  "title": "Exile",
+  "artist": "Taylor Swift feat. Bon Iver",
+  "album": "Foklore",
+  "year": 2020,
+  "words": [
+    {
+      "word": "A",
+      "count": 10
+    },
+    {
+      "word": "Add",
+      "count": 1
+    },
+    {
+      "word": "Ah",
+      "count": 2
+    },
+    {
+      "word": "All",
+      "count": 7
+    },
+    {
+      "word": "Always",
+      "count": 2
+    },
+    {
+      "word": "Am",
+      "count": 3
+    },
+    {
+      "word": "Amount",
+      "count": 2
+    },
+    {
+      "word": "And",
+      "count": 6
+    },
+    {
+      "word": "Anymore",
+      "count": 3
+    },
+    {
+      "word": "Arms",
+      "count": 1
+    },
+    {
+      "word": "Around",
+      "count": 7
+    },
+    {
+      "word": "At",
+      "count": 1
+    },
+    {
+      "word": "Balancing",
+      "count": 1
+    },
+    {
+      "word": "Before",
+      "count": 6
+    },
+    {
+      "word": "Bloody",
+      "count": 1
+    },
+    {
+      "word": "Body",
+      "count": 1
+    },
+    {
+      "word": "Branches",
+      "count": 1
+    },
+    {
+      "word": "Breaking",
+      "count": 1
+    },
+    {
+      "word": "But",
+      "count": 1
+    },
+    {
+      "word": "Can",
+      "count": 4
+    },
+    {
+      "word": "Cause",
+      "count": 3
+    },
+    {
+      "word": "Chances",
+      "count": 1
+    },
+    {
+      "word": "Couldn't",
+      "count": 4
+    },
+    {
+      "word": "Crown",
+      "count": 1
+    },
+    {
+      "word": "Crying",
+      "count": 2
+    },
+    {
+      "word": "Defending",
+      "count": 2
+    },
+    {
+      "word": "Didn't",
+      "count": 8
+    },
+    {
+      "word": "Do",
+      "count": 2
+    },
+    {
+      "word": "Door",
+      "count": 2
+    },
+    {
+      "word": "Ending",
+      "count": 3
+    },
+    {
+      "word": "Even",
+      "count": 5
+    },
+    {
+      "word": "Exile",
+      "count": 3
+    },
+    {
+      "word": "Eyes",
+      "count": 1
+    },
+    {
+      "word": "Film",
+      "count": 6
+    },
+    {
+      "word": "Five",
+      "count": 1
+    },
+    {
+      "word": "For",
+      "count": 3
+    },
+    {
+      "word": "Funny",
+      "count": 1
+    },
+    {
+      "word": "Gave",
+      "count": 12
+    },
+    {
+      "word": "Get",
+      "count": 1
+    },
+    {
+      "word": "Hall",
+      "count": 1
+    },
+    {
+      "word": "He's",
+      "count": 1
+    },
+    {
+      "word": "Hear",
+      "count": 4
+    },
+    {
+      "word": "Here",
+      "count": 1
+    },
+    {
+      "word": "His",
+      "count": 1
+    },
+    {
+      "word": "Holding",
+      "count": 1
+    },
+    {
+      "word": "Homeland",
+      "count": 2
+    },
+    {
+      "word": "Honey",
+      "count": 2
+    },
+    {
+      "word": "Hundredth",
+      "count": 1
+    },
+    {
+      "word": "I",
+      "count": 27
+    },
+    {
+      "word": "I'm",
+      "count": 6
+    },
+    {
+      "word": "I've",
+      "count": 6
+    },
+    {
+      "word": "In",
+      "count": 4
+    },
+    {
+      "word": "Injury",
+      "count": 1
+    },
+    {
+      "word": "Insults",
+      "count": 1
+    },
+    {
+      "word": "Is",
+      "count": 2
+    },
+    {
+      "word": "It",
+      "count": 2
+    },
+    {
+      "word": "Joke's",
+      "count": 1
+    },
+    {
+      "word": "Just",
+      "count": 1
+    },
+    {
+      "word": "Knuckles",
+      "count": 1
+    },
+    {
+      "word": "Laughing",
+      "count": 1
+    },
+    {
+      "word": "Learned",
+      "count": 5
+    },
+    {
+      "word": "Leave",
+      "count": 1
+    },
+    {
+      "word": "Leaving",
+      "count": 2
+    },
+    {
+      "word": "Like",
+      "count": 5
+    },
+    {
+      "word": "Line",
+      "count": 2
+    },
+    {
+      "word": "Love",
+      "count": 1
+    },
+    {
+      "word": "Many",
+      "count": 8
+    },
+    {
+      "word": "Me",
+      "count": 6
+    },
+    {
+      "word": "Mind",
+      "count": 5
+    },
+    {
+      "word": "Minutes",
+      "count": 1
+    },
+    {
+      "word": "My",
+      "count": 7
+    },
+    {
+      "word": "Never",
+      "count": 15
+    },
+    {
+      "word": "No",
+      "count": 2
+    },
+    {
+      "word": "Not",
+      "count": 4
+    },
+    {
+      "word": "Now",
+      "count": 6
+    },
+    {
+      "word": "Of",
+      "count": 2
+    },
+    {
+      "word": "Offending",
+      "count": 1
+    },
+    {
+      "word": "On",
+      "count": 1
+    },
+    {
+      "word": "Out",
+      "count": 12
+    },
+    {
+      "word": "Pack",
+      "count": 1
+    },
+    {
+      "word": "Problem",
+      "count": 1
+    },
+    {
+      "word": "Read",
+      "count": 5
+    },
+    {
+      "word": "Right",
+      "count": 2
+    },
+    {
+      "word": "Second",
+      "count": 1
+    },
+    {
+      "word": "See",
+      "count": 3
+    },
+    {
+      "word": "Seeing",
+      "count": 3
+    },
+    {
+      "word": "Seen",
+      "count": 6
+    },
+    {
+      "word": "Side",
+      "count": 2
+    },
+    {
+      "word": "Sign",
+      "count": 8
+    },
+    {
+      "word": "Signs",
+      "count": 9
+    },
+    {
+      "word": "So",
+      "count": 15
+    },
+    {
+      "word": "Standing",
+      "count": 1
+    },
+    {
+      "word": "Staring",
+      "count": 1
+    },
+    {
+      "word": "Step",
+      "count": 2
+    },
+    {
+      "word": "The",
+      "count": 8
+    },
+    {
+      "word": "There",
+      "count": 2
+    },
+    {
+      "word": "Thin",
+      "count": 2
+    },
+    {
+      "word": "Things",
+      "count": 6
+    },
+    {
+      "word": "Think",
+      "count": 6
+    },
+    {
+      "word": "Third",
+      "count": 1
+    },
+    {
+      "word": "This",
+      "count": 12
+    },
+    {
+      "word": "Those",
+      "count": 1
+    },
+    {
+      "word": "Time",
+      "count": 5
+    },
+    {
+      "word": "To",
+      "count": 7
+    },
+    {
+      "word": "Took",
+      "count": 1
+    },
+    {
+      "word": "Town",
+      "count": 2
+    },
+    {
+      "word": "Turn",
+      "count": 4
+    },
+    {
+      "word": "Turned",
+      "count": 2
+    },
+    {
+      "word": "Understudy",
+      "count": 1
+    },
+    {
+      "word": "Up",
+      "count": 1
+    },
+    {
+      "word": "Us",
+      "count": 1
+    },
+    {
+      "word": "Very",
+      "count": 2
+    },
+    {
+      "word": "Walked",
+      "count": 2
+    },
+    {
+      "word": "Warning",
+      "count": 8
+    },
+    {
+      "word": "We",
+      "count": 2
+    },
+    {
+      "word": "Were",
+      "count": 3
+    },
+    {
+      "word": "What",
+      "count": 2
+    },
+    {
+      "word": "Who",
+      "count": 1
+    },
+    {
+      "word": "Whole",
+      "count": 1
+    },
+    {
+      "word": "With",
+      "count": 2
+    },
+    {
+      "word": "You",
+      "count": 25
+    },
+    {
+      "word": "You'd",
+      "count": 1
+    },
+    {
+      "word": "You're",
+      "count": 2
+    },
+    {
+      "word": "Your",
+      "count": 7
+    }
+  ],
+  "punctuation": {
+    "?": 3,
+    "!": 0,
+    ".": 0
+  }
+}
