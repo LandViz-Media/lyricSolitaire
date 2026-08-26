@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="description"
+    content="Lyric Solitaire - a music and lyric-based solitaire game"
+  >
+
+  <title>Lyric Solitaire</title>
+
+
+  <!--
+  ==========================================================
+  MAIN STYLESHEET
+  ==========================================================
+  -->
+
+  <link
+    rel="stylesheet"
+    href="./css/game.css"
+  >
+
+
+</head>
+
+
+<body>
+
+
+  <!--
+  ==========================================================
+  APPLICATION CONTAINER
+  ==========================================================
+
+  main.js will control which component is displayed here.
+
+  Initially this will be the Game Setup screen.
+
+  Later it can switch to:
+
+      Game Setup
+          ↓
+      Solo Game
+          ↓
+      Game Results
+
+  ==========================================================
+  -->
+
+  <main
+    id="app"
+    class="app-container"
+  >
+
+
+    <!--
+    --------------------------------------------------------
+    APPLICATION HEADER
+    --------------------------------------------------------
+    -->
+
+    <header
+      id="appHeader"
+      class="app-header"
+    >
+
+      <h1>
+        Lyric Solitaire
+      </h1>
+
+      <p>
+        Build the lyrics. Play the song.
+      </p>
+
+    </header>
+
+
+    <!--
+    --------------------------------------------------------
+    GAME SETUP COMPONENT
+    --------------------------------------------------------
+
+    gameSetup.js will populate this area.
+
+    --------------------------------------------------------
+    -->
+
+    <section
+      id="gameSetup"
+      class="game-component"
+    >
+
+      <div class="loading">
+
+        Loading Game Setup...
+
+      </div>
+
+    </section>
+
+
+    <!--
+    --------------------------------------------------------
+    SOLO GAME COMPONENT
+    --------------------------------------------------------
+
+    soloGame.js will eventually populate this area.
+
+    It starts hidden because the player must first
+    configure a game.
+
+    --------------------------------------------------------
+    -->
+
+    <section
+      id="soloGame"
+      class="game-component"
+      hidden
+    >
+
+      <!--
+        Solo game interface will be inserted here.
+      -->
+
+    </section>
+
+
+    <!--
+    --------------------------------------------------------
+    UTILITY COMPONENT
+    --------------------------------------------------------
+
+    utility.js will eventually populate this area.
+
+    This will contain tools such as:
+
+        TXT → Lyrics JSON
+        TXT → Word Count JSON
+
+    It starts hidden.
+
+    --------------------------------------------------------
+    -->
+
+    <section
+      id="utility"
+      class="game-component"
+      hidden
+    >
+
+      <!--
+        Utility interface will be inserted here.
+      -->
+
+    </section>
+
+
+    <!--
+    --------------------------------------------------------
+    GAME RESULTS
+    --------------------------------------------------------
+
+    Future component.
+
+    --------------------------------------------------------
+    -->
+
+    <section
+      id="gameResults"
+      class="game-component"
+      hidden
+    >
+
+      <!--
+        Final score and game results will appear here.
+      -->
+
+    </section>
+
+
+  </main>
+
+
+  <!--
+  ==========================================================
+  JAVASCRIPT APPLICATION
+  ==========================================================
+
+  main.js is the only JavaScript file that needs to be
+  loaded directly by the HTML page.
+
+  main.js will import the other components.
+
+  ==========================================================
+  -->
+
+  <script
+    type="module"
+    src="./js/main.js"
+  ></script>
+
+
+</body>
+
+</html>
