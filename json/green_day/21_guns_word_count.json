@@ -1,0 +1,442 @@
+{
+  "title": "21 Guns",
+  "artist": "Green Day",
+  "album": "21st Century Breakdown",
+  "year": 2009,
+  "genre": "Alternative Rock",
+  "words": [
+    {
+      "word": "A",
+      "count": 3
+    },
+    {
+      "word": "All",
+      "count": 1
+    },
+    {
+      "word": "And",
+      "count": 11
+    },
+    {
+      "word": "Another",
+      "count": 1
+    },
+    {
+      "word": "Arms",
+      "count": 8
+    },
+    {
+      "word": "At",
+      "count": 1
+    },
+    {
+      "word": "Away",
+      "count": 1
+    },
+    {
+      "word": "Break",
+      "count": 1
+    },
+    {
+      "word": "Breaks",
+      "count": 1
+    },
+    {
+      "word": "Breath",
+      "count": 1
+    },
+    {
+      "word": "Broken",
+      "count": 1
+    },
+    {
+      "word": "Built",
+      "count": 1
+    },
+    {
+      "word": "Burned",
+      "count": 1
+    },
+    {
+      "word": "Can't",
+      "count": 1
+    },
+    {
+      "word": "Close",
+      "count": 1
+    },
+    {
+      "word": "Control",
+      "count": 1
+    },
+    {
+      "word": "Did",
+      "count": 3
+    },
+    {
+      "word": "Die",
+      "count": 1
+    },
+    {
+      "word": "Died",
+      "count": 1
+    },
+    {
+      "word": "Do",
+      "count": 1
+    },
+    {
+      "word": "Does",
+      "count": 2
+    },
+    {
+      "word": "Doesn't",
+      "count": 1
+    },
+    {
+      "word": "Down",
+      "count": 5
+    },
+    {
+      "word": "Dyin'",
+      "count": 1
+    },
+    {
+      "word": "End",
+      "count": 1
+    },
+    {
+      "word": "Ever",
+      "count": 1
+    },
+    {
+      "word": "Faith",
+      "count": 1
+    },
+    {
+      "word": "Feel",
+      "count": 1
+    },
+    {
+      "word": "Fight",
+      "count": 4
+    },
+    {
+      "word": "Fightin'",
+      "count": 1
+    },
+    {
+      "word": "Fire",
+      "count": 1
+    },
+    {
+      "word": "For",
+      "count": 4
+    },
+    {
+      "word": "Forgiveness",
+      "count": 1
+    },
+    {
+      "word": "From",
+      "count": 1
+    },
+    {
+      "word": "Get",
+      "count": 1
+    },
+    {
+      "word": "Give",
+      "count": 4
+    },
+    {
+      "word": "Glass",
+      "count": 1
+    },
+    {
+      "word": "Guns",
+      "count": 8
+    },
+    {
+      "word": "Hangover",
+      "count": 1
+    },
+    {
+      "word": "Has",
+      "count": 1
+    },
+    {
+      "word": "Have",
+      "count": 1
+    },
+    {
+      "word": "Heart",
+      "count": 2
+    },
+    {
+      "word": "Hide",
+      "count": 1
+    },
+    {
+      "word": "Home",
+      "count": 1
+    },
+    {
+      "word": "House",
+      "count": 1
+    },
+    {
+      "word": "I",
+      "count": 3
+    },
+    {
+      "word": "In",
+      "count": 3
+    },
+    {
+      "word": "Inside",
+      "count": 2
+    },
+    {
+      "word": "Into",
+      "count": 4
+    },
+    {
+      "word": "It",
+      "count": 1
+    },
+    {
+      "word": "It's",
+      "count": 2
+    },
+    {
+      "word": "Know",
+      "count": 1
+    },
+    {
+      "word": "Last",
+      "count": 1
+    },
+    {
+      "word": "Lay",
+      "count": 4
+    },
+    {
+      "word": "Let",
+      "count": 1
+    },
+    {
+      "word": "Liar",
+      "count": 1
+    },
+    {
+      "word": "Like",
+      "count": 1
+    },
+    {
+      "word": "Live",
+      "count": 2
+    },
+    {
+      "word": "Look",
+      "count": 1
+    },
+    {
+      "word": "Looking",
+      "count": 1
+    },
+    {
+      "word": "Lost",
+      "count": 1
+    },
+    {
+      "word": "Mind",
+      "count": 1
+    },
+    {
+      "word": "Not",
+      "count": 1
+    },
+    {
+      "word": "Nothing's",
+      "count": 1
+    },
+    {
+      "word": "Of",
+      "count": 3
+    },
+    {
+      "word": "On",
+      "count": 2
+    },
+    {
+      "word": "One",
+      "count": 16
+    },
+    {
+      "word": "Out",
+      "count": 1
+    },
+    {
+      "word": "Own",
+      "count": 1
+    },
+    {
+      "word": "Pain",
+      "count": 1
+    },
+    {
+      "word": "Pass",
+      "count": 1
+    },
+    {
+      "word": "Place",
+      "count": 1
+    },
+    {
+      "word": "Pride",
+      "count": 1
+    },
+    {
+      "word": "Road",
+      "count": 1
+    },
+    {
+      "word": "Ruins",
+      "count": 3
+    },
+    {
+      "word": "Sense",
+      "count": 1
+    },
+    {
+      "word": "Sky",
+      "count": 4
+    },
+    {
+      "word": "Someone",
+      "count": 1
+    },
+    {
+      "word": "Somethin'",
+      "count": 1
+    },
+    {
+      "word": "Soul",
+      "count": 1
+    },
+    {
+      "word": "Spirit",
+      "count": 1
+    },
+    {
+      "word": "Stand",
+      "count": 1
+    },
+    {
+      "word": "Stone",
+      "count": 1
+    },
+    {
+      "word": "Suffocatin'",
+      "count": 1
+    },
+    {
+      "word": "Take",
+      "count": 1
+    },
+    {
+      "word": "Taken",
+      "count": 1
+    },
+    {
+      "word": "The",
+      "count": 16
+    },
+    {
+      "word": "Their",
+      "count": 1
+    },
+    {
+      "word": "This",
+      "count": 1
+    },
+    {
+      "word": "Thoughts",
+      "count": 1
+    },
+    {
+      "word": "Throw",
+      "count": 4
+    },
+    {
+      "word": "Time",
+      "count": 1
+    },
+    {
+      "word": "To",
+      "count": 5
+    },
+    {
+      "word": "Toll",
+      "count": 1
+    },
+    {
+      "word": "Too",
+      "count": 1
+    },
+    {
+      "word": "Try",
+      "count": 2
+    },
+    {
+      "word": "Twenty",
+      "count": 8
+    },
+    {
+      "word": "Up",
+      "count": 8
+    },
+    {
+      "word": "Walks",
+      "count": 1
+    },
+    {
+      "word": "Weigh",
+      "count": 1
+    },
+    {
+      "word": "What's",
+      "count": 1
+    },
+    {
+      "word": "When",
+      "count": 5
+    },
+    {
+      "word": "Worth",
+      "count": 2
+    },
+    {
+      "word": "You",
+      "count": 11
+    },
+    {
+      "word": "You're",
+      "count": 4
+    },
+    {
+      "word": "Your",
+      "count": 15
+    },
+    {
+      "word": "Yourself",
+      "count": 1
+    }
+  ],
+  "punctuation": {
+    "?": 6,
+    "!": 0,
+    ".": 0
+  }
+}
