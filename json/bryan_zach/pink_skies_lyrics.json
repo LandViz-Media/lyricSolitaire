@@ -3,6 +3,7 @@
   "artist": "Zach Bryan",
   "album": "The Great American Bar Scene",
   "year": 2024,
+  "genre": "Country",
   "sections": [
     {
       "type": "Verse",
@@ -59,7 +60,7 @@
       ]
     },
     {
-      "type": "Verse",
+      "type": "Outro",
       "lyrics": [
         "The kids are in town for a funeral",
         "So pack the car and dry your eyes",

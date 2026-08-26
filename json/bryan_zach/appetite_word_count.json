@@ -1,0 +1,434 @@
+{
+  "title": "Appetite",
+  "artist": "Zach Bryan",
+  "album": "With Heaven On Top",
+  "year": 2026,
+  "genre": "Country",
+  "words": [
+    {
+      "word": "A",
+      "count": 3
+    },
+    {
+      "word": "Act",
+      "count": 1
+    },
+    {
+      "word": "Age",
+      "count": 1
+    },
+    {
+      "word": "All",
+      "count": 3
+    },
+    {
+      "word": "Always",
+      "count": 1
+    },
+    {
+      "word": "Am",
+      "count": 3
+    },
+    {
+      "word": "An",
+      "count": 6
+    },
+    {
+      "word": "And",
+      "count": 12
+    },
+    {
+      "word": "Appetite",
+      "count": 6
+    },
+    {
+      "word": "Arkansas",
+      "count": 2
+    },
+    {
+      "word": "Ass",
+      "count": 1
+    },
+    {
+      "word": "At",
+      "count": 2
+    },
+    {
+      "word": "Bags",
+      "count": 1
+    },
+    {
+      "word": "Be",
+      "count": 1
+    },
+    {
+      "word": "Been",
+      "count": 4
+    },
+    {
+      "word": "Belt",
+      "count": 2
+    },
+    {
+      "word": "Bloody",
+      "count": 2
+    },
+    {
+      "word": "Bout",
+      "count": 1
+    },
+    {
+      "word": "Care",
+      "count": 2
+    },
+    {
+      "word": "Cause",
+      "count": 1
+    },
+    {
+      "word": "Children",
+      "count": 3
+    },
+    {
+      "word": "Combs",
+      "count": 1
+    },
+    {
+      "word": "Content",
+      "count": 1
+    },
+    {
+      "word": "Corny",
+      "count": 1
+    },
+    {
+      "word": "Cutting",
+      "count": 1
+    },
+    {
+      "word": "Dogs",
+      "count": 1
+    },
+    {
+      "word": "Don't",
+      "count": 5
+    },
+    {
+      "word": "Down",
+      "count": 1
+    },
+    {
+      "word": "Drinking",
+      "count": 2
+    },
+    {
+      "word": "Drunk",
+      "count": 1
+    },
+    {
+      "word": "Enough",
+      "count": 1
+    },
+    {
+      "word": "Everyone",
+      "count": 1
+    },
+    {
+      "word": "Fame",
+      "count": 1
+    },
+    {
+      "word": "Father",
+      "count": 3
+    },
+    {
+      "word": "Fight",
+      "count": 3
+    },
+    {
+      "word": "Fuck",
+      "count": 1
+    },
+    {
+      "word": "Get",
+      "count": 2
+    },
+    {
+      "word": "Give",
+      "count": 3
+    },
+    {
+      "word": "Got",
+      "count": 1
+    },
+    {
+      "word": "Gotta",
+      "count": 1
+    },
+    {
+      "word": "Grow",
+      "count": 3
+    },
+    {
+      "word": "Handle",
+      "count": 1
+    },
+    {
+      "word": "Have",
+      "count": 1
+    },
+    {
+      "word": "I",
+      "count": 13
+    },
+    {
+      "word": "I've",
+      "count": 4
+    },
+    {
+      "word": "If",
+      "count": 3
+    },
+    {
+      "word": "In",
+      "count": 3
+    },
+    {
+      "word": "It",
+      "count": 1
+    },
+    {
+      "word": "Kids",
+      "count": 1
+    },
+    {
+      "word": "Know",
+      "count": 1
+    },
+    {
+      "word": "Life",
+      "count": 1
+    },
+    {
+      "word": "Like",
+      "count": 4
+    },
+    {
+      "word": "Matter",
+      "count": 1
+    },
+    {
+      "word": "Me",
+      "count": 1
+    },
+    {
+      "word": "Money",
+      "count": 2
+    },
+    {
+      "word": "My",
+      "count": 9
+    },
+    {
+      "word": "Myself",
+      "count": 3
+    },
+    {
+      "word": "Northwest",
+      "count": 2
+    },
+    {
+      "word": "Now",
+      "count": 1
+    },
+    {
+      "word": "Of",
+      "count": 1
+    },
+    {
+      "word": "Older",
+      "count": 1
+    },
+    {
+      "word": "On",
+      "count": 1
+    },
+    {
+      "word": "Other",
+      "count": 1
+    },
+    {
+      "word": "Out",
+      "count": 2
+    },
+    {
+      "word": "Pack",
+      "count": 1
+    },
+    {
+      "word": "Playing",
+      "count": 2
+    },
+    {
+      "word": "Quickly",
+      "count": 1
+    },
+    {
+      "word": "Really",
+      "count": 1
+    },
+    {
+      "word": "Satellites",
+      "count": 1
+    },
+    {
+      "word": "Say",
+      "count": 1
+    },
+    {
+      "word": "Sections",
+      "count": 1
+    },
+    {
+      "word": "Settle",
+      "count": 1
+    },
+    {
+      "word": "Shit",
+      "count": 4
+    },
+    {
+      "word": "Shows",
+      "count": 2
+    },
+    {
+      "word": "Shut",
+      "count": 1
+    },
+    {
+      "word": "So",
+      "count": 2
+    },
+    {
+      "word": "Sober",
+      "count": 1
+    },
+    {
+      "word": "Some",
+      "count": 1
+    },
+    {
+      "word": "Stage",
+      "count": 1
+    },
+    {
+      "word": "Start",
+      "count": 3
+    },
+    {
+      "word": "Stir",
+      "count": 3
+    },
+    {
+      "word": "Strong",
+      "count": 1
+    },
+    {
+      "word": "That",
+      "count": 1
+    },
+    {
+      "word": "The",
+      "count": 1
+    },
+    {
+      "word": "Their",
+      "count": 3
+    },
+    {
+      "word": "Themself",
+      "count": 3
+    },
+    {
+      "word": "Thing",
+      "count": 1
+    },
+    {
+      "word": "Thinking",
+      "count": 1
+    },
+    {
+      "word": "This",
+      "count": 1
+    },
+    {
+      "word": "Those",
+      "count": 2
+    },
+    {
+      "word": "Tight",
+      "count": 2
+    },
+    {
+      "word": "To",
+      "count": 10
+    },
+    {
+      "word": "Together",
+      "count": 1
+    },
+    {
+      "word": "Told",
+      "count": 1
+    },
+    {
+      "word": "Toothbrush",
+      "count": 1
+    },
+    {
+      "word": "Towers",
+      "count": 1
+    },
+    {
+      "word": "Twin",
+      "count": 1
+    },
+    {
+      "word": "Up",
+      "count": 14
+    },
+    {
+      "word": "Want",
+      "count": 3
+    },
+    {
+      "word": "What",
+      "count": 3
+    },
+    {
+      "word": "Who",
+      "count": 2
+    },
+    {
+      "word": "Why",
+      "count": 3
+    },
+    {
+      "word": "Willing",
+      "count": 3
+    },
+    {
+      "word": "With",
+      "count": 4
+    },
+    {
+      "word": "Work",
+      "count": 3
+    }
+  ],
+  "punctuation": {
+    "?": 6,
+    "!": 0,
+    ".": 0
+  }
+}

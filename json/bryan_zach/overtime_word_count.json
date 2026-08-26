@@ -1,0 +1,578 @@
+{
+  "title": "Overtime",
+  "artist": "Zach Bryan",
+  "album": "Zach Bryan",
+  "year": 2023,
+  "genre": "Country",
+  "words": [
+    {
+      "word": "A",
+      "count": 11
+    },
+    {
+      "word": "About",
+      "count": 1
+    },
+    {
+      "word": "Ain't",
+      "count": 1
+    },
+    {
+      "word": "All",
+      "count": 1
+    },
+    {
+      "word": "And",
+      "count": 11
+    },
+    {
+      "word": "Anyway",
+      "count": 1
+    },
+    {
+      "word": "Around",
+      "count": 1
+    },
+    {
+      "word": "Arrogant",
+      "count": 1
+    },
+    {
+      "word": "Asking",
+      "count": 1
+    },
+    {
+      "word": "Bad",
+      "count": 1
+    },
+    {
+      "word": "Be",
+      "count": 4
+    },
+    {
+      "word": "Become",
+      "count": 1
+    },
+    {
+      "word": "Been",
+      "count": 3
+    },
+    {
+      "word": "Being",
+      "count": 1
+    },
+    {
+      "word": "But",
+      "count": 1
+    },
+    {
+      "word": "By",
+      "count": 1
+    },
+    {
+      "word": "Cause",
+      "count": 2
+    },
+    {
+      "word": "Child",
+      "count": 2
+    },
+    {
+      "word": "Couldn't",
+      "count": 2
+    },
+    {
+      "word": "Cowboy",
+      "count": 1
+    },
+    {
+      "word": "Cut",
+      "count": 1
+    },
+    {
+      "word": "Damn",
+      "count": 1
+    },
+    {
+      "word": "Darlin'",
+      "count": 1
+    },
+    {
+      "word": "Daughters",
+      "count": 1
+    },
+    {
+      "word": "Day",
+      "count": 1
+    },
+    {
+      "word": "Decided",
+      "count": 1
+    },
+    {
+      "word": "Deserve",
+      "count": 1
+    },
+    {
+      "word": "Died",
+      "count": 1
+    },
+    {
+      "word": "Disease",
+      "count": 1
+    },
+    {
+      "word": "Do",
+      "count": 1
+    },
+    {
+      "word": "Double",
+      "count": 1
+    },
+    {
+      "word": "Down",
+      "count": 2
+    },
+    {
+      "word": "Earthly",
+      "count": 1
+    },
+    {
+      "word": "Even",
+      "count": 2
+    },
+    {
+      "word": "Ever",
+      "count": 2
+    },
+    {
+      "word": "Family",
+      "count": 2
+    },
+    {
+      "word": "Fast",
+      "count": 2
+    },
+    {
+      "word": "Father",
+      "count": 1
+    },
+    {
+      "word": "Fifty",
+      "count": 1
+    },
+    {
+      "word": "For",
+      "count": 3
+    },
+    {
+      "word": "Free",
+      "count": 1
+    },
+    {
+      "word": "From",
+      "count": 1
+    },
+    {
+      "word": "Fuck",
+      "count": 1
+    },
+    {
+      "word": "Gave",
+      "count": 1
+    },
+    {
+      "word": "Gene",
+      "count": 1
+    },
+    {
+      "word": "Get",
+      "count": 1
+    },
+    {
+      "word": "Going",
+      "count": 2
+    },
+    {
+      "word": "Got",
+      "count": 1
+    },
+    {
+      "word": "Granddaddy",
+      "count": 1
+    },
+    {
+      "word": "Grandfather",
+      "count": 1
+    },
+    {
+      "word": "Grows",
+      "count": 1
+    },
+    {
+      "word": "He",
+      "count": 2
+    },
+    {
+      "word": "Hear",
+      "count": 1
+    },
+    {
+      "word": "Hey",
+      "count": 1
+    },
+    {
+      "word": "His",
+      "count": 1
+    },
+    {
+      "word": "Hold",
+      "count": 2
+    },
+    {
+      "word": "Humble",
+      "count": 1
+    },
+    {
+      "word": "Hungry",
+      "count": 1
+    },
+    {
+      "word": "I",
+      "count": 16
+    },
+    {
+      "word": "I'll",
+      "count": 3
+    },
+    {
+      "word": "I'm",
+      "count": 2
+    },
+    {
+      "word": "I's",
+      "count": 1
+    },
+    {
+      "word": "In",
+      "count": 3
+    },
+    {
+      "word": "Interstate",
+      "count": 1
+    },
+    {
+      "word": "It's",
+      "count": 1
+    },
+    {
+      "word": "Just",
+      "count": 1
+    },
+    {
+      "word": "Keepin'",
+      "count": 1
+    },
+    {
+      "word": "Know",
+      "count": 1
+    },
+    {
+      "word": "Left",
+      "count": 2
+    },
+    {
+      "word": "Let",
+      "count": 1
+    },
+    {
+      "word": "Life",
+      "count": 1
+    },
+    {
+      "word": "Lost",
+      "count": 1
+    },
+    {
+      "word": "Love",
+      "count": 1
+    },
+    {
+      "word": "Loves",
+      "count": 1
+    },
+    {
+      "word": "Make",
+      "count": 1
+    },
+    {
+      "word": "Matter",
+      "count": 2
+    },
+    {
+      "word": "Me",
+      "count": 5
+    },
+    {
+      "word": "Mean",
+      "count": 2
+    },
+    {
+      "word": "Miles",
+      "count": 1
+    },
+    {
+      "word": "My",
+      "count": 4
+    },
+    {
+      "word": "Name",
+      "count": 1
+    },
+    {
+      "word": "Never",
+      "count": 3
+    },
+    {
+      "word": "No",
+      "count": 2
+    },
+    {
+      "word": "Nobody",
+      "count": 1
+    },
+    {
+      "word": "On",
+      "count": 2
+    },
+    {
+      "word": "One",
+      "count": 1
+    },
+    {
+      "word": "Out",
+      "count": 1
+    },
+    {
+      "word": "Overtime",
+      "count": 4
+    },
+    {
+      "word": "Pride",
+      "count": 1
+    },
+    {
+      "word": "Quiet",
+      "count": 1
+    },
+    {
+      "word": "Real",
+      "count": 2
+    },
+    {
+      "word": "Said",
+      "count": 2
+    },
+    {
+      "word": "Same",
+      "count": 1
+    },
+    {
+      "word": "Say",
+      "count": 1
+    },
+    {
+      "word": "Scrapin'",
+      "count": 1
+    },
+    {
+      "word": "See",
+      "count": 1
+    },
+    {
+      "word": "Shit",
+      "count": 1
+    },
+    {
+      "word": "Shouldn't",
+      "count": 2
+    },
+    {
+      "word": "Since",
+      "count": 2
+    },
+    {
+      "word": "Skin",
+      "count": 1
+    },
+    {
+      "word": "So",
+      "count": 2
+    },
+    {
+      "word": "Son",
+      "count": 1
+    },
+    {
+      "word": "Songs",
+      "count": 1
+    },
+    {
+      "word": "Sound",
+      "count": 1
+    },
+    {
+      "word": "Stay",
+      "count": 2
+    },
+    {
+      "word": "Tattooed",
+      "count": 1
+    },
+    {
+      "word": "That",
+      "count": 4
+    },
+    {
+      "word": "The",
+      "count": 2
+    },
+    {
+      "word": "There",
+      "count": 2
+    },
+    {
+      "word": "They",
+      "count": 3
+    },
+    {
+      "word": "They're",
+      "count": 2
+    },
+    {
+      "word": "This",
+      "count": 1
+    },
+    {
+      "word": "Throat",
+      "count": 1
+    },
+    {
+      "word": "Through",
+      "count": 1
+    },
+    {
+      "word": "Tight",
+      "count": 2
+    },
+    {
+      "word": "Til",
+      "count": 1
+    },
+    {
+      "word": "To",
+      "count": 1
+    },
+    {
+      "word": "Told",
+      "count": 2
+    },
+    {
+      "word": "Town",
+      "count": 2
+    },
+    {
+      "word": "Tree",
+      "count": 1
+    },
+    {
+      "word": "Try",
+      "count": 2
+    },
+    {
+      "word": "Wanna",
+      "count": 4
+    },
+    {
+      "word": "Was",
+      "count": 2
+    },
+    {
+      "word": "What",
+      "count": 2
+    },
+    {
+      "word": "When",
+      "count": 1
+    },
+    {
+      "word": "While",
+      "count": 2
+    },
+    {
+      "word": "Who",
+      "count": 1
+    },
+    {
+      "word": "Whole",
+      "count": 1
+    },
+    {
+      "word": "Why",
+      "count": 1
+    },
+    {
+      "word": "With",
+      "count": 1
+    },
+    {
+      "word": "Won't",
+      "count": 1
+    },
+    {
+      "word": "Woohoo",
+      "count": 1
+    },
+    {
+      "word": "Worked",
+      "count": 1
+    },
+    {
+      "word": "Workin'",
+      "count": 2
+    },
+    {
+      "word": "Working",
+      "count": 2
+    },
+    {
+      "word": "Worlds",
+      "count": 1
+    },
+    {
+      "word": "Yeah",
+      "count": 1
+    },
+    {
+      "word": "You",
+      "count": 5
+    },
+    {
+      "word": "You'll",
+      "count": 2
+    },
+    {
+      "word": "Your",
+      "count": 1
+    },
+    {
+      "word": "Yourself",
+      "count": 2
+    }
+  ],
+  "punctuation": {
+    "?": 2,
+    "!": 0,
+    ".": 0
+  }
+}
