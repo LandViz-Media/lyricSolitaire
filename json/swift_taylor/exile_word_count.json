@@ -3,10 +3,11 @@
   "artist": "Taylor Swift feat. Bon Iver",
   "album": "Foklore",
   "year": 2020,
+  "genre": "Country",
   "words": [
     {
       "word": "A",
-      "count": 10
+      "count": 13
     },
     {
       "word": "Add",
@@ -18,11 +19,11 @@
     },
     {
       "word": "All",
-      "count": 7
+      "count": 9
     },
     {
       "word": "Always",
-      "count": 2
+      "count": 3
     },
     {
       "word": "Am",
@@ -30,7 +31,7 @@
     },
     {
       "word": "Amount",
-      "count": 2
+      "count": 3
     },
     {
       "word": "And",
@@ -46,7 +47,7 @@
     },
     {
       "word": "Around",
-      "count": 7
+      "count": 9
     },
     {
       "word": "At",
@@ -82,11 +83,11 @@
     },
     {
       "word": "Can",
-      "count": 4
+      "count": 5
     },
     {
       "word": "Cause",
-      "count": 3
+      "count": 4
     },
     {
       "word": "Chances",
@@ -94,7 +95,7 @@
     },
     {
       "word": "Couldn't",
-      "count": 4
+      "count": 5
     },
     {
       "word": "Crown",
@@ -102,7 +103,7 @@
     },
     {
       "word": "Crying",
-      "count": 2
+      "count": 3
     },
     {
       "word": "Defending",
@@ -110,11 +111,11 @@
     },
     {
       "word": "Didn't",
-      "count": 8
+      "count": 11
     },
     {
       "word": "Do",
-      "count": 2
+      "count": 3
     },
     {
       "word": "Door",
@@ -126,7 +127,7 @@
     },
     {
       "word": "Even",
-      "count": 5
+      "count": 8
     },
     {
       "word": "Exile",
@@ -146,7 +147,7 @@
     },
     {
       "word": "For",
-      "count": 3
+      "count": 4
     },
     {
       "word": "Funny",
@@ -154,7 +155,7 @@
     },
     {
       "word": "Gave",
-      "count": 12
+      "count": 16
     },
     {
       "word": "Get",
@@ -170,7 +171,7 @@
     },
     {
       "word": "Hear",
-      "count": 4
+      "count": 6
     },
     {
       "word": "Here",
@@ -181,7 +182,7 @@
       "count": 1
     },
     {
-      "word": "Holding",
+      "word": "Holdin'",
       "count": 1
     },
     {
@@ -198,7 +199,7 @@
     },
     {
       "word": "I",
-      "count": 27
+      "count": 32
     },
     {
       "word": "I'm",
@@ -222,7 +223,7 @@
     },
     {
       "word": "Is",
-      "count": 2
+      "count": 3
     },
     {
       "word": "It",
@@ -241,12 +242,12 @@
       "count": 1
     },
     {
-      "word": "Laughing",
+      "word": "Laughin'",
       "count": 1
     },
     {
       "word": "Learned",
-      "count": 5
+      "count": 7
     },
     {
       "word": "Leave",
@@ -262,7 +263,7 @@
     },
     {
       "word": "Line",
-      "count": 2
+      "count": 3
     },
     {
       "word": "Love",
@@ -270,15 +271,15 @@
     },
     {
       "word": "Many",
-      "count": 8
+      "count": 12
     },
     {
       "word": "Me",
-      "count": 6
+      "count": 8
     },
     {
       "word": "Mind",
-      "count": 5
+      "count": 7
     },
     {
       "word": "Minutes",
@@ -286,15 +287,15 @@
     },
     {
       "word": "My",
-      "count": 7
+      "count": 8
     },
     {
       "word": "Never",
-      "count": 15
+      "count": 20
     },
     {
       "word": "No",
-      "count": 2
+      "count": 3
     },
     {
       "word": "Not",
@@ -306,7 +307,7 @@
     },
     {
       "word": "Of",
-      "count": 2
+      "count": 3
     },
     {
       "word": "Offending",
@@ -317,8 +318,12 @@
       "count": 1
     },
     {
+      "word": "Ooh",
+      "count": 3
+    },
+    {
       "word": "Out",
-      "count": 12
+      "count": 15
     },
     {
       "word": "Pack",
@@ -330,11 +335,11 @@
     },
     {
       "word": "Read",
-      "count": 5
+      "count": 7
     },
     {
       "word": "Right",
-      "count": 2
+      "count": 3
     },
     {
       "word": "Second",
@@ -342,11 +347,15 @@
     },
     {
       "word": "See",
-      "count": 3
+      "count": 4
+    },
+    {
+      "word": "Seein'",
+      "count": 1
     },
     {
       "word": "Seeing",
-      "count": 3
+      "count": 2
     },
     {
       "word": "Seen",
@@ -358,15 +367,15 @@
     },
     {
       "word": "Sign",
-      "count": 8
+      "count": 10
     },
     {
       "word": "Signs",
-      "count": 9
+      "count": 14
     },
     {
       "word": "So",
-      "count": 15
+      "count": 20
     },
     {
       "word": "Standing",
@@ -378,23 +387,23 @@
     },
     {
       "word": "Step",
-      "count": 2
+      "count": 3
     },
     {
       "word": "The",
-      "count": 8
+      "count": 9
     },
     {
       "word": "There",
-      "count": 2
+      "count": 3
     },
     {
       "word": "Thin",
-      "count": 2
+      "count": 3
     },
     {
       "word": "Things",
-      "count": 6
+      "count": 8
     },
     {
       "word": "Think",
@@ -406,7 +415,7 @@
     },
     {
       "word": "This",
-      "count": 12
+      "count": 14
     },
     {
       "word": "Those",
@@ -414,11 +423,11 @@
     },
     {
       "word": "Time",
-      "count": 5
+      "count": 7
     },
     {
       "word": "To",
-      "count": 7
+      "count": 9
     },
     {
       "word": "Took",
@@ -430,11 +439,11 @@
     },
     {
       "word": "Turn",
-      "count": 4
+      "count": 5
     },
     {
       "word": "Turned",
-      "count": 2
+      "count": 3
     },
     {
       "word": "Understudy",
@@ -450,19 +459,19 @@
     },
     {
       "word": "Very",
-      "count": 2
+      "count": 3
     },
     {
       "word": "Walked",
-      "count": 2
+      "count": 3
     },
     {
       "word": "Warning",
-      "count": 8
+      "count": 10
     },
     {
       "word": "We",
-      "count": 2
+      "count": 3
     },
     {
       "word": "Were",
@@ -486,7 +495,7 @@
     },
     {
       "word": "You",
-      "count": 25
+      "count": 32
     },
     {
       "word": "You'd",
@@ -498,12 +507,12 @@
     },
     {
       "word": "Your",
-      "count": 7
+      "count": 8
     }
   ],
   "punctuation": {
     "?": 3,
     "!": 0,
-    ".": 0
+    ".": 1
   }
 }
