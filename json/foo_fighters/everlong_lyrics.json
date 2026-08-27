@@ -1,0 +1,114 @@
+{
+  "title": "Everlong",
+  "artist": "Foo Fighters",
+  "album": "The Colour and the Shape",
+  "year": 1997,
+  "genre": "Alternative Rock, Post-Grunge, Hard Rock",
+  "sections": [
+    {
+      "type": "Verse",
+      "lyrics": [
+        "Hello, I've waited here for you",
+        "Everlong",
+        "Tonight, I throw myself into",
+        "And out of the red, out of her head, she sang"
+      ]
+    },
+    {
+      "type": "Refrain",
+      "lyrics": [
+        "Doo-doo-doo-doo-doo-doo, doo-doo-doo",
+        "Doo-doo-doo-doo-doo-doo, doo-doo-doo",
+        "Doo-doo-doo-doo-doo-doo",
+        "Doo-doo-doo-doo, doo-doo-doo"
+      ]
+    },
+    {
+      "type": "Verse",
+      "lyrics": [
+        "Come down, and waste away with me",
+        "Down with me",
+        "Slow, how you wanted it to be",
+        "I'm over my head, out of her head, she sang"
+      ]
+    },
+    {
+      "type": "Pre-Chorus",
+      "lyrics": [
+        "And I wonder",
+        "When I sing along with you"
+      ]
+    },
+    {
+      "type": "Chorus",
+      "lyrics": [
+        "If everything could ever feel this real forever",
+        "If anything could ever be this good again",
+        "The only thing I'll ever ask of you",
+        "You gotta promise not to stop when I say when",
+        "She sang"
+      ]
+    },
+    {
+      "type": "Refrain",
+      "lyrics": [
+        "Doo-doo-doo-doo-doo-doo, doo-doo-doo",
+        "Doo-doo-doo-doo-doo-doo, doo-doo-doo",
+        "Doo-doo-doo-doo-doo-doo",
+        "Doo-doo-doo-doo, doo-doo-doo"
+      ]
+    },
+    {
+      "type": "Verse",
+      "lyrics": [
+        "Breathe out, so I can breathe you in",
+        "Hold you in",
+        "And now, I know you've always been",
+        "Out of your head, out of my head, I sang"
+      ]
+    },
+    {
+      "type": "Pre-Chorus",
+      "lyrics": [
+        "And I wonder",
+        "When I sing along with you"
+      ]
+    },
+    {
+      "type": "Chorus",
+      "lyrics": [
+        "If everything could ever feel this real forever",
+        "If anything could ever be this good again",
+        "The only thing I'll ever ask of you",
+        "You gotta promise not to stop when I say when",
+        "She sang"
+      ]
+    },
+    {
+      "type": "Bridge",
+      "lyrics": [
+        "So, dad would take the Sundays off",
+        "And that's the only time he could ever get any rest",
+        "And so, because we were loud on Sundays",
+        "He'd make us hold his construction boots over our head, 'til we'd sleep",
+        "And they were really heavy boots and I used to say, \"Dad, come on, please\"",
+        "And like start crying, 'cause they're too heavy"
+      ]
+    },
+    {
+      "type": "Pre-Chorus",
+      "lyrics": [
+        "And I wonder"
+      ]
+    },
+    {
+      "type": "Chorus",
+      "lyrics": [
+        "If everything could ever feel this real forever",
+        "If anything could ever be this good again",
+        "The only thing I'll ever ask of you",
+        "You gotta promise not to stop when I say when"
+      ]
+    }
+  ]
+}

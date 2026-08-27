@@ -1,0 +1,450 @@
+{
+  "title": "Everlong",
+  "artist": "Foo Fighters",
+  "album": "The Colour and the Shape",
+  "year": 1997,
+  "genre": "Alternative Rock, Post-Grunge, Hard Rock",
+  "words": [
+    {
+      "word": "Again",
+      "count": 3
+    },
+    {
+      "word": "Along",
+      "count": 2
+    },
+    {
+      "word": "Always",
+      "count": 1
+    },
+    {
+      "word": "And",
+      "count": 11
+    },
+    {
+      "word": "Any",
+      "count": 1
+    },
+    {
+      "word": "Anything",
+      "count": 3
+    },
+    {
+      "word": "Ask",
+      "count": 3
+    },
+    {
+      "word": "Away",
+      "count": 1
+    },
+    {
+      "word": "Be",
+      "count": 4
+    },
+    {
+      "word": "Because",
+      "count": 1
+    },
+    {
+      "word": "Been",
+      "count": 1
+    },
+    {
+      "word": "Boots",
+      "count": 2
+    },
+    {
+      "word": "Breathe",
+      "count": 2
+    },
+    {
+      "word": "Can",
+      "count": 1
+    },
+    {
+      "word": "Cause",
+      "count": 1
+    },
+    {
+      "word": "Come",
+      "count": 2
+    },
+    {
+      "word": "Construction",
+      "count": 1
+    },
+    {
+      "word": "Could",
+      "count": 7
+    },
+    {
+      "word": "Crying",
+      "count": 1
+    },
+    {
+      "word": "Dad",
+      "count": 2
+    },
+    {
+      "word": "Doo",
+      "count": 62
+    },
+    {
+      "word": "Down",
+      "count": 2
+    },
+    {
+      "word": "Ever",
+      "count": 10
+    },
+    {
+      "word": "Everlong",
+      "count": 1
+    },
+    {
+      "word": "Everything",
+      "count": 3
+    },
+    {
+      "word": "Feel",
+      "count": 3
+    },
+    {
+      "word": "For",
+      "count": 1
+    },
+    {
+      "word": "Forever",
+      "count": 3
+    },
+    {
+      "word": "Get",
+      "count": 1
+    },
+    {
+      "word": "Good",
+      "count": 3
+    },
+    {
+      "word": "Gotta",
+      "count": 3
+    },
+    {
+      "word": "He",
+      "count": 1
+    },
+    {
+      "word": "He'd",
+      "count": 1
+    },
+    {
+      "word": "Head",
+      "count": 6
+    },
+    {
+      "word": "Heavy",
+      "count": 2
+    },
+    {
+      "word": "Hello",
+      "count": 1
+    },
+    {
+      "word": "Her",
+      "count": 2
+    },
+    {
+      "word": "Here",
+      "count": 1
+    },
+    {
+      "word": "His",
+      "count": 1
+    },
+    {
+      "word": "Hold",
+      "count": 2
+    },
+    {
+      "word": "How",
+      "count": 1
+    },
+    {
+      "word": "I",
+      "count": 13
+    },
+    {
+      "word": "I'll",
+      "count": 3
+    },
+    {
+      "word": "I'm",
+      "count": 1
+    },
+    {
+      "word": "I've",
+      "count": 1
+    },
+    {
+      "word": "If",
+      "count": 6
+    },
+    {
+      "word": "In",
+      "count": 2
+    },
+    {
+      "word": "Into",
+      "count": 1
+    },
+    {
+      "word": "It",
+      "count": 1
+    },
+    {
+      "word": "Know",
+      "count": 1
+    },
+    {
+      "word": "Like",
+      "count": 1
+    },
+    {
+      "word": "Loud",
+      "count": 1
+    },
+    {
+      "word": "Make",
+      "count": 1
+    },
+    {
+      "word": "Me",
+      "count": 2
+    },
+    {
+      "word": "My",
+      "count": 2
+    },
+    {
+      "word": "Myself",
+      "count": 1
+    },
+    {
+      "word": "Not",
+      "count": 3
+    },
+    {
+      "word": "Now",
+      "count": 1
+    },
+    {
+      "word": "Of",
+      "count": 8
+    },
+    {
+      "word": "Off",
+      "count": 1
+    },
+    {
+      "word": "On",
+      "count": 2
+    },
+    {
+      "word": "Only",
+      "count": 4
+    },
+    {
+      "word": "Our",
+      "count": 1
+    },
+    {
+      "word": "Out",
+      "count": 6
+    },
+    {
+      "word": "Over",
+      "count": 2
+    },
+    {
+      "word": "Please",
+      "count": 1
+    },
+    {
+      "word": "Promise",
+      "count": 3
+    },
+    {
+      "word": "Real",
+      "count": 3
+    },
+    {
+      "word": "Really",
+      "count": 1
+    },
+    {
+      "word": "Red",
+      "count": 1
+    },
+    {
+      "word": "Rest",
+      "count": 1
+    },
+    {
+      "word": "Sang",
+      "count": 5
+    },
+    {
+      "word": "Say",
+      "count": 4
+    },
+    {
+      "word": "She",
+      "count": 4
+    },
+    {
+      "word": "Sing",
+      "count": 2
+    },
+    {
+      "word": "Sleep",
+      "count": 1
+    },
+    {
+      "word": "Slow",
+      "count": 1
+    },
+    {
+      "word": "So",
+      "count": 3
+    },
+    {
+      "word": "Start",
+      "count": 1
+    },
+    {
+      "word": "Stop",
+      "count": 3
+    },
+    {
+      "word": "Sundays",
+      "count": 2
+    },
+    {
+      "word": "Take",
+      "count": 1
+    },
+    {
+      "word": "That's",
+      "count": 1
+    },
+    {
+      "word": "The",
+      "count": 6
+    },
+    {
+      "word": "They",
+      "count": 1
+    },
+    {
+      "word": "They're",
+      "count": 1
+    },
+    {
+      "word": "Thing",
+      "count": 3
+    },
+    {
+      "word": "This",
+      "count": 6
+    },
+    {
+      "word": "Throw",
+      "count": 1
+    },
+    {
+      "word": "Til",
+      "count": 1
+    },
+    {
+      "word": "Time",
+      "count": 1
+    },
+    {
+      "word": "To",
+      "count": 5
+    },
+    {
+      "word": "Tonight",
+      "count": 1
+    },
+    {
+      "word": "Too",
+      "count": 1
+    },
+    {
+      "word": "Us",
+      "count": 1
+    },
+    {
+      "word": "Used",
+      "count": 1
+    },
+    {
+      "word": "Waited",
+      "count": 1
+    },
+    {
+      "word": "Wanted",
+      "count": 1
+    },
+    {
+      "word": "Waste",
+      "count": 1
+    },
+    {
+      "word": "We",
+      "count": 1
+    },
+    {
+      "word": "We'd",
+      "count": 1
+    },
+    {
+      "word": "Were",
+      "count": 2
+    },
+    {
+      "word": "When",
+      "count": 8
+    },
+    {
+      "word": "With",
+      "count": 4
+    },
+    {
+      "word": "Wonder",
+      "count": 3
+    },
+    {
+      "word": "Would",
+      "count": 1
+    },
+    {
+      "word": "You",
+      "count": 12
+    },
+    {
+      "word": "You've",
+      "count": 1
+    },
+    {
+      "word": "Your",
+      "count": 1
+    }
+  ],
+  "punctuation": {
+    "?": 0,
+    "!": 0,
+    ".": 0
+  }
+}
