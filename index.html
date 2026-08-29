@@ -3,211 +3,188 @@
 
 <head>
 
-  <meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-  <meta
-    name="description"
-    content="Lyric Solitaire - a music and lyric-based solitaire game"
-  >
+    <meta
+        name="description"
+        content="Lyric Solitaire — Build the lyrics. Play the song."
+    >
 
-  <title>Lyric Solitaire</title>
+    <title>Lyric Solitaire — Coming Soon</title>
+
+    <style>
+
+        /*
+         * ==========================================================
+         * LYRIC SOLITAIRE — HOMEPAGE
+         * ==========================================================
+         *
+         * This is the public landing page for Lyric Solitaire.
+         *
+         * The actual game is located in:
+         *
+         *     game.html
+         *
+         * This page intentionally does not load the game JavaScript.
+         *
+         * ==========================================================
+         */
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100%;
+        }
+
+        body {
+            background: #111c27;
+            font-family: Arial, Helvetica, sans-serif;
+        }
 
 
-  <!--
-  ==========================================================
-  MAIN STYLESHEET
-  ==========================================================
-  -->
+        /*
+         * ----------------------------------------------------------
+         * PAGE CONTAINER
+         * ----------------------------------------------------------
+         */
 
-  <link
-    rel="stylesheet"
-    href="./css/game.css"
-  >
+        .landing-page {
+            min-height: 100vh;
 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            padding: 20px;
+        }
+
+
+        /*
+         * ----------------------------------------------------------
+         * PROMOTIONAL IMAGE
+         * ----------------------------------------------------------
+         *
+         * The image contains the complete temporary promotional
+         * artwork, including:
+         *
+         *     Lyric Solitaire
+         *     Coming Soon
+         *     Song-word examples
+         *     Sing the Words You Love
+         *     Developer credit
+         *     ThroatPhlegm
+         *     King's Mark Games
+         *
+         * ----------------------------------------------------------
+         */
+
+        .cover-art {
+            display: block;
+
+            width: 100%;
+            max-width: 900px;
+            height: auto;
+
+            border-radius: 8px;
+
+            box-shadow:
+                0 20px 60px rgba(0, 0, 0, 0.45);
+        }
+
+
+        /*
+         * ----------------------------------------------------------
+         * PLAY BUTTON
+         * ----------------------------------------------------------
+         *
+         * The game is not ready yet, but we'll eventually use this
+         * button to send the player to game.html.
+         *
+         * For now it is hidden.
+         *
+         * ----------------------------------------------------------
+         */
+
+        .play-button {
+            display: none;
+
+            margin-top: 20px;
+
+            padding: 14px 28px;
+
+            background: #c99b3b;
+            color: #111c27;
+
+            border: none;
+            border-radius: 8px;
+
+            font-size: 20px;
+            font-weight: bold;
+
+            text-decoration: none;
+        }
+
+
+        /*
+         * ----------------------------------------------------------
+         * MOBILE
+         * ----------------------------------------------------------
+         */
+
+        @media (max-width: 600px) {
+
+            .landing-page {
+                padding: 8px;
+            }
+
+            .cover-art {
+                border-radius: 4px;
+            }
+
+        }
+
+    </style>
 
 </head>
 
 
 <body>
 
+    <main class="landing-page">
 
-  <!--
-  ==========================================================
-  APPLICATION CONTAINER
-  ==========================================================
+        <div>
 
-  main.js will control which component is displayed here.
+            <img
+                class="cover-art"
+                src="./images/lyric-solitaire-coming-soon.png"
+                alt="Lyric Solitaire — Coming Soon. Sing the Words You Love."
+            >
 
-  Initially this will be the Game Setup screen.
+            <!--
+                When the game is ready, change display:none above
+                and this link will take the player to game.html.
+            -->
 
-  Later it can switch to:
+            <a
+                class="play-button"
+                href="./game.html"
+            >
+                Play Lyric Solitaire
+            </a>
 
-      Game Setup
-          ↓
-      Solo Game
-          ↓
-      Game Results
+        </div>
 
-  ==========================================================
-  -->
-
-  <main
-    id="app"
-    class="app-container"
-  >
-
-
-    <!--
-    --------------------------------------------------------
-    APPLICATION HEADER
-    --------------------------------------------------------
-    -->
-
-    <header
-      id="appHeader"
-      class="app-header"
-    >
-
-      <h1>
-        Lyric Solitaire
-      </h1>
-
-      <p>
-        Build the lyrics. Play the song.
-      </p>
-
-    </header>
-
-
-    <!--
-    --------------------------------------------------------
-    GAME SETUP COMPONENT
-    --------------------------------------------------------
-
-    gameSetup.js will populate this area.
-
-    --------------------------------------------------------
-    -->
-
-    <section
-      id="gameSetup"
-      class="game-component"
-    >
-
-      <div class="loading">
-
-        Loading Game Setup...
-
-      </div>
-
-    </section>
-
-
-    <!--
-    --------------------------------------------------------
-    SOLO GAME COMPONENT
-    --------------------------------------------------------
-
-    soloGame.js will eventually populate this area.
-
-    It starts hidden because the player must first
-    configure a game.
-
-    --------------------------------------------------------
-    -->
-
-    <section
-      id="soloGame"
-      class="game-component"
-      hidden
-    >
-
-      <!--
-        Solo game interface will be inserted here.
-      -->
-
-    </section>
-
-
-    <!--
-    --------------------------------------------------------
-    UTILITY COMPONENT
-    --------------------------------------------------------
-
-    utility.js will eventually populate this area.
-
-    This will contain tools such as:
-
-        TXT → Lyrics JSON
-        TXT → Word Count JSON
-
-    It starts hidden.
-
-    --------------------------------------------------------
-    -->
-
-    <section
-      id="utility"
-      class="game-component"
-      hidden
-    >
-
-      <!--
-        Utility interface will be inserted here.
-      -->
-
-    </section>
-
-
-    <!--
-    --------------------------------------------------------
-    GAME RESULTS
-    --------------------------------------------------------
-
-    Future component.
-
-    --------------------------------------------------------
-    -->
-
-    <section
-      id="gameResults"
-      class="game-component"
-      hidden
-    >
-
-      <!--
-        Final score and game results will appear here.
-      -->
-
-    </section>
-
-
-  </main>
-
-
-  <!--
-  ==========================================================
-  JAVASCRIPT APPLICATION
-  ==========================================================
-
-  main.js is the only JavaScript file that needs to be
-  loaded directly by the HTML page.
-
-  main.js will import the other components.
-
-  ==========================================================
-  -->
-
-  <script
-    type="module"
-    src="./js/main.js"
-  ></script>
-
+    </main>
 
 </body>
 
