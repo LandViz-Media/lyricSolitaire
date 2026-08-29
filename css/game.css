@@ -1,69 +1,261 @@
-/* ==========================================================
+/* =========================================================
    LYRIC SOLITAIRE
-   MAIN GAME STYLES
-   ========================================================== */
+   Basic Game Framework
+   ========================================================= */
 
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 body {
-  margin: 0;
-
-  font-family:
-    Arial,
-    Helvetica,
-    sans-serif;
-
-  background: #f1f3f5;
-
-  color: #222;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f2f2f2;
+    color: #222;
 }
 
 
-.app-container {
-  max-width: 1200px;
+/* =========================================================
+   HEADER
+   ========================================================= */
 
-  margin: 0 auto;
+#game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
-  padding: 30px 20px;
+    padding: 20px 30px;
+
+    background: #222;
+    color: white;
+}
+
+.game-title h1 {
+    margin: 0;
+    font-size: 32px;
+}
+
+.game-title p {
+    margin: 4px 0 0;
+    opacity: 0.75;
+}
+
+#game-status {
+    display: flex;
+    gap: 30px;
+    text-align: center;
+}
+
+#game-status > div {
+    display: flex;
+    flex-direction: column;
+}
+
+.status-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    opacity: 0.7;
+}
+
+#round-number,
+#score {
+    font-size: 24px;
+    font-weight: bold;
 }
 
 
-.app-header {
-  text-align: center;
+/* =========================================================
+   MAIN CONTAINER
+   ========================================================= */
 
-  margin-bottom: 30px;
+#game-container {
+    width: min(1400px, 95%);
+    margin: 30px auto;
 }
 
 
-.app-header h1 {
-  margin: 0;
+/* =========================================================
+   PANELS
+   ========================================================= */
 
-  font-size: 42px;
+.game-panel {
+    background: white;
+    border-radius: 10px;
+    padding: 25px;
+    margin-bottom: 25px;
 
-  letter-spacing: 2px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.panel-heading {
+    margin-bottom: 25px;
+}
+
+.panel-heading h2 {
+    margin: 0 0 5px;
+}
+
+.panel-heading p {
+    margin: 0;
+    color: #666;
 }
 
 
-.app-header p {
-  margin-top: 8px;
+/* =========================================================
+   SETUP
+   ========================================================= */
 
-  color: #666;
+#setup-content {
+    display: grid;
+    gap: 20px;
+}
 
-  font-size: 17px;
+#artist-selection,
+#genre-selection,
+#song-selection,
+#selected-songs,
+#game-statistics {
+    min-height: 40px;
 }
 
 
-.game-component {
-  width: 100%;
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+button {
+    border: none;
+    border-radius: 6px;
+    padding: 10px 18px;
+
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    opacity: 0.85;
+}
+
+#start-game {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+#end-turn {
+    font-weight: bold;
 }
 
 
-.loading {
-  padding: 30px;
+/* =========================================================
+   PLAYER INVENTORY
+   ========================================================= */
 
-  text-align: center;
+#word-tiles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
 
-  color: #666;
+    min-height: 60px;
+    padding: 15px;
+
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+
+/* =========================================================
+   LYRIC BOARD
+   ========================================================= */
+
+#lyric-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    margin-top: 15px;
+}
+
+.lyric-row {
+    display: grid;
+    grid-template-columns: 150px 1fr;
+
+    min-height: 55px;
+
+    border: 1px solid #ddd;
+    border-radius: 6px;
+}
+
+.lyric-section {
+    padding: 15px;
+    font-weight: bold;
+    background: #f5f5f5;
+}
+
+.lyric-line {
+    padding: 15px;
+}
+
+
+/* =========================================================
+   COMPLETED LINES
+   ========================================================= */
+
+#completed-line-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+
+/* =========================================================
+   TURN CONTROLS
+   ========================================================= */
+
+#turn-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-top: 25px;
+    padding-top: 20px;
+
+    border-top: 1px solid #ddd;
+}
+
+#turn-information {
+    display: flex;
+    gap: 25px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+    #game-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    #game-status {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .lyric-row {
+        grid-template-columns: 1fr;
+    }
+
+    #turn-controls {
+        flex-direction: column;
+        gap: 15px;
+        align-items: stretch;
+    }
+
+    #turn-information {
+        flex-wrap: wrap;
+    }
 }
