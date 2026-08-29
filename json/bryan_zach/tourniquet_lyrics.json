@@ -1,0 +1,71 @@
+{
+  "title": "Tourniquet",
+  "artist": "Zach Bryan",
+  "album": "Zach Bryan",
+  "year": 2023,
+  "genre": "Country Rock, Folk, Country",
+  "sections": [
+    {
+      "type": "Verse",
+      "lyrics": [
+        "There's delays on the planes out of Eastern Montana",
+        "Where you told me you were leavin' from",
+        "You've been stabbed in the back and the rest of your body",
+        "Won't you tell me where you're bleedin' from?",
+        "If you need a tourniquet or if you wanna turn and quit",
+        "Know that I'll be by your side",
+        "You bled your whole soul into things you can't control",
+        "In a world you'll never satisfy"
+      ]
+    },
+    {
+      "type": "Chorus",
+      "lyrics": [
+        "I'll bandage up your body and your bones and your bad days too",
+        "Take care of the blood that your love runs through",
+        "I know all the damage that some days in this dark world does",
+        "You were laughin' last week at somethin' I dreamed of"
+      ]
+    },
+    {
+      "type": "Verse",
+      "lyrics": [
+        "When you finally feel the blood you spill into everybody else",
+        "I'll tourniquet your toes to the ground",
+        "Pull you in and hold you tight, love you through the heart of night",
+        "Spring your kind ass into town",
+        "You've been playin' your guitar from arenas to the bars",
+        "Since you were old enough to rhyme a word",
+        "But your face is gettin' thinner, and you're prayin' for the winter",
+        "And I heard you fucked it up with her"
+      ]
+    },
+    {
+      "type": "Chorus",
+      "lyrics": [
+        "I'll bandage up your body and your bones and your bad days too",
+        "Take care of the blood that your love runs through",
+        "I know all the damage that some days in this dark world does",
+        "You were laughin' last evenin' at somethin' I dreamed of"
+      ]
+    },
+    {
+      "type": "Chorus",
+      "lyrics": [
+        "I'll bandage up your body and your bones and your bad days too",
+        "Take care of the blood that your love runs through",
+        "I know all the damage that some days in this dark world does",
+        "She was laughin' last evenin' at somethin' I dreamed of"
+      ]
+    },
+    {
+      "type": "Outro",
+      "lyrics": [
+        "There's delays on the planes out of Eastern Montana",
+        "Where you told me you were leavin' from",
+        "You've been stabbed in the back and the rest of your body",
+        "Won't you tell me where you're bleedin' from?"
+      ]
+    }
+  ]
+}

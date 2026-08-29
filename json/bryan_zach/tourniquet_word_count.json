@@ -1,0 +1,502 @@
+{
+  "title": "Tourniquet",
+  "artist": "Zach Bryan",
+  "album": "Zach Bryan",
+  "year": 2023,
+  "genre": "Country Rock, Folk, Country",
+  "words": [
+    {
+      "word": "A",
+      "count": 3
+    },
+    {
+      "word": "All",
+      "count": 3
+    },
+    {
+      "word": "And",
+      "count": 12
+    },
+    {
+      "word": "Arenas",
+      "count": 1
+    },
+    {
+      "word": "Ass",
+      "count": 1
+    },
+    {
+      "word": "At",
+      "count": 3
+    },
+    {
+      "word": "Back",
+      "count": 2
+    },
+    {
+      "word": "Bad",
+      "count": 3
+    },
+    {
+      "word": "Bandage",
+      "count": 3
+    },
+    {
+      "word": "Bars",
+      "count": 1
+    },
+    {
+      "word": "Be",
+      "count": 1
+    },
+    {
+      "word": "Been",
+      "count": 3
+    },
+    {
+      "word": "Bled",
+      "count": 1
+    },
+    {
+      "word": "Bleedin'",
+      "count": 2
+    },
+    {
+      "word": "Blood",
+      "count": 4
+    },
+    {
+      "word": "Body",
+      "count": 5
+    },
+    {
+      "word": "Bones",
+      "count": 3
+    },
+    {
+      "word": "But",
+      "count": 1
+    },
+    {
+      "word": "By",
+      "count": 1
+    },
+    {
+      "word": "Can't",
+      "count": 1
+    },
+    {
+      "word": "Care",
+      "count": 3
+    },
+    {
+      "word": "Control",
+      "count": 1
+    },
+    {
+      "word": "Damage",
+      "count": 3
+    },
+    {
+      "word": "Dark",
+      "count": 3
+    },
+    {
+      "word": "Days",
+      "count": 6
+    },
+    {
+      "word": "Delays",
+      "count": 2
+    },
+    {
+      "word": "Does",
+      "count": 3
+    },
+    {
+      "word": "Dreamed",
+      "count": 3
+    },
+    {
+      "word": "Eastern",
+      "count": 2
+    },
+    {
+      "word": "Else",
+      "count": 1
+    },
+    {
+      "word": "Enough",
+      "count": 1
+    },
+    {
+      "word": "Evenin'",
+      "count": 2
+    },
+    {
+      "word": "Everybody",
+      "count": 1
+    },
+    {
+      "word": "Face",
+      "count": 1
+    },
+    {
+      "word": "Feel",
+      "count": 1
+    },
+    {
+      "word": "Finally",
+      "count": 1
+    },
+    {
+      "word": "For",
+      "count": 1
+    },
+    {
+      "word": "From",
+      "count": 5
+    },
+    {
+      "word": "Fucked",
+      "count": 1
+    },
+    {
+      "word": "Gettin'",
+      "count": 1
+    },
+    {
+      "word": "Ground",
+      "count": 1
+    },
+    {
+      "word": "Guitar",
+      "count": 1
+    },
+    {
+      "word": "Heard",
+      "count": 1
+    },
+    {
+      "word": "Heart",
+      "count": 1
+    },
+    {
+      "word": "Her",
+      "count": 1
+    },
+    {
+      "word": "Hold",
+      "count": 1
+    },
+    {
+      "word": "I",
+      "count": 7
+    },
+    {
+      "word": "I'll",
+      "count": 5
+    },
+    {
+      "word": "If",
+      "count": 2
+    },
+    {
+      "word": "In",
+      "count": 7
+    },
+    {
+      "word": "Into",
+      "count": 3
+    },
+    {
+      "word": "Is",
+      "count": 1
+    },
+    {
+      "word": "It",
+      "count": 1
+    },
+    {
+      "word": "Kind",
+      "count": 1
+    },
+    {
+      "word": "Know",
+      "count": 4
+    },
+    {
+      "word": "Last",
+      "count": 3
+    },
+    {
+      "word": "Laughin'",
+      "count": 3
+    },
+    {
+      "word": "Leavin'",
+      "count": 2
+    },
+    {
+      "word": "Love",
+      "count": 4
+    },
+    {
+      "word": "Me",
+      "count": 4
+    },
+    {
+      "word": "Montana",
+      "count": 2
+    },
+    {
+      "word": "Need",
+      "count": 1
+    },
+    {
+      "word": "Never",
+      "count": 1
+    },
+    {
+      "word": "Night",
+      "count": 1
+    },
+    {
+      "word": "Of",
+      "count": 11
+    },
+    {
+      "word": "Old",
+      "count": 1
+    },
+    {
+      "word": "On",
+      "count": 2
+    },
+    {
+      "word": "Or",
+      "count": 1
+    },
+    {
+      "word": "Out",
+      "count": 2
+    },
+    {
+      "word": "Planes",
+      "count": 2
+    },
+    {
+      "word": "Playin'",
+      "count": 1
+    },
+    {
+      "word": "Prayin'",
+      "count": 1
+    },
+    {
+      "word": "Pull",
+      "count": 1
+    },
+    {
+      "word": "Quit",
+      "count": 1
+    },
+    {
+      "word": "Rest",
+      "count": 2
+    },
+    {
+      "word": "Rhyme",
+      "count": 1
+    },
+    {
+      "word": "Runs",
+      "count": 3
+    },
+    {
+      "word": "Satisfy",
+      "count": 1
+    },
+    {
+      "word": "She",
+      "count": 1
+    },
+    {
+      "word": "Side",
+      "count": 1
+    },
+    {
+      "word": "Since",
+      "count": 1
+    },
+    {
+      "word": "Some",
+      "count": 3
+    },
+    {
+      "word": "Somethin'",
+      "count": 3
+    },
+    {
+      "word": "Soul",
+      "count": 1
+    },
+    {
+      "word": "Spill",
+      "count": 1
+    },
+    {
+      "word": "Spring",
+      "count": 1
+    },
+    {
+      "word": "Stabbed",
+      "count": 2
+    },
+    {
+      "word": "Take",
+      "count": 3
+    },
+    {
+      "word": "Tell",
+      "count": 2
+    },
+    {
+      "word": "That",
+      "count": 7
+    },
+    {
+      "word": "The",
+      "count": 17
+    },
+    {
+      "word": "There's",
+      "count": 2
+    },
+    {
+      "word": "Things",
+      "count": 1
+    },
+    {
+      "word": "Thinner",
+      "count": 1
+    },
+    {
+      "word": "This",
+      "count": 3
+    },
+    {
+      "word": "Through",
+      "count": 4
+    },
+    {
+      "word": "Tight",
+      "count": 1
+    },
+    {
+      "word": "To",
+      "count": 3
+    },
+    {
+      "word": "Toes",
+      "count": 1
+    },
+    {
+      "word": "Told",
+      "count": 2
+    },
+    {
+      "word": "Too",
+      "count": 3
+    },
+    {
+      "word": "Tourniquet",
+      "count": 2
+    },
+    {
+      "word": "Town",
+      "count": 1
+    },
+    {
+      "word": "Turn",
+      "count": 1
+    },
+    {
+      "word": "Up",
+      "count": 4
+    },
+    {
+      "word": "Wanna",
+      "count": 1
+    },
+    {
+      "word": "Was",
+      "count": 1
+    },
+    {
+      "word": "Week",
+      "count": 1
+    },
+    {
+      "word": "Were",
+      "count": 5
+    },
+    {
+      "word": "When",
+      "count": 1
+    },
+    {
+      "word": "Where",
+      "count": 4
+    },
+    {
+      "word": "Whole",
+      "count": 1
+    },
+    {
+      "word": "Winter",
+      "count": 1
+    },
+    {
+      "word": "With",
+      "count": 1
+    },
+    {
+      "word": "Won't",
+      "count": 2
+    },
+    {
+      "word": "Word",
+      "count": 1
+    },
+    {
+      "word": "World",
+      "count": 4
+    },
+    {
+      "word": "You",
+      "count": 19
+    },
+    {
+      "word": "You'll",
+      "count": 1
+    },
+    {
+      "word": "You're",
+      "count": 3
+    },
+    {
+      "word": "You've",
+      "count": 3
+    },
+    {
+      "word": "Your",
+      "count": 20
+    }
+  ],
+  "punctuation": {
+    "?": 2,
+    "!": 0,
+    ".": 0
+  }
+}
