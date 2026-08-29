@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Lyric Solitaire — Game</title>
+
+    <link rel="stylesheet" href="css/game.css">
+</head>
+
+<body>
+
+    <!-- =========================================================
+         GAME HEADER
+         ========================================================= -->
+
+    <header id="game-header">
+        <div class="game-title">
+            <h1>Lyric Solitaire</h1>
+            <p>Build the lyrics. Play the song.</p>
+        </div>
+
+        <div id="game-status">
+            <div>
+                <span class="status-label">Round</span>
+                <span id="round-number">—</span>
+            </div>
+
+            <div>
+                <span class="status-label">Score</span>
+                <span id="score">0</span>
+            </div>
+        </div>
+    </header>
+
+
+    <!-- =========================================================
+         GAME SETUP
+         ========================================================= -->
+
+    <main id="game-container">
+
+        <section id="game-setup" class="game-panel">
+
+            <div class="panel-heading">
+                <h2>Game Setup</h2>
+                <p>Select the music you want to play.</p>
+            </div>
+
+            <div id="setup-content">
+
+                <!-- Artist selection will be added by gameSetup.js -->
+
+                <div id="artist-selection"></div>
+
+                <!-- Genre selection will be added later -->
+
+                <div id="genre-selection"></div>
+
+                <!-- Song selection will be added by gameSetup.js -->
+
+                <div id="song-selection"></div>
+
+                <!-- Selected songs -->
+
+                <div id="selected-songs"></div>
+
+                <!-- Setup statistics -->
+
+                <div id="game-statistics"></div>
+
+                <!-- Start button -->
+
+                <div class="setup-actions">
+                    <button id="start-game" type="button">
+                        Start Game
+                    </button>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             SOLO GAME
+             ===================================================== -->
+
+        <section id="solo-game" class="game-panel" hidden>
+
+            <div class="panel-heading">
+                <h2>Lyric Solitaire</h2>
+            </div>
+
+            <!-- Player's word inventory -->
+
+            <section id="player-inventory">
+
+                <h3>Your Words</h3>
+
+                <div id="word-tiles">
+                    <!-- Word tiles will be created by soloPlay.js -->
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 LYRIC BOARD
+                 ================================================= -->
+
+            <section id="lyric-board">
+
+                <h3>Lyrics</h3>
+
+                <div id="lyric-rows">
+                    <!-- Lyric rows will be created by lyricBoard.js -->
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 COMPLETED LINES
+                 ================================================= -->
+
+            <section id="completed-lines">
+
+                <h3>Completed Lines</h3>
+
+                <div id="completed-line-list">
+                    <!-- Completed lines will be added here -->
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 TURN CONTROLS
+                 ================================================= -->
+
+            <section id="turn-controls">
+
+                <div id="turn-information">
+                    <span>
+                        Tiles to Draw:
+                        <strong id="draw-count">—</strong>
+                    </span>
+
+                    <span>
+                        Tiles Played:
+                        <strong id="played-count">0</strong>
+                    </span>
+
+                    <span>
+                        Turns Remaining:
+                        <strong id="turns-remaining">—</strong>
+                    </span>
+                </div>
+
+                <button id="end-turn" type="button">
+                    End Turn
+                </button>
+
+            </section>
+
+        </section>
+
+    </main>
+
+
+    <!-- =========================================================
+         JAVASCRIPT COMPONENTS
+         ========================================================= -->
+
+    <!-- Main application controller -->
+    <script src="js/main.js"></script>
+
+    <!-- Game setup -->
+    <script src="js/components/gameSetup.js"></script>
+
+    <!-- Solo play -->
+    <script src="js/components/soloPlay.js"></script>
+
+    <!-- Word pool / weighted draws -->
+    <script src="js/components/wordPool.js"></script>
+
+    <!-- Lyric board -->
+    <script src="js/components/lyricBoard.js"></script>
+
+    <!-- Scoring -->
+    <script src="js/components/scoring.js"></script>
+
+    <!-- General interface functions -->
+    <script src="js/components/ui.js"></script>
+
+    <!-- Utilities -->
+    <script src="js/utilities/lyricsParser.js"></script>
+
+    <!-- Game simulation/testing utility -->
+    <script src="js/utilities/simulator.js"></script>
+
+</body>
+</html>
