@@ -11,20 +11,63 @@ physical game implementation.
 
 **Current version: Prototype v0.1.0**
 
-Lyric Solitaire is currently in active prototype development.
-
-The current version establishes the game's web interface and JavaScript
-component architecture. Game mechanics are being implemented and tested
-incrementally.
+The current prototype establishes the game's web interface, project
+architecture, and development tools. Game mechanics are being implemented and
+tested incrementally.
 
 ## Play the Prototype
 
-The project is hosted using GitHub Pages.
-
 - [Lyric Solitaire Cover Page](https://landviz-media.github.io/lyricSolitaire/)
 - [Lyric Solitaire Game Prototype](https://landviz-media.github.io/lyricSolitaire/game.html)
+- [Lyrics JSON Generator](https://landviz-media.github.io/lyricSolitaire/tools/lyrics-json-generator/)
 
 The cover page is intentionally separate from the game interface.
+
+## Development Tools
+
+### Lyrics JSON Generator
+
+The Lyrics JSON Generator is a development/data-authoring tool used to turn
+structured lyric text files into the JSON files used by Lyric Solitaire.
+
+It produces:
+
+1. Lyrics JSON
+2. Word Count JSON
+
+The generator preserves the current project format, including:
+
+- Artist
+- Song title
+- Album
+- Year
+- Genre
+- Named lyric sections
+- Individual lyric-line occurrences
+- Physical word counts
+- Unique word counts
+- Punctuation counts
+
+The source format is:
+
+```text
+Artist
+Song Title
+Album
+Year
+Genre
+
+[Verse]
+Lyrics...
+Lyrics...
+
+[Chorus]
+Lyrics...
+Lyrics...
+```
+
+The generator was originally developed and tested in JSBin and is now being
+brought into the GitHub project as a local development tool.
 
 ## Game Concept
 
@@ -140,10 +183,17 @@ lyricSolitaire/
 ├── changelog.md
 │
 ├── images/
-│   └── lyric-solitaire-coming-soon.png
 │
 ├── css/
 │   └── game.css
+│
+├── tools/
+│   └── lyrics-json-generator/
+│       ├── index.html
+│       ├── css/
+│       │   └── generator.css
+│       └── js/
+│           └── generator.js
 │
 ├── js/
 │   ├── main.js
@@ -178,38 +228,67 @@ be developed and tested independently.
 
 ### `gameSetup.js`
 
-Responsible for artist selection, genre filtering, song selection, game mode
-selection, loading song statistics, and preparing a new game.
+Responsible for:
+
+- Artist selection
+- Genre filtering
+- Song selection
+- Game mode selection
+- Loading song statistics
+- Preparing a new game
 
 ### `wordPool.js`
 
-Responsible for building the physical word pool, tracking individual word
-tiles, drawing tiles, and maintaining the remaining pool.
+Responsible for:
+
+- Building the physical word pool
+- Tracking individual word tiles
+- Drawing tiles
+- Maintaining the remaining pool
 
 ### `playerHand.js`
 
-Responsible for the player word inventory, displaying word tiles, selecting
-words, tracking held words, and removing played words from the hand.
+Responsible for:
+
+- Player word inventory
+- Displaying word tiles
+- Selecting words
+- Tracking held words
+- Removing played words from the hand
 
 ### `lyricBoard.js`
 
-Responsible for managing active lyric rows, tracking open and occupied rows,
-and replacing completed rows.
+Responsible for:
+
+- Managing the active lyric rows
+- Tracking open and occupied rows
+- Replacing completed rows
 
 ### `lyricGrid.js`
 
-Responsible for rendering lyric lines, displaying individual word positions,
-highlighting candidate words, and locking successfully played words.
+Responsible for:
+
+- Rendering lyric lines
+- Displaying individual word positions
+- Highlighting candidate words
+- Locking successfully played words
 
 ### `completedLines.js`
 
-Responsible for moving completed lines out of the active board, displaying
-completed lyric lines, and supporting scoring feedback.
+Responsible for:
+
+- Moving completed lines out of the active board
+- Displaying completed lyric lines
+- Supporting scoring feedback
 
 ### `scoring.js`
 
-Responsible for word-placement scoring, completed-line scoring, section
-bonuses, and future scoring rules.
+Responsible for:
+
+- Word-placement scoring
+- Completed-line scoring
+- Section bonuses
+- Future scoring rules
 
 ### `scoreBoard.js`
 
@@ -217,8 +296,12 @@ Responsible for displaying the current score and scoring information.
 
 ### `gameControls.js`
 
-Responsible for End Turn, New Game, pause/resume controls, and other
-game-level controls.
+Responsible for:
+
+- End Turn
+- New Game
+- Pause/resume controls
+- Other game-level controls
 
 ### `soloPlay.js`
 

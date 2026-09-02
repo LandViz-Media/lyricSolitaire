@@ -12,49 +12,54 @@ the state of the prototype being tested rather than a public release.
 ### Project Structure
 
 - Established `index.html` as the public cover / landing page.
-- Established `game.html` as the actual game interface.
+- Established `game.html` as the game prototype interface.
 - Established `css/game.css` for game styling.
 - Established component-based JavaScript structure under `js/components/`.
 - Established utility scripts under `js/utilities/`.
 - Established lyric JSON storage under `json/`.
+- Established `tools/lyrics-json-generator/` as the project data-authoring tool.
 
 ### Game Interface
 
-- Rebuilt `game.html` to match the existing CSS framework.
+- Corrected `game.html` so it matches the existing game CSS selectors.
 - Removed accidental Markdown code fences from the HTML.
 - Added visible prototype version number.
-- Added game status area for Round, Turns remaining, and Score.
+- Added game status area for:
+  - Round
+  - Turns remaining
+  - Score
 - Added player word inventory area.
 - Added lyric board area.
 - Added completed-lines area.
-- Added turn information for Draw, Played, and Held.
+- Added turn information for:
+  - Draw
+  - Played
+  - Held
 - Added End Turn control.
 
-### JavaScript Architecture
+### Lyrics JSON Generator
 
-The following component files are established as the initial game architecture:
-
-- `completedLines.js`
-- `gameControls.js`
-- `gameSetup.js`
-- `lyricBoard.js`
-- `lyricGrid.js`
-- `playerHand.js`
-- `scoreBoard.js`
-- `scoring.js`
-- `soloPlay.js`
-- `ui.js`
-- `utility.js`
-- `wordPool.js`
-
-Development utilities:
-
-- `lyricsParser.js`
-- `simulator.js`
+- Imported the working JSBin Lyrics JSON Generator into the repository.
+- Preserved the established five-line metadata format:
+  - Artist
+  - Song Title
+  - Album
+  - Year
+  - Genre
+- Preserved bracketed lyric sections such as `[Verse]`, `[Chorus]`,
+  `[Bridge]`, `[Intro]`, and `[Outro]`.
+- Preserved Unicode normalization.
+- Preserved contraction-aware word tokenization.
+- Preserved physical word counts.
+- Preserved unique-word counts.
+- Preserved punctuation counts.
+- Preserved separate downloads for Lyrics JSON and Word Count JSON.
+- Removed JSBin-specific wrapper code and external analytics code.
 
 ### Documentation
 
-- Established `README.md` as the project description and developer-facing overview.
+- Updated `README.md` to describe the project and its development tools.
+- Added the Lyrics JSON Generator to the documented project structure.
 - Established `changelog.md` as the chronological development record.
 - Prototype versioning established at `v0.1.0`.
 
@@ -62,6 +67,9 @@ Development utilities:
 
 The game interface is an architectural prototype.
 
-The next development stage is to replace the JavaScript component placeholders
-with the actual game setup, word-pool, player-hand, lyric-board, turn, and
-scoring logic.
+The Lyrics JSON Generator is now represented in the repository as a local
+development tool.
+
+The next major development task is the game simulator, using the actual song
+JSON and word-count data to test game balance before implementing the complete
+gameplay interface.
