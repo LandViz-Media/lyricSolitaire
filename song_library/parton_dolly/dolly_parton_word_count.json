@@ -1,0 +1,523 @@
+{
+  "title": "Dolly Parton",
+  "artist": "9 to 5",
+  "album": "9 to 5 and Odd Jobs",
+  "year": 1980,
+  "genre": "Country Pop, Folk, and Country",
+  "totalWords": 345,
+  "uniqueWords": 128,
+  "words": [
+    {
+      "word": "a",
+      "count": 14
+    },
+    {
+      "word": "about",
+      "count": 2
+    },
+    {
+      "word": "ahead",
+      "count": 1
+    },
+    {
+      "word": "all",
+      "count": 4
+    },
+    {
+      "word": "ambition",
+      "count": 1
+    },
+    {
+      "word": "and",
+      "count": 18
+    },
+    {
+      "word": "away",
+      "count": 1
+    },
+    {
+      "word": "Barely",
+      "count": 3
+    },
+    {
+      "word": "bed",
+      "count": 1
+    },
+    {
+      "word": "better",
+      "count": 2
+    },
+    {
+      "word": "blood",
+      "count": 1
+    },
+    {
+      "word": "boat",
+      "count": 1
+    },
+    {
+      "word": "boss",
+      "count": 1
+    },
+    {
+      "word": "bossman's",
+      "count": 1
+    },
+    {
+      "word": "but",
+      "count": 2
+    },
+    {
+      "word": "by",
+      "count": 3
+    },
+    {
+      "word": "call",
+      "count": 2
+    },
+    {
+      "word": "come",
+      "count": 2
+    },
+    {
+      "word": "crazy",
+      "count": 3
+    },
+    {
+      "word": "credit",
+      "count": 3
+    },
+    {
+      "word": "cup",
+      "count": 1
+    },
+    {
+      "word": "day",
+      "count": 1
+    },
+    {
+      "word": "deserve",
+      "count": 1
+    },
+    {
+      "word": "devotion",
+      "count": 1
+    },
+    {
+      "word": "don't",
+      "count": 2
+    },
+    {
+      "word": "dream",
+      "count": 1
+    },
+    {
+      "word": "dreams",
+      "count": 1
+    },
+    {
+      "word": "drive",
+      "count": 3
+    },
+    {
+      "word": "em",
+      "count": 1
+    },
+    {
+      "word": "enough",
+      "count": 3
+    },
+    {
+      "word": "fair",
+      "count": 1
+    },
+    {
+      "word": "folks",
+      "count": 1
+    },
+    {
+      "word": "for",
+      "count": 2
+    },
+    {
+      "word": "friends",
+      "count": 1
+    },
+    {
+      "word": "from",
+      "count": 1
+    },
+    {
+      "word": "game",
+      "count": 2
+    },
+    {
+      "word": "get",
+      "count": 2
+    },
+    {
+      "word": "gettin'",
+      "count": 3
+    },
+    {
+      "word": "give",
+      "count": 2
+    },
+    {
+      "word": "givin'",
+      "count": 3
+    },
+    {
+      "word": "gonna",
+      "count": 2
+    },
+    {
+      "word": "got",
+      "count": 3
+    },
+    {
+      "word": "he'll",
+      "count": 1
+    },
+    {
+      "word": "his",
+      "count": 2
+    },
+    {
+      "word": "I",
+      "count": 3
+    },
+    {
+      "word": "if",
+      "count": 3
+    },
+    {
+      "word": "in",
+      "count": 5
+    },
+    {
+      "word": "is",
+      "count": 1
+    },
+    {
+      "word": "it",
+      "count": 7
+    },
+    {
+      "word": "it's",
+      "count": 9
+    },
+    {
+      "word": "job",
+      "count": 1
+    },
+    {
+      "word": "Jump",
+      "count": 1
+    },
+    {
+      "word": "jumpin'",
+      "count": 1
+    },
+    {
+      "word": "just",
+      "count": 5
+    },
+    {
+      "word": "kitchen",
+      "count": 1
+    },
+    {
+      "word": "ladder",
+      "count": 1
+    },
+    {
+      "word": "let",
+      "count": 5
+    },
+    {
+      "word": "life",
+      "count": 5
+    },
+    {
+      "word": "like",
+      "count": 1
+    },
+    {
+      "word": "livin'",
+      "count": 3
+    },
+    {
+      "word": "lot",
+      "count": 1
+    },
+    {
+      "word": "make",
+      "count": 3
+    },
+    {
+      "word": "man",
+      "count": 1
+    },
+    {
+      "word": "man's",
+      "count": 2
+    },
+    {
+      "word": "matter",
+      "count": 2
+    },
+    {
+      "word": "me",
+      "count": 3
+    },
+    {
+      "word": "mind",
+      "count": 3
+    },
+    {
+      "word": "mm",
+      "count": 1
+    },
+    {
+      "word": "money",
+      "count": 2
+    },
+    {
+      "word": "move",
+      "count": 1
+    },
+    {
+      "word": "myself",
+      "count": 1
+    },
+    {
+      "word": "never",
+      "count": 4
+    },
+    {
+      "word": "no",
+      "count": 5
+    },
+    {
+      "word": "of",
+      "count": 3
+    },
+    {
+      "word": "oh",
+      "count": 1
+    },
+    {
+      "word": "on",
+      "count": 3
+    },
+    {
+      "word": "out",
+      "count": 3
+    },
+    {
+      "word": "Pour",
+      "count": 1
+    },
+    {
+      "word": "promotion",
+      "count": 1
+    },
+    {
+      "word": "pumpin'",
+      "count": 1
+    },
+    {
+      "word": "puttin'",
+      "count": 2
+    },
+    {
+      "word": "rich",
+      "count": 2
+    },
+    {
+      "word": "roll",
+      "count": 1
+    },
+    {
+      "word": "same",
+      "count": 1
+    },
+    {
+      "word": "seem",
+      "count": 1
+    },
+    {
+      "word": "service",
+      "count": 1
+    },
+    {
+      "word": "shatter",
+      "count": 1
+    },
+    {
+      "word": "ship'll",
+      "count": 1
+    },
+    {
+      "word": "shower",
+      "count": 1
+    },
+    {
+      "word": "sometimes",
+      "count": 1
+    },
+    {
+      "word": "spend",
+      "count": 2
+    },
+    {
+      "word": "starts",
+      "count": 2
+    },
+    {
+      "word": "step",
+      "count": 1
+    },
+    {
+      "word": "street",
+      "count": 1
+    },
+    {
+      "word": "stretch",
+      "count": 1
+    },
+    {
+      "word": "stumble",
+      "count": 1
+    },
+    {
+      "word": "swear",
+      "count": 1
+    },
+    {
+      "word": "take",
+      "count": 1
+    },
+    {
+      "word": "takin'",
+      "count": 3
+    },
+    {
+      "word": "that",
+      "count": 2
+    },
+    {
+      "word": "the",
+      "count": 12
+    },
+    {
+      "word": "There's",
+      "count": 2
+    },
+    {
+      "word": "They",
+      "count": 12
+    },
+    {
+      "word": "think",
+      "count": 3
+    },
+    {
+      "word": "tide's",
+      "count": 1
+    },
+    {
+      "word": "to",
+      "count": 21
+    },
+    {
+      "word": "traffic",
+      "count": 1
+    },
+    {
+      "word": "try",
+      "count": 1
+    },
+    {
+      "word": "Tumble",
+      "count": 1
+    },
+    {
+      "word": "turn",
+      "count": 1
+    },
+    {
+      "word": "use",
+      "count": 3
+    },
+    {
+      "word": "Waitin'",
+      "count": 1
+    },
+    {
+      "word": "wallet",
+      "count": 2
+    },
+    {
+      "word": "Want",
+      "count": 3
+    },
+    {
+      "word": "watch",
+      "count": 1
+    },
+    {
+      "word": "way",
+      "count": 4
+    },
+    {
+      "word": "what",
+      "count": 5
+    },
+    {
+      "word": "where",
+      "count": 2
+    },
+    {
+      "word": "With",
+      "count": 2
+    },
+    {
+      "word": "won't",
+      "count": 1
+    },
+    {
+      "word": "Workin'",
+      "count": 2
+    },
+    {
+      "word": "would",
+      "count": 2
+    },
+    {
+      "word": "yawn",
+      "count": 1
+    },
+    {
+      "word": "yeah",
+      "count": 2
+    },
+    {
+      "word": "you",
+      "count": 21
+    },
+    {
+      "word": "You're",
+      "count": 1
+    },
+    {
+      "word": "you've",
+      "count": 1
+    },
+    {
+      "word": "your",
+      "count": 8
+    }
+  ]
+}
