@@ -1,0 +1,1 @@
+Extract this package over the root of your local Lyric Solitaire repo. Paths are preserved so new/updated files land in the correct directories. The song-library migration is backward compatible during transition; move the existing maintained song JSON files from /json into /song_library when ready.

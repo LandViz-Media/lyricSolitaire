@@ -1,251 +1,78 @@
 # Lyric Solitaire
 
-Lyric Solitaire is a digital card/word game in which players build song
-lyrics from individual word tiles.
+Lyric Solitaire is a word-based solitaire game in which players reconstruct song lyrics using physical-style word tiles drawn from song-specific word pools.
 
-The game is being developed as a digital playtesting environment for testing
-the game's rules, balance, scoring system, and song data before any final
-physical game implementation.
+The project is being developed as a browser-based digital playtesting environment. The goal is to develop the game rules, balance, scoring, and song-data system before finalizing a physical tabletop version.
 
-## Project Status
+## Play and Development Tools
 
-**Current version: Prototype v0.1.1**
+- **Cover page:** https://landviz-media.github.io/lyricSolitaire/
+- **Game prototype:** https://landviz-media.github.io/lyricSolitaire/game.html
+- **Simulator Lab:** https://landviz-media.github.io/lyricSolitaire/simulator.html
 
-The project currently contains:
+## Current Development Status
 
-- The public cover page.
-- The initial game interface shell.
-- A working Lyrics JSON Generator.
-- A working game simulator for testing Easy/Open Mode assumptions.
-- Initial song and word-count JSON data.
+The simulator is the current primary development tool. **Simulator v0.1.0** tests the Easy / Open Mode assumptions with real song lyric and word-count data.
 
-The gameplay interface itself is still under development.
+The player-facing game interface is still under development.
 
-## Play the Prototype
+## Core Game Idea
 
-- [Lyric Solitaire Cover Page](https://landviz-media.github.io/lyricSolitaire/)
-- [Lyric Solitaire Game Prototype](https://landviz-media.github.io/lyricSolitaire/game.html)
-- [Game Simulator](https://landviz-media.github.io/lyricSolitaire/tools/simulator/)
-- [Lyrics JSON Generator](https://landviz-media.github.io/lyricSolitaire/tools/lyrics-json-generator/)
+Players draw individual word tiles from a persistent pool created from the selected songs. Tiles are played into lyric lines or remain held in the player's inventory. There is currently no discard mechanism.
 
-## Development Tools
+Completing a lyric line immediately frees its row. Easy / Open Mode allows a player to work from lyric-line candidates containing a selected word.
 
-### Lyrics JSON Generator
+## Song Data
 
-The Lyrics JSON Generator turns structured lyric text files into:
+Song data is maintained in the `song_library/` directory. Lyric JSON and word-count JSON files are maintained by the project owner. The application uses `song_library/song_catalog.json` as a composite index so new songs can be added without hard-coding filenames throughout the game.
 
-1. Lyrics JSON
-2. Word Count JSON
+The song information exposed to the player will include metadata such as artist, title, album, year, genre, **total words**, and **unique words**.
 
-The source format is:
+Difficulty will eventually be calculated rather than assigned as a simple permanent label. The eventual difficulty model is expected to consider song characteristics together with game parameters such as starting rows, turn count, hand limit, draw progression, word distribution, repetition, and other measurable gameplay factors.
 
-```text
-Artist
-Song Title
-Album
-Year
-Genre
+## Simulator Lab
 
-[Verse]
-Lyrics...
-Lyrics...
+The simulator separates the simulation engine from the developer interface:
 
-[Chorus]
-Lyrics...
-Lyrics...
-```
+- `js/utilities/simulator.js` — game simulation rules and state
+- `simulator.html` — developer-facing experiment interface
+- `js/utilities/testResultLogger.js` — standardized JSON result logging/export
 
-The generator preserves:
+Each experiment records its parameters and aggregate results. Exported JSON files can be placed in `test_results/` and later combined for analysis and visualization.
 
-- Artist
-- Song title
-- Album
-- Year
-- Genre
-- Named lyric sections
-- Individual lyric-line occurrences
-- Physical word counts
-- Unique word counts
-- Punctuation counts
+## Test Results
 
-### Game Simulator
+The `test_results/` directory is intended to contain exported simulator experiment records. This provides a growing evidence base for evaluating solvability and eventually developing a data-driven challenge rating for songs.
 
-The Game Simulator tests game balance and solvability using the actual
-Lyrics JSON and Word Count JSON files in the repository.
+## Documentation
 
-The first simulator target is Easy / Open Mode.
-
-Current assumptions modeled by the simulator:
-
-- 12 active lyric rows
-- 50-tile player inventory
-- 12 maximum rounds
-- Initial draw of 12 tiles
-- Later draws use the agreed previous-play formula
-- Actual draws are capped by pool size and inventory capacity
-- Played words leave the player's hand
-- Unplayed words remain held
-- Completed lines immediately free a row
-- Duplicate lyric-line occurrences remain separate
-- An aggressive player attempts to play every usable tile
-- Scoring is not yet modeled
-
-The simulator is intended to help us answer questions such as:
-
-- Can a player complete a single song?
-- Can a player complete multiple songs?
-- How quickly does the 50-tile inventory fill?
-- How much of the physical word pool remains?
-- How many lyric lines can be completed?
-- Does the draw formula create runaway hand growth?
-- Is the game winnable within the planned number of rounds?
-
-## Game Concept
-
-Players receive individual word tiles drawn from a pool created from the
-selected songs.
-
-Players use those words to reconstruct lyric lines displayed on the game
-board.
-
-A word tile can be:
-
-- **Played** into a lyric line.
-- **Held** in the player's inventory.
-
-There is no discard mechanism.
-
-Once a physical word tile has been drawn from the pool, it remains either
-in the player's hand or in a completed/played lyric line.
-
-## Game Modes
-
-### Easy / Open Mode
-
-The board provides up to 12 open lyric rows.
-
-Players can select a word and work with candidate lyric lines containing that
-word.
-
-### Standard Mode
-
-Planned board size:
-
-- 10 lyric rows
-
-### Hard Mode
-
-Planned board size:
-
-- 8 lyric rows
-
-The exact differences between Standard and Hard Mode are still under
-development.
-
-## Songs and Lyric Data
-
-Songs are stored as JSON files.
-
-Each song contains metadata and lyric sections such as:
-
-- Verse
-- Chorus
-- Bridge
-- Intro
-- Outro
-
-Individual lyric lines remain separate occurrences even when two lines contain
-identical text.
-
-This is important because the game treats each occurrence as a distinct
-playable lyric line.
-
-## Current Song Data
-
-The repository currently contains song data for:
-
-- Zach Bryan
-- Taylor Swift / Bon Iver
-
-The current data includes:
-
-- `Quittin' Time`
-- `Pink Skies`
-- `Appetite`
-- `Overtime`
-- `exile`
+Additional rules, simulator notes, and development history belong in Markdown files such as `docs/GAME_RULES.md`, `docs/SIMULATOR.md`, and `changelog.md`, rather than in this README.
 
 ## Project Structure
 
 ```text
 lyricSolitaire/
-├── index.html
-├── game.html
-├── README.md
-├── changelog.md
-│
-├── images/
-│
-├── css/
-│   └── game.css
-│
-├── tools/
-│   ├── lyrics-json-generator/
-│   │   ├── index.html
-│   │   ├── css/
-│   │   │   └── generator.css
-│   │   └── js/
-│   │       └── generator.js
-│   │
-│   └── simulator/
-│       ├── index.html
-│       ├── css/
-│       │   └── simulator.css
-│       └── js/
-│           └── simulator-ui.js
-│
+├── index.html                 # Cover / coming-soon page
+├── game.html                  # Player-facing game prototype
+├── simulator.html             # Simulator Lab
+├── README.md                  # GitHub project description
+├── changelog.md               # Development history
+├── docs/                      # Supporting game/developer documentation
+├── images/                    # Application artwork
+├── css/                       # Stylesheets
 ├── js/
-│   ├── main.js
-│   ├── components/
-│   └── utilities/
-│       ├── lyricsParser.js
-│       └── simulator.js
-│
-└── json/
-    ├── bryan_zach/
-    └── swift_taylor/
+│   ├── config/                # Shared project configuration
+│   ├── data/                  # Shared data/catalog loaders
+│   ├── components/            # Game UI components
+│   └── utilities/             # Parsers, simulation, logging utilities
+├── song_library/              # Maintained lyric and word-count data
+└── test_results/              # Exported simulator experiment records
 ```
 
-## Development Conventions
+## Development Convention
 
-Every JavaScript component we update should contain:
-
-1. A responsibility comment at the top of the file.
-2. Comments explaining important sections of code.
-3. Comments explaining non-obvious game rules.
-4. Clear function responsibilities.
-
-The simulator deliberately separates:
-
-- **Simulation engine** — `js/utilities/simulator.js`
-- **Simulator interface** — `tools/simulator/js/simulator-ui.js`
-
-This allows the same simulation engine to be reused later by automated tests
-or other development tools.
-
-## Versioning
-
-Prototype versions identify the state of the project being tested.
-
-Current prototype:
-
-**v0.1.1**
-
-Development history is maintained in [`changelog.md`](changelog.md).
+Every JavaScript file we update should have a clear responsibility comment at the top and comments explaining important code sections and non-obvious game rules.
 
 ## License
 
-Development project by Christopher J. Seeger.
-
-Additional licensing and distribution information will be established as the
-project approaches release.
+Development project by Christopher J. Seeger. Licensing and distribution details will be established as the project approaches release.

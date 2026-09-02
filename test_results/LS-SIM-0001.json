@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "1.0",
+  "experimentId": "LS-SIM-0001",
+  "timestamp": "2026-09-02",
+  "simulatorVersion": "0.1.0",
+  "recordSource": "manual screenshot transcription",
+  "parameters": {
+    "songs": [
+      "zach_bryan__quittin_time"
+    ],
+    "mode": "easy",
+    "modeLabel": "Easy / Open",
+    "trials": 2,
+    "randomSeed": 12345,
+    "startingRows": 12,
+    "handLimit": 50,
+    "maximumRounds": 12
+  },
+  "songs": [
+    {
+      "id": "zach_bryan__quittin_time",
+      "title": "Quittin' Time",
+      "artist": "Zach Bryan",
+      "totalWords": 241,
+      "uniqueWords": 108
+    }
+  ],
+  "results": {
+    "trialCount": 2,
+    "wins": 1,
+    "losses": 1,
+    "winRate": 0.5,
+    "averageRounds": 10.5,
+    "averageWordsPlayed": 172,
+    "averageCompletedLines": 15
+  },
+  "notes": "Initial manual test shown in the user-provided screenshot. The screenshot did not contain the complete per-trial trace, so no synthetic trial details were added."
+}
