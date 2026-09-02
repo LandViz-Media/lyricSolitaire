@@ -1,245 +1,154 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-```
-<title>Lyric Solitaire — Game</title>
-
-<link rel="stylesheet" href="css/game.css">
-```
-
+    <title>Lyric Solitaire — Game</title>
+    <link rel="stylesheet" href="css/game.css">
 </head>
-
 <body>
-
-```
-<!-- =====================================================
-     GAME HEADER
-     ===================================================== -->
-
-<header id="game-header">
-
-    <div id="game-branding">
-        <h1>Lyric Solitaire</h1>
-        <p>Build the lyrics. Play the song.</p>
-    </div>
-
-    <div id="game-status">
-
-        <div class="status-item">
-            <span class="status-label">Round</span>
-            <span id="round-number">—</span>
+    <!-- =====================================================
+         GAME HEADER
+         Displays the game title, prototype version, and
+         current game status.
+         ===================================================== -->
+    <header id="game-header">
+        <div class="game-title">
+            <h1>Lyric Solitaire</h1>
+            <p>Build the lyrics. Play the song.</p>
+            <span id="game-version">Prototype v0.1.0</span>
         </div>
 
-        <div class="status-item">
-            <span class="status-label">Turns</span>
-            <span id="turns-remaining">—</span>
+        <div id="game-status">
+            <div class="status-item">
+                <span class="status-label">Round</span>
+                <span id="round-number">—</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">Turns</span>
+                <span id="turns-remaining">—</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">Score</span>
+                <span id="score">0</span>
+            </div>
         </div>
+    </header>
 
-        <div class="status-item">
-            <span class="status-label">Score</span>
-            <span id="score">0</span>
-        </div>
-
-    </div>
-
-</header>
-
-
-<!-- =====================================================
-     MAIN GAME AREA
-     ===================================================== -->
-
-<main id="game-container">
-
-
-    <!-- =================================================
-         GAME SETUP
-         ================================================= -->
-
-    <section id="game-setup" class="game-section">
-
-        <div class="section-header">
-            <h2>Game Setup</h2>
-            <p>Select the music and game mode.</p>
-        </div>
-
-        <div id="game-setup-content">
-
-            <!--
-                gameSetup.js will populate:
-
-                Artist selection
-                Genre filter
-                Song selection
-                Selected songs
-                Game mode
-                Setup statistics
-            -->
-
-            <div id="artist-selection"></div>
-
-            <div id="genre-selection"></div>
-
-            <div id="song-selection"></div>
-
-            <div id="selected-songs"></div>
-
-            <div id="game-mode-selection"></div>
-
-            <div id="setup-statistics"></div>
-
-            <div id="setup-actions">
-
-                <button id="start-game" type="button">
-                    Start Game
-                </button>
-
+    <!-- =====================================================
+         MAIN GAME AREA
+         ===================================================== -->
+    <main id="game-container">
+        <!-- =================================================
+             GAME SETUP
+             ================================================= -->
+        <section id="game-setup" class="game-panel">
+            <div class="panel-heading">
+                <h2>Game Setup</h2>
+                <p>Select the music and game mode.</p>
             </div>
 
-        </div>
+            <div id="setup-content">
+                <div id="artist-selection"><!-- gameSetup.js --></div>
+                <div id="genre-selection"><!-- gameSetup.js --></div>
+                <div id="song-selection"><!-- gameSetup.js --></div>
+                <div id="selected-songs"><!-- gameSetup.js --></div>
+                <div id="game-mode-selection"><!-- gameSetup.js --></div>
+                <div id="game-statistics"><!-- gameSetup.js --></div>
 
-    </section>
-
-
-    <!-- =================================================
-         SOLO PLAY
-         ================================================= -->
-
-    <section id="solo-game" class="game-section" hidden>
-
-
-        <!-- =============================================
-             GAME CONTROLS
-             ============================================= -->
-
-        <div id="game-controls">
-
-            <!--
-                gameControls.js will populate controls
-                such as:
-                - End Turn
-                - Pause
-                - New Game
-                - etc.
-            -->
-
-        </div>
-
-
-        <!-- =============================================
-             SCOREBOARD
-             ============================================= -->
-
-        <div id="score-board">
-
-            <!-- scoreBoard.js -->
-
-        </div>
-
-
-        <!-- =============================================
-             PLAYER HAND
-             ============================================= -->
-
-        <section id="player-hand">
-
-            <div class="section-header">
-                <h2>Your Words</h2>
+                <div id="setup-actions">
+                    <button id="start-game" type="button">Start Game</button>
+                </div>
             </div>
-
-            <div id="player-hand-tiles">
-
-                <!-- playerHand.js -->
-
-            </div>
-
         </section>
 
+        <!-- =================================================
+             SOLO GAME
+             Hidden until the player starts a game.
+             ================================================= -->
+        <section id="solo-game" class="game-panel" hidden>
+            <div id="game-controls"><!-- gameControls.js --></div>
+            <div id="score-board"><!-- scoreBoard.js --></div>
 
-        <!-- =============================================
-             LYRIC BOARD
-             ============================================= -->
+            <section id="player-hand">
+                <div class="panel-heading">
+                    <h2>Your Words</h2>
+                </div>
+                <div id="word-tiles"><!-- playerHand.js --></div>
+            </section>
 
-        <section id="lyric-board">
+            <section id="lyric-board">
+                <div class="panel-heading">
+                    <h2>Lyrics</h2>
+                </div>
+                <div id="lyric-rows"><!-- lyricGrid.js --></div>
+            </section>
 
-            <div class="section-header">
-                <h2>Lyrics</h2>
+            <section id="completed-lines">
+                <div class="panel-heading">
+                    <h2>Completed Lines</h2>
+                </div>
+                <div id="completed-line-list"><!-- completedLines.js --></div>
+            </section>
+
+            <div id="turn-controls">
+                <div id="turn-information">
+                    <div>
+                        <span class="status-label">Draw</span>
+                        <span id="draw-count">—</span>
+                    </div>
+                    <div>
+                        <span class="status-label">Played</span>
+                        <span id="played-count">0</span>
+                    </div>
+                    <div>
+                        <span class="status-label">Held</span>
+                        <span id="held-count">0</span>
+                    </div>
+                </div>
+
+                <button id="end-turn" type="button">End Turn</button>
             </div>
-
-            <div id="lyric-grid">
-
-                <!-- lyricGrid.js -->
-
-            </div>
-
         </section>
+    </main>
 
+    <!-- =====================================================
+         JAVASCRIPT
+         Components are loaded before main.js so the main
+         application controller can coordinate them.
+         ===================================================== -->
 
-        <!-- =============================================
-             COMPLETED LINES
-             ============================================= -->
+    <!-- Shared utilities -->
+    <script src="js/components/utility.js"></script>
+    <script src="js/components/ui.js"></script>
 
-        <section id="completed-lines">
+    <!-- Game setup -->
+    <script src="js/components/gameSetup.js"></script>
 
-            <div class="section-header">
-                <h2>Completed Lines</h2>
-            </div>
+    <!-- Word pool and player inventory -->
+    <script src="js/components/wordPool.js"></script>
+    <script src="js/components/playerHand.js"></script>
 
-            <div id="completed-line-list">
+    <!-- Lyric board -->
+    <script src="js/components/lyricBoard.js"></script>
+    <script src="js/components/lyricGrid.js"></script>
 
-                <!-- completedLines.js -->
+    <!-- Completed lines -->
+    <script src="js/components/completedLines.js"></script>
 
-            </div>
+    <!-- Scoring -->
+    <script src="js/components/scoring.js"></script>
+    <script src="js/components/scoreBoard.js"></script>
 
-        </section>
+    <!-- Game controls and solo play -->
+    <script src="js/components/gameControls.js"></script>
+    <script src="js/components/soloPlay.js"></script>
 
+    <!-- Development / utility tools -->
+    <script src="js/utilities/lyricsParser.js"></script>
+    <script src="js/utilities/simulator.js"></script>
 
-    </section>
-
-</main>
-
-
-<!-- =====================================================
-     JAVASCRIPT
-     ===================================================== -->
-
-<!-- Main application controller -->
-<script src="js/main.js"></script>
-
-<!-- Shared utilities / interface -->
-<script src="js/components/utility.js"></script>
-<script src="js/components/ui.js"></script>
-
-<!-- Game setup -->
-<script src="js/components/gameSetup.js"></script>
-
-<!-- Word pool and player inventory -->
-<script src="js/components/wordPool.js"></script>
-<script src="js/components/playerHand.js"></script>
-
-<!-- Lyric board -->
-<script src="js/components/lyricBoard.js"></script>
-<script src="js/components/lyricGrid.js"></script>
-
-<!-- Completed lines -->
-<script src="js/components/completedLines.js"></script>
-
-<!-- Scoring -->
-<script src="js/components/scoring.js"></script>
-<script src="js/components/scoreBoard.js"></script>
-
-<!-- Game controls and solo play -->
-<script src="js/components/gameControls.js"></script>
-<script src="js/components/soloPlay.js"></script>
-
-<!-- Development / utility tools -->
-<script src="js/utilities/lyricsParser.js"></script>
-<script src="js/utilities/simulator.js"></script>
-```
-
+    <!-- Main application controller, loaded last. -->
+    <script src="js/main.js"></script>
 </body>
 </html>
