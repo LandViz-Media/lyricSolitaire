@@ -1,4 +1,4 @@
-# Changelog
+# Changelogs
 
 All notable Lyric Solitaire development changes are recorded here.
 
