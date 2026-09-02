@@ -533,6 +533,7 @@
         const won = completedWords === totalWordsInSource;
 
         return {
+            simulatorVersion: CONFIG.version,
             won: won,
             mode: mode,
             modeLabel: gameConfig.label,
