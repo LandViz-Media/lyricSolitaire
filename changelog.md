@@ -7,6 +7,68 @@ the state of the prototype being tested rather than a public release.
 
 ---
 
+## Prototype v0.1.1 — 2026-09-01
+
+### Game Simulator
+
+Added the first functional game-balance simulator.
+
+The simulator uses the actual repository Lyrics JSON and Word Count JSON
+files rather than hand-entered song statistics.
+
+Added:
+
+- `js/utilities/simulator.js`
+- `tools/simulator/index.html`
+- `tools/simulator/css/simulator.css`
+- `tools/simulator/js/simulator-ui.js`
+
+### Simulation Rules
+
+The first simulator target is Easy / Open Mode.
+
+The simulator models:
+
+- 12 active lyric rows
+- 50-tile player inventory
+- 12 maximum rounds
+- Initial draw of 12 tiles
+- Subsequent draw formula based on previous-round words played
+- Inventory-cap draw limiting
+- Physical word-pool depletion
+- Word placement
+- Held words
+- Duplicate lyric-line occurrences
+- Immediate completion of lyric lines
+- Immediate freeing of completed rows
+- Aggressive play strategy
+
+The simulator does **not** model scoring yet because completion-line and
+section-bonus scoring rules remain under discussion.
+
+### Simulation Strategy
+
+The simulated player attempts to play every usable word.
+
+When a word cannot be played into an active line, the simulator may open a
+new lyric line containing that word when an active row is available.
+
+The simulator prefers lines that are closer to completion in order to model
+the aggressive strategy discussed during prototype balancing.
+
+### Reproducibility
+
+Added a seeded random-number generator to the simulator interface so a test
+run can be reproduced using the same seed.
+
+### Documentation
+
+- Updated README to document the simulator.
+- Updated the current project version to `v0.1.1`.
+- Added simulator links to the development tools section.
+
+---
+
 ## Prototype v0.1.0 — 2026-09-01
 
 ### Project Structure
@@ -46,30 +108,17 @@ the state of the prototype being tested rather than a public release.
   - Album
   - Year
   - Genre
-- Preserved bracketed lyric sections such as `[Verse]`, `[Chorus]`,
-  `[Bridge]`, `[Intro]`, and `[Outro]`.
+- Preserved bracketed lyric sections.
 - Preserved Unicode normalization.
 - Preserved contraction-aware word tokenization.
 - Preserved physical word counts.
 - Preserved unique-word counts.
 - Preserved punctuation counts.
 - Preserved separate downloads for Lyrics JSON and Word Count JSON.
-- Removed JSBin-specific wrapper code and external analytics code.
+- Removed JSBin-specific wrapper and analytics code.
 
 ### Documentation
 
-- Updated `README.md` to describe the project and its development tools.
-- Added the Lyrics JSON Generator to the documented project structure.
-- Established `changelog.md` as the chronological development record.
-- Prototype versioning established at `v0.1.0`.
-
-### Current Status
-
-The game interface is an architectural prototype.
-
-The Lyrics JSON Generator is now represented in the repository as a local
-development tool.
-
-The next major development task is the game simulator, using the actual song
-JSON and word-count data to test game balance before implementing the complete
-gameplay interface.
+- Updated `README.md`.
+- Established `changelog.md`.
+- Established prototype versioning.

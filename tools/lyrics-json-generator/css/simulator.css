@@ -1,0 +1,198 @@
+/*
+    RESPONSIBILITY:
+    Styling for the Lyric Solitaire game simulator.
+*/
+
+body {
+    font-family: Arial, sans-serif;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 24px;
+    line-height: 1.5;
+    background: #f7f7f7;
+    color: #222;
+}
+
+h1,
+h2,
+h3 {
+    margin-top: 0;
+}
+
+.simulator-header {
+    margin-bottom: 20px;
+}
+
+.version {
+    display: inline-block;
+    font-weight: bold;
+    margin-top: 6px;
+}
+
+.tool-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin: 18px 0 24px;
+}
+
+.panel {
+    background: #fff;
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.rule-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+}
+
+.rule-grid div {
+    border: 1px solid #ddd;
+    padding: 12px;
+    background: #fafafa;
+}
+
+.rule-grid strong,
+.rule-grid span {
+    display: block;
+}
+
+.rule-grid span {
+    margin-top: 4px;
+}
+
+.note,
+.status {
+    padding: 12px;
+    background: #f2f2f2;
+    border: 1px solid #ddd;
+}
+
+.song-list {
+    display: grid;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.song-option {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+.song-option label {
+    cursor: pointer;
+}
+
+.song-meta {
+    display: block;
+    font-size: 0.9em;
+    color: #555;
+}
+
+.sim-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: end;
+}
+
+.sim-controls label {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-weight: bold;
+}
+
+.sim-controls input {
+    width: 150px;
+    box-sizing: border-box;
+    padding: 9px;
+    font-size: 15px;
+}
+
+button {
+    padding: 10px 16px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.result-card {
+    border: 1px solid #ddd;
+    padding: 12px;
+    background: #fafafa;
+}
+
+.result-card strong,
+.result-card span {
+    display: block;
+}
+
+.result-card span {
+    font-size: 1.4em;
+    font-weight: bold;
+    margin-top: 4px;
+}
+
+.table-wrap {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 650px;
+}
+
+th,
+td {
+    text-align: right;
+    padding: 8px;
+    border: 1px solid #ddd;
+}
+
+th {
+    background: #f2f2f2;
+}
+
+td:first-child,
+th:first-child {
+    text-align: left;
+}
+
+.validation-warning {
+    color: #8a4b00;
+    font-weight: bold;
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 14px;
+    }
+
+    .sim-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .sim-controls input {
+        width: 100%;
+    }
+}
