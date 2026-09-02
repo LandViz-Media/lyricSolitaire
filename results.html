@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lyric Solitaire — Results Viewer</title>
+<style>
+:root{--paper:#f5f0e4;--white:#fffdf7;--ink:#17232b;--muted:#66727a;--navy:#102936;--gold:#d59a1a;--line:#d3c5a8}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{background:var(--navy);color:#f4e5bc;padding:18px 22px;border-bottom:5px solid var(--gold)}h1{margin:0 0 4px}header p{margin:0;color:#d8cfbb}
+main{width:min(1500px,calc(100% - 32px));margin:18px auto 45px;display:grid;gap:16px}.panel{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:16px}.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+input,select,button{font:inherit;padding:8px;border:1px solid #b7ab95;border-radius:7px;background:#fff}button{cursor:pointer;background:var(--gold);color:#fff;font-weight:800}
+.metrics{display:grid;grid-template-columns:repeat(6,1fr);gap:9px}.metric{padding:11px;border:1px solid var(--line);border-radius:8px;text-align:center;background:#fffdf8}.metric span{display:block;font-size:11px;color:var(--muted);text-transform:uppercase}.metric strong{font-size:23px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:7px;border-bottom:1px solid var(--line);text-align:left}th{background:#f4eee1}
+canvas{width:100%;height:300px;border:1px solid var(--line);border-radius:8px;background:#fff}.drop{padding:22px;text-align:center;border:2px dashed #b8a889;border-radius:9px;background:#faf7ef;color:var(--muted)}pre{background:#172026;color:#eee;padding:10px;max-height:330px;overflow:auto;font-size:12px}.note{font-size:12px;color:var(--muted)}
+@media(max-width:900px){.metrics{grid-template-columns:repeat(3,1fr)}.grid{grid-template-columns:1fr}}@media(max-width:600px){.metrics{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<header><h1>Lyric Solitaire — Results Viewer</h1><p>Compare exported simulator experiments and inspect trial-level distributions.</p></header>
+<main>
+<section class="panel"><h2>Load Experiment Results</h2>
+<div class="drop" id="drop">Drag JSON result files here, or choose files below.</div>
+<div class="controls" style="margin-top:10px"><input id="fileInput" type="file" accept=".json,application/json" multiple>
+<select id="songFilter"><option value="">All songs</option></select>
+<select id="modeFilter"><option value="">All modes</option></select>
+<select id="metric"><option value="totalPlayed">Words Played</option><option value="roundsPlayed">Rounds Played</option><option value="completedLines">Completed Lines</option><option value="held">Final Hand</option><option value="won">Win / Loss</option></select></div>
+<p class="note">The first viewer is deliberately file-based. Select multiple JSON exports and compare them without modifying the source test files.</p>
+</section>
+
+<section class="metrics">
+<div class="metric"><span>Experiments</span><strong id="mExperiments">0</strong></div>
+<div class="metric"><span>Trials</span><strong id="mTrials">0</strong></div>
+<div class="metric"><span>Wins</span><strong id="mWins">0</strong></div>
+<div class="metric"><span>Win Rate</span><strong id="mWinRate">—</strong></div>
+<div class="metric"><span>All Words Used</span><strong id="mAllWords">—</strong></div>
+<div class="metric"><span>Songs</span><strong id="mSongs">0</strong></div>
+</section>
+
+<section class="grid">
+<section class="panel"><h2>Experiment Comparison</h2><div id="comparison">Load result files to begin.</div></section>
+<section class="panel"><h2>Trial Histogram</h2><canvas id="histogram" width="900" height="300"></canvas><p id="histNote" class="note">Select a record with a complete trial collection.</p></section>
+</section>
+
+<section class="grid">
+<section class="panel"><h2>Loaded Data</h2><pre id="raw">No files loaded.</pre></section>
+<section class="panel"><h2>Future Analysis</h2><p class="note">This page is the foundation for later song comparison, mode comparison, histograms, distributions, simulator-version comparison, and challenge-level development.</p></section>
+</section>
+</main>
+<script>
+/*
+ * Results Viewer Controller
+ *
+ * Responsibility:
+ * Reads exported experiment JSON and provides basic filtering, comparison,
+ * and histogram visualization. It does not modify experiment data.
+ */
+let records=[];
+const $=id=>document.getElementById(id);
+function esc(v){return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;")}
+async function readFiles(files){const loaded=[];for(const file of files){try{const data=JSON.parse(await file.text());if(data?.experimentId&&data?.results)loaded.push(data)}catch(e){console.warn("Could not read",file.name,e)}}for(const r of loaded)if(!records.some(x=>x.experimentId===r.experimentId))records.push(r);refreshFilters();render()}
+function songText(r){return(r.songs||[]).map(s=>s.title).join(" + ")}
+function refreshFilters(){const song=[...new Set(records.flatMap(r=>(r.songs||[]).map(s=>s.title)))].sort();const mode=[...new Set(records.map(r=>r.parameters?.modeLabel||r.parameters?.mode).filter(Boolean))].sort();const s=$("songFilter").value,m=$("modeFilter").value;$("songFilter").innerHTML='<option value="">All songs</option>'+song.map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join("");$("modeFilter").innerHTML='<option value="">All modes</option>'+mode.map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join("");if(song.includes(s))$("songFilter").value=s;if(mode.includes(m))$("modeFilter").value=m}
+function filtered(){const song=$("songFilter").value,mode=$("modeFilter").value;return records.filter(r=>(!song||(r.songs||[]).some(s=>s.title===song))&&(!mode||(r.parameters?.modeLabel===mode||r.parameters?.mode===mode)))}
+function render(){const rows=filtered(),trials=rows.reduce((n,r)=>n+(Number(r.results?.trialCount)||0),0),wins=rows.reduce((n,r)=>n+(Number(r.results?.wins)||0),0),all=rows.reduce((n,r)=>n+(Number(r.results?.allWordsUsedTrials)||0),0),songs=new Set(rows.flatMap(r=>(r.songs||[]).map(s=>s.title)));$("mExperiments").textContent=rows.length;$("mTrials").textContent=trials;$("mWins").textContent=wins;$("mWinRate").textContent=trials?`${(wins/trials*100).toFixed(1)}%`:"—";$("mAllWords").textContent=trials?`${all}/${trials}`:"—";$("mSongs").textContent=songs.size;$("comparison").innerHTML=rows.length?`<table><thead><tr><th>Experiment</th><th>Song(s)</th><th>Mode</th><th>Trials</th><th>Win</th><th>All Words</th><th>Avg Played</th></tr></thead><tbody>${rows.map(r=>{const z=r.results||{};return`<tr><td>${esc(r.experimentId)}</td><td>${esc(songText(r))}</td><td>${esc(r.parameters?.modeLabel||r.parameters?.mode||"")}</td><td>${z.trialCount??"—"}</td><td>${z.winRate!=null?(z.winRate*100).toFixed(1)+"%":"—"}</td><td>${z.allWordsUsedRate!=null?(z.allWordsUsedRate*100).toFixed(1)+"%":"—"}</td><td>${z.averagePlayed!=null?Number(z.averagePlayed).toFixed(2):"—"}</td></tr>`}).join("")}</tbody></table>`:"Load result files to begin."; $("raw").textContent=JSON.stringify(rows,null,2);drawHistogram(rows)}
+function drawHistogram(rows){const canvas=$("histogram"),ctx=canvas.getContext("2d");ctx.clearRect(0,0,canvas.width,canvas.height);const r=rows[0],trials=r?.trials||[],metric=$("metric").value;if(!trials.length){$("histNote").textContent="No complete trial collection is available in the selected record.";return}let values=metric==="won"?trials.map(t=>t.won?1:0):trials.map(t=>Number(t[metric])||0);const min=Math.min(...values),max=Math.max(...values),bins=20,width=(max-min)||1,counts=new Array(bins).fill(0);values.forEach(v=>{let i=Math.floor((v-min)/width*bins);if(i===bins)i=bins-1;counts[i]++});const left=45,top=18,right=12,bottom=34,w=canvas.width-left-right,h=canvas.height-top-bottom,mx=Math.max(...counts,1),bw=w/bins;ctx.fillStyle="#102936";counts.forEach((c,i)=>{const bh=c/mx*h;ctx.fillRect(left+i*bw,top+h-bh,Math.max(1,bw-2),bh)});ctx.fillStyle="#58636a";ctx.font="12px system-ui";ctx.fillText(String(min.toFixed(1)),left,canvas.height-10);ctx.fillText(String(max.toFixed(1)),canvas.width-55,canvas.height-10);ctx.fillText(`${metric} • ${values.length} trials`,left,12);$("histNote").textContent=`Showing ${metric} distribution for ${r.experimentId}.`}
+$("fileInput").addEventListener("change",e=>readFiles(e.target.files));["songFilter","modeFilter","metric"].forEach(id=>$(id).addEventListener("change",render));const drop=$("drop");["dragenter","dragover"].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.style.background="#f0e5ca"}));["dragleave","drop"].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.style.background=""}));drop.addEventListener("drop",e=>readFiles(e.dataTransfer.files));render();
+</script>
+</body>
+</html>

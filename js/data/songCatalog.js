@@ -2,45 +2,62 @@
  * Lyric Solitaire — Song Catalog Loader
  *
  * Responsibility:
- * Loads the composite song manifest and provides helper functions for the
- * simulator/game to locate lyric and word-count JSON files.
+ * Loads the composite song catalog that points the application to the
+ * maintained song-library JSON files.
  *
- * Long-term data location:
- *   /song_library/
- *
- * During the one-time migration from the old /json folder, this loader will
- * fall back to /json when the song_library copy is not present.
+ * The project owner maintains /song_library. The loader falls back to the
+ * legacy /json location only so an in-progress migration does not break the
+ * application.
  */
 window.LyricSolitaireSongCatalog = {
-  urls: ["song_library/song_catalog.json", "json/song_catalog.json"],
+    urls: [
+        "song_library/song_catalog.json",
+        "json/song_catalog.json"
+    ],
 
-  async load() {
-    let lastError = null;
+    _activeCatalogSource: null,
 
-    for (const url of this.urls) {
-      try {
-        const response = await fetch(url, { cache: "no-store" });
-        if (response.ok) {
-          const data = await response.json();
-          this._activeCatalogSource = url.startsWith("json/") ? "json" : "song_library";
-          data._catalogSource = url;
-          return data;
+    async load() {
+        let lastError = null;
+
+        for (const url of this.urls) {
+            try {
+                const response = await fetch(url, { cache: "no-store" });
+
+                if (!response.ok) {
+                    lastError = new Error(`${url}: HTTP ${response.status}`);
+                    continue;
+                }
+
+                const data = await response.json();
+                this._activeCatalogSource =
+                    url.startsWith("song_library/") ? "song_library" : "json";
+                data._catalogSource = url;
+                return data;
+            } catch (error) {
+                lastError = error;
+            }
         }
-        lastError = new Error(`${url}: ${response.status}`);
-      } catch (error) {
-        lastError = error;
-      }
-    }
 
-    throw new Error(
-      `Unable to load song catalog. Tried song_library/ and json/. ${lastError?.message || ""}`
-    );
-  },
+        throw new Error(
+            `Unable to load song catalog. ${lastError?.message || ""}`
+        );
+    },
 
-  resolveDataPath(path) {
-    if (String(path).startsWith("song_library/")) {
-      return path;
+    resolveDataPath(path) {
+        const value = String(path);
+
+        if (
+            this._activeCatalogSource === "json" &&
+            value.startsWith("song_library/")
+        ) {
+            return value.replace(/^song_library\//, "json/");
+        }
+
+        if (value.startsWith("song_library/")) {
+            return value;
+        }
+
+        return value.replace(/^json\//, "song_library/");
     }
-    return String(path).replace(/^json\//, "song_library/");
-  }
 };

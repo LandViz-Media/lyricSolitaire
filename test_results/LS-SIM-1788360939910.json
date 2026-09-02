@@ -1,0 +1,195 @@
+{
+  "schemaVersion": "1.0",
+  "experimentId": "LS-SIM-1788360939910",
+  "timestamp": "2026-09-02T14:55:39.910Z",
+  "simulatorVersion": "0.1.0",
+  "parameters": {
+    "mode": "easy",
+    "modeLabel": "Easy / Open",
+    "trials": 1000,
+    "randomSeed": 12345,
+    "startingRows": 12,
+    "handLimit": 50,
+    "maximumRounds": 12
+  },
+  "songs": [
+    {
+      "id": "zach_bryan__pink_skies",
+      "title": "Pink Skies",
+      "artist": "Zach Bryan",
+      "album": "The Great American Bar Scene",
+      "year": 2024,
+      "genre": "Country",
+      "total": 237,
+      "unique": 100
+    },
+    {
+      "id": "zach_bryan__quittin_time",
+      "title": "Quittin' Time",
+      "artist": "Zach Bryan",
+      "album": "Summertime Blues",
+      "year": 2022,
+      "genre": "Country",
+      "total": 241,
+      "unique": 108
+    }
+  ],
+  "results": {
+    "trialCount": 1000,
+    "wins": 0,
+    "losses": 1000,
+    "winRate": 0,
+    "averageRounds": 12,
+    "averageDrawn": 113.822,
+    "averagePlayed": 63.838,
+    "averageHeld": 49.984,
+    "averageCompletedLines": 0.53,
+    "averagePoolRemaining": 364.178,
+    "averageActiveLines": 12
+  },
+  "sampleTrial": {
+    "won": false,
+    "roundsPlayed": 12,
+    "totalSourceWords": 478,
+    "totalDrawn": 104,
+    "totalPlayed": 54,
+    "held": 50,
+    "completedLines": 0,
+    "activeLines": 12,
+    "poolRemaining": 374,
+    "rounds": [
+      {
+        "round": 1,
+        "requestedDraw": 12,
+        "actualDraw": 12,
+        "handBeforeDraw": 0,
+        "handAfterPlay": 0,
+        "played": 12,
+        "completed": 0,
+        "activeLines": 8,
+        "poolRemaining": 466
+      },
+      {
+        "round": 2,
+        "requestedDraw": 23,
+        "actualDraw": 23,
+        "handBeforeDraw": 0,
+        "handAfterPlay": 10,
+        "played": 13,
+        "completed": 0,
+        "activeLines": 12,
+        "poolRemaining": 443
+      },
+      {
+        "round": 3,
+        "requestedDraw": 23,
+        "actualDraw": 23,
+        "handBeforeDraw": 10,
+        "handAfterPlay": 22,
+        "played": 11,
+        "completed": 0,
+        "activeLines": 12,
+        "poolRemaining": 420
+      },
+      {
+        "round": 4,
+        "requestedDraw": 20,
+        "actualDraw": 20,
+        "handBeforeDraw": 22,
+        "handAfterPlay": 35,
+        "played": 7,
+        "completed": 0,
+        "activeLines": 12,
+        "poolRemaining": 400
+      },
+      {
+        "round": 5,
+        "requestedDraw": 15,
+        "actualDraw": 15,
+        "handBeforeDraw": 35,
+        "handAfterPlay": 43,
+        "played": 7,
+        "completed": 0,
+        "activeLines": 12,
+        "poolRemaining": 385
+      },
+      {
+        "round": 6,
+        "requestedDraw": 14,
+        "actualDraw": 7,
+        "handBeforeDraw": 43,
+        "handAfterPlay": 46,
+        "played": 4,
+        "completed": 0,
+        "activeLines": 12,
+        "poolRemaining": 378
+      },
+      {
+        "round": 7,
+        "requestedDraw": 10,
+        "actualDraw": 4,
+        "handBeforeDraw": 46,
+        "handAfterPlay": 50,
+        "played": 0,
+        "completed": 0,
+        "activeLines": 12,
+        "poolRemaining": 374
+      },
+      {
+        "round": 8,
+        "requestedDraw": 5,
+        "actualDraw": 0,
+        "handBeforeDraw": 50,
+        "handAfterPlay": 50,
+        "played": 0,
+        "completed": 0,
+        "activeLines": 12,
+        "poolRemaining": 374
+      },
+      {
+        "round": 9,
+        "requestedDraw": 4,
+        "actualDraw": 0,
+        "handBeforeDraw": 50,
+        "handAfterPlay": 50,
+        "played": 0,
+        "completed": 0,
+        "activeLines": 12,
+        "poolRemaining": 374
+      },
+      {
+        "round": 10,
+        "requestedDraw": 3,
+        "actualDraw": 0,
+        "handBeforeDraw": 50,
+        "handAfterPlay": 50,
+        "played": 0,
+        "completed": 0,
+        "activeLines": 12,
+        "poolRemaining": 374
+      },
+      {
+        "round": 11,
+        "requestedDraw": 2,
+        "actualDraw": 0,
+        "handBeforeDraw": 50,
+        "handAfterPlay": 50,
+        "played": 0,
+        "completed": 0,
+        "activeLines": 12,
+        "poolRemaining": 374
+      },
+      {
+        "round": 12,
+        "requestedDraw": 1,
+        "actualDraw": 0,
+        "handBeforeDraw": 50,
+        "handAfterPlay": 50,
+        "played": 0,
+        "completed": 0,
+        "activeLines": 12,
+        "poolRemaining": 374
+      }
+    ]
+  }
+}

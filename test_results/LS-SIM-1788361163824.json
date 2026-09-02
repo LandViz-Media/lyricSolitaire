@@ -1,0 +1,152 @@
+{
+  "schemaVersion": "1.0",
+  "experimentId": "LS-SIM-1788361163824",
+  "timestamp": "2026-09-02T14:59:23.824Z",
+  "simulatorVersion": "0.1.0",
+  "parameters": {
+    "mode": "easy",
+    "modeLabel": "Easy / Open",
+    "trials": 2,
+    "randomSeed": 12345,
+    "startingRows": 12,
+    "handLimit": 50,
+    "maximumRounds": 12
+  },
+  "songs": [
+    {
+      "id": "zach_bryan__appetite",
+      "title": "Appetite",
+      "artist": "Zach Bryan",
+      "album": "With Heaven On Top",
+      "year": 2026,
+      "genre": "Country",
+      "total": 243,
+      "unique": 105
+    }
+  ],
+  "results": {
+    "trialCount": 2,
+    "wins": 2,
+    "losses": 0,
+    "winRate": 1,
+    "averageRounds": 9,
+    "averageDrawn": 243,
+    "averagePlayed": 243,
+    "averageHeld": 0,
+    "averageCompletedLines": 23,
+    "averagePoolRemaining": 0,
+    "averageActiveLines": 0
+  },
+  "sampleTrial": {
+    "won": true,
+    "roundsPlayed": 9,
+    "totalSourceWords": 243,
+    "totalDrawn": 243,
+    "totalPlayed": 243,
+    "held": 0,
+    "completedLines": 23,
+    "activeLines": 0,
+    "poolRemaining": 0,
+    "rounds": [
+      {
+        "round": 1,
+        "requestedDraw": 12,
+        "actualDraw": 12,
+        "handBeforeDraw": 0,
+        "handAfterPlay": 0,
+        "played": 12,
+        "completed": 0,
+        "activeLines": 5,
+        "poolRemaining": 231
+      },
+      {
+        "round": 2,
+        "requestedDraw": 23,
+        "actualDraw": 23,
+        "handBeforeDraw": 0,
+        "handAfterPlay": 1,
+        "played": 22,
+        "completed": 0,
+        "activeLines": 12,
+        "poolRemaining": 208
+      },
+      {
+        "round": 3,
+        "requestedDraw": 32,
+        "actualDraw": 32,
+        "handBeforeDraw": 1,
+        "handAfterPlay": 3,
+        "played": 30,
+        "completed": 0,
+        "activeLines": 12,
+        "poolRemaining": 176
+      },
+      {
+        "round": 4,
+        "requestedDraw": 39,
+        "actualDraw": 39,
+        "handBeforeDraw": 3,
+        "handAfterPlay": 15,
+        "played": 27,
+        "completed": 1,
+        "activeLines": 12,
+        "poolRemaining": 137
+      },
+      {
+        "round": 5,
+        "requestedDraw": 35,
+        "actualDraw": 35,
+        "handBeforeDraw": 15,
+        "handAfterPlay": 18,
+        "played": 32,
+        "completed": 2,
+        "activeLines": 12,
+        "poolRemaining": 102
+      },
+      {
+        "round": 6,
+        "requestedDraw": 39,
+        "actualDraw": 32,
+        "handBeforeDraw": 18,
+        "handAfterPlay": 19,
+        "played": 31,
+        "completed": 3,
+        "activeLines": 12,
+        "poolRemaining": 70
+      },
+      {
+        "round": 7,
+        "requestedDraw": 37,
+        "actualDraw": 31,
+        "handBeforeDraw": 19,
+        "handAfterPlay": 24,
+        "played": 26,
+        "completed": 1,
+        "activeLines": 12,
+        "poolRemaining": 39
+      },
+      {
+        "round": 8,
+        "requestedDraw": 31,
+        "actualDraw": 26,
+        "handBeforeDraw": 24,
+        "handAfterPlay": 0,
+        "played": 50,
+        "completed": 9,
+        "activeLines": 7,
+        "poolRemaining": 13
+      },
+      {
+        "round": 9,
+        "requestedDraw": 54,
+        "actualDraw": 13,
+        "handBeforeDraw": 0,
+        "handAfterPlay": 0,
+        "played": 13,
+        "completed": 7,
+        "activeLines": 0,
+        "poolRemaining": 0
+      }
+    ]
+  }
+}

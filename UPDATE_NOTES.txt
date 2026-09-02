@@ -1,0 +1,14 @@
+Lyric Solitaire Simulator v0.1.1
+
+Drop these files over the root of the local Lyric Solitaire repository.
+
+Important:
+- /song_library remains your maintained source-data directory. This package
+  does not include or rewrite lyric/word-count source files.
+- v0.1.1 is the first release where Standard and Hard actually change the
+  simulator engine configuration.
+- Re-run earlier Standard/Hard experiments created with v0.1.0 before using
+  them as difficulty evidence.
+- Reset is not required between normal runs.
+- results.html is included now so exported results can be compared and
+  visualized as the test library grows.

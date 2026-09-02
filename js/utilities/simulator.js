@@ -4,50 +4,65 @@
  * ============================================================
  *
  * RESPONSIBILITY:
- * Simulate complete Lyric Solitaire games using the actual song
- * Lyrics JSON and Word Count JSON files.
+ * Simulate complete Lyric Solitaire games using lyric JSON and word-count
+ * JSON data.
  *
- * This file contains game-state and simulation logic only.
- * It does not create or manipulate the simulator interface.
+ * This file contains game-state and simulation logic only. It does not create
+ * or manipulate the simulator interface.
  *
- * IMPORTANT SIMULATION ASSUMPTIONS:
- * - Easy / Open Mode is the initial simulation target.
- * - Easy / Open Mode has 12 active lyric rows.
- * - The player's inventory is capped at 50 physical word tiles.
- * - Round 1 draws 12 tiles.
- * - For later rounds:
- *       Draw = (13 - Round) + Previous Round Words Played
- * - Actual draw is capped by both the remaining pool and available
- *   inventory space.
- * - A drawn tile is never discarded. It is either played or held.
- * - The simulated player is intentionally aggressive.
- * - A word is played whenever an active line can use it.
- * - If a word cannot be used by an active line, the player may open
- *   a new lyric line containing that word if a row is available.
- * - Completed lines immediately free their row.
- * - Scoring is intentionally NOT modeled yet because the exact
- *   completion-line and section-bonus rules remain under discussion.
+ * IMPORTANT:
+ * Simulator v0.1.1 is the first version in which Easy, Standard, and Hard
+ * actually change the simulation configuration.
  *
- * This simulator is therefore a balance/solvability tool, not yet
- * the final game engine.
+ * MODE CONFIGURATION:
+ *   Easy / Open : 12 rows, 50-tile hand, 12 rounds
+ *   Standard    : 10 rows, 40-tile hand, 10 rounds
+ *   Hard        :  8 rows, 30-tile hand,  8 rounds
+ *
+ * The current simulator intentionally uses an aggressive simulated player.
+ * It is a balance/solvability research tool, not the final game engine.
+ *
+ * Scoring is not modeled yet.
  * ============================================================
  */
-
 (function (global) {
     "use strict";
 
-    const CONFIG = {
-        version: "0.1.1",
-        mode: "Easy / Open",
-        maxRows: 12,
-        maxHand: 50,
-        maxRounds: 12,
-        initialDraw: 12
+    const MODE_CONFIG = {
+        easy: {
+            label: "Easy / Open",
+            maxRows: 12,
+            maxHand: 50,
+            maxRounds: 12
+        },
+        standard: {
+            label: "Standard",
+            maxRows: 10,
+            maxHand: 40,
+            maxRounds: 10
+        },
+        hard: {
+            label: "Hard",
+            maxRows: 8,
+            maxHand: 30,
+            maxRounds: 8
+        }
     };
 
+    const CONFIG = {
+        version: "0.1.1",
+        initialDraw: 12,
+        defaultMode: "easy",
+        modes: MODE_CONFIG
+    };
+
+    function getModeConfig(mode) {
+        return MODE_CONFIG[mode] || MODE_CONFIG.easy;
+    }
+
     /*
-     * Normalize a word in the same general way as the Lyrics JSON
-     * Generator so the simulator can match word tiles to lyric words.
+     * Normalize lyric words so matching is consistent across punctuation
+     * and typographic apostrophes.
      */
     function normalizeWord(word) {
         return String(word || "")
@@ -59,25 +74,13 @@
     }
 
     /*
-     * Tokenize lyric lines while preserving contractions such as:
-     * I've, can't, Quittin', lady's, and we'll.
+     * Tokenize lyric lines while preserving common contractions.
      */
     function tokenizeLine(line) {
         const pattern = /[\p{L}\p{M}]+(?:['’][\p{L}\p{M}]*)?/gu;
         return String(line || "").match(pattern) || [];
     }
 
-    /*
-     * Create a frequency map from a lyric line.
-     *
-     * Example:
-     * "my hand and my side"
-     * becomes:
-     * my: 2
-     * hand: 1
-     * and: 1
-     * side: 1
-     */
     function wordFrequency(line) {
         const counts = new Map();
 
@@ -90,9 +93,8 @@
     }
 
     /*
-     * Convert Word Count JSON into an array representing the physical
-     * tiles. If "my" has a count of 14, fourteen physical "my" tiles
-     * are placed in the pool.
+     * Expand the word-count JSON into physical word tiles.
+     * A count of 14 for "my" produces fourteen physical tiles.
      */
     function buildPhysicalPool(wordCountData) {
         const pool = [];
@@ -112,11 +114,8 @@
     }
 
     /*
-     * Create one playable lyric-line occurrence.
-     *
-     * Each occurrence remains separate even when two lines have
-     * identical text. This preserves the game's rule that duplicate
-     * lyric lines are distinct candidates.
+     * Preserve every lyric-line occurrence separately. Repeated chorus text
+     * therefore remains multiple distinct candidate lines.
      */
     function buildLineOccurrences(lyricsData) {
         const lines = [];
@@ -134,10 +133,12 @@
                     text: text,
                     required: required,
                     remaining: new Map(required),
-                    wordCount: Array.from(required.values())
-                        .reduce(function (sum, count) {
+                    wordCount: Array.from(required.values()).reduce(
+                        function (sum, count) {
                             return sum + count;
-                        }, 0),
+                        },
+                        0
+                    ),
                     placed: 0
                 });
 
@@ -148,10 +149,6 @@
         return lines;
     }
 
-    /*
-     * Clone a line occurrence for a particular simulated game.
-     * The source catalog must remain untouched between trials.
-     */
     function cloneLine(line) {
         return {
             id: line.id,
@@ -166,12 +163,6 @@
         };
     }
 
-    /*
-     * Fisher-Yates shuffle.
-     *
-     * A supplied random function allows repeatable simulations when
-     * the simulator UI provides a seed.
-     */
     function shuffle(array, random) {
         for (let i = array.length - 1; i > 0; i -= 1) {
             const j = Math.floor(random() * (i + 1));
@@ -184,19 +175,12 @@
     }
 
     /*
-     * Find the next draw amount according to the current agreed
-     * draw rule.
+     * Current agreed draw progression:
+     *   Round 1 = 12
+     *   Later round = (13 - Round) + Previous Round Words Played
      *
-     * Round 1:
-     *     12
-     *
-     * If all 12 are played:
-     * Round 2:
-     *     12 - 1 + 12 = 23
-     *
-     * If all 23 are played:
-     * Round 3:
-     *     11 - 1 + 23 = 33
+     * Example:
+     *   Round 2 after 12 played = 11 + 12 = 23.
      */
     function calculateDraw(round, previousPlayed) {
         if (round === 1) {
@@ -206,21 +190,15 @@
         return Math.max(0, (13 - round) + previousPlayed);
     }
 
-    /*
-     * Test whether an active lyric line can accept a particular word.
-     */
     function lineCanUseWord(line, wordKey) {
         return (line.remaining.get(wordKey) || 0) > 0;
     }
 
     /*
-     * Select the best active line for a word.
-     *
      * Aggressive strategy:
-     * 1. Prefer lines that are closest to completion.
-     * 2. Prefer lines where this word fills a larger portion of
-     *    the remaining requirement.
-     * 3. Break ties randomly.
+     *   1. Prefer an active line already closest to completion.
+     *   2. Prefer uses of the selected word that advance that line.
+     *   3. Use randomness only to break ties.
      */
     function chooseActiveLine(activeLines, wordKey, random) {
         const candidates = activeLines.filter(function (line) {
@@ -242,12 +220,6 @@
             });
 
             const usesOfWord = line.remaining.get(wordKey) || 0;
-
-            /*
-             * Higher progress is better. A small remaining word count
-             * receives a strong preference because completing a line
-             * immediately frees a row.
-             */
             const progressScore =
                 (line.wordCount - remainingWords) * 100 -
                 remainingWords * 10 +
@@ -265,47 +237,49 @@
     }
 
     /*
-     * Select a new lyric occurrence containing a word.
-     *
-     * This models Easy/Open behavior: when the player has a word that
-     * cannot be played into an existing line, an open row can be used
-     * to introduce a candidate line containing that word.
+     * Easy/Open candidate behavior: when a word cannot be used by an active
+     * line, an open row may introduce a new lyric line containing that word.
      */
-    function chooseNewLine(allLines, activeLines, completedIds, wordKey, random) {
-        const activeIds = new Set(activeLines.map(function (line) {
-            return line.id;
-        }));
+    function chooseNewLine(
+        allLines,
+        activeLines,
+        completedIds,
+        wordKey,
+        random
+    ) {
+        const activeIds = new Set(
+            activeLines.map(function (line) {
+                return line.id;
+            })
+        );
 
         const candidates = allLines.filter(function (line) {
-            return !activeIds.has(line.id) &&
+            return (
+                !activeIds.has(line.id) &&
                 !completedIds.has(line.id) &&
-                lineCanUseWord(line, wordKey);
+                lineCanUseWord(line, wordKey)
+            );
         });
 
         if (candidates.length === 0) {
             return null;
         }
 
-        /*
-         * Prefer shorter lines because they are more likely to complete
-         * quickly, while retaining randomness among similarly useful
-         * candidates.
-         */
+        // Short lines are favored because they can free a row faster.
         candidates.sort(function (a, b) {
             return a.wordCount - b.wordCount;
         });
 
-        const topCount = Math.min(8, candidates.length);
-        const topCandidates = candidates.slice(0, topCount);
+        const topCandidates = candidates.slice(
+            0,
+            Math.min(8, candidates.length)
+        );
 
         return cloneLine(
             topCandidates[Math.floor(random() * topCandidates.length)]
         );
     }
 
-    /*
-     * Play one physical word tile into a line.
-     */
     function playWordIntoLine(line, wordKey) {
         const remaining = line.remaining.get(wordKey) || 0;
 
@@ -320,21 +294,21 @@
         }
 
         line.placed += 1;
-
         return true;
     }
 
-    /*
-     * Determine whether all words in a line have been played.
-     */
     function isLineComplete(line) {
         return line.remaining.size === 0;
     }
 
     /*
-     * Remove completed lines immediately and record them.
+     * Completed rows leave the active board immediately.
      */
-    function compactCompletedLines(activeLines, completedIds, completedLines) {
+    function compactCompletedLines(
+        activeLines,
+        completedIds,
+        completedLines
+    ) {
         const remaining = [];
 
         activeLines.forEach(function (line) {
@@ -349,16 +323,13 @@
         return remaining;
     }
 
-    /*
-     * Draw physical tiles from the pool, respecting the 50-tile
-     * player inventory limit.
-     */
-    function drawTiles(pool, hand, requestedAmount, random) {
-        const availableCapacity = CONFIG.maxHand - hand.length;
+    function drawTiles(pool, hand, requestedAmount, random, gameConfig) {
+        const availableCapacity = gameConfig.maxHand - hand.length;
+
         const actualAmount = Math.min(
             requestedAmount,
             pool.length,
-            availableCapacity
+            Math.max(0, availableCapacity)
         );
 
         const drawn = [];
@@ -372,18 +343,7 @@
     }
 
     /*
-     * Add a physical tile to the player's hand.
-     */
-    function addToHand(hand, tile) {
-        hand.push(tile);
-    }
-
-    /*
-     * Attempt to play as many hand tiles as possible.
-     *
-     * This is deliberately aggressive. It repeatedly scans the hand,
-     * playing usable words, opening new lines when possible, and
-     * immediately processing completed lines.
+     * Aggressively play the hand until no additional word can be placed.
      */
     function aggressivelyPlayHand(
         hand,
@@ -391,7 +351,8 @@
         allLines,
         completedIds,
         completedLines,
-        random
+        random,
+        gameConfig
     ) {
         let playedThisTurn = 0;
         let changed = true;
@@ -409,8 +370,11 @@
                     random
                 );
 
-                if (!target && activeLines.length < CONFIG.maxRows) {
-                    const newLine = chooseNewLine(
+                if (
+                    !target &&
+                    activeLines.length < gameConfig.maxRows
+                ) {
+                    target = chooseNewLine(
                         allLines,
                         activeLines,
                         completedIds,
@@ -418,9 +382,8 @@
                         random
                     );
 
-                    if (newLine) {
-                        activeLines.push(newLine);
-                        target = newLine;
+                    if (target) {
+                        activeLines.push(target);
                     }
                 }
 
@@ -432,20 +395,12 @@
                     continue;
                 }
 
-                /*
-                 * The physical tile has now been played and is removed
-                 * from the player's hand.
-                 */
+                // The physical tile has been played.
                 hand.splice(handIndex, 1);
                 handIndex -= 1;
-
                 playedThisTurn += 1;
                 changed = true;
 
-                /*
-                 * A completed line immediately leaves the active board,
-                 * freeing a row for another candidate line.
-                 */
                 const compacted = compactCompletedLines(
                     activeLines,
                     completedIds,
@@ -463,10 +418,12 @@
     }
 
     /*
-     * Run one complete simulated game.
+     * Run one complete simulated game under the selected mode.
      */
     function simulateGame(songBundle, options) {
         const random = options.random;
+        const mode = options.mode || CONFIG.defaultMode;
+        const gameConfig = getModeConfig(mode);
 
         const allLines = songBundle.lines;
         const pool = songBundle.pool.slice();
@@ -484,7 +441,15 @@
 
         const rounds = [];
 
-        for (let round = 1; round <= CONFIG.maxRounds; round += 1) {
+        for (
+            let round = 1;
+            round <= gameConfig.maxRounds;
+            round += 1
+        ) {
+            /*
+             * If the pool is empty, all remaining progress depends on the hand.
+             * There is no new draw, but there is also no new round needed.
+             */
             if (pool.length === 0) {
                 break;
             }
@@ -500,11 +465,12 @@
                 pool,
                 hand,
                 requestedDraw,
-                random
+                random,
+                gameConfig
             );
 
             drawn.forEach(function (tile) {
-                addToHand(hand, tile);
+                hand.push(tile);
             });
 
             totalDrawn += drawn.length;
@@ -515,11 +481,19 @@
                 allLines,
                 completedIds,
                 completedLines,
-                random
+                random,
+                gameConfig
             );
 
             totalPlayed += playedThisRound;
             previousPlayed = playedThisRound;
+
+            const completedBeforeRound = rounds.reduce(
+                function (sum, item) {
+                    return sum + item.completed;
+                },
+                0
+            );
 
             rounds.push({
                 round: round,
@@ -528,26 +502,22 @@
                 handBeforeDraw: handBeforeDraw,
                 handAfterPlay: hand.length,
                 played: playedThisRound,
-                completed: completedLines.length -
-                    rounds.reduce(function (sum, item) {
-                        return sum + item.completed;
-                    }, 0),
+                completed: completedLines.length - completedBeforeRound,
                 activeLines: activeLines.length,
                 poolRemaining: pool.length
             });
 
-            /*
-             * Stop when there are no physical tiles left to draw and
-             * there is no possibility of another turn.
-             */
             if (pool.length === 0) {
                 break;
             }
         }
 
-        const totalWordsInSource = allLines.reduce(function (sum, line) {
-            return sum + line.wordCount;
-        }, 0);
+        const totalWordsInSource = allLines.reduce(
+            function (sum, line) {
+                return sum + line.wordCount;
+            },
+            0
+        );
 
         const completedWords = completedLines.reduce(
             function (sum, line) {
@@ -557,15 +527,18 @@
         );
 
         /*
-         * A "win" for simulation purposes means every lyric word in the
-         * selected songs was successfully placed into completed lines.
-         *
-         * This is intentionally separate from final scoring.
+         * A win means all source lyric words were successfully placed into
+         * completed lyric lines. This remains independent of scoring.
          */
         const won = completedWords === totalWordsInSource;
 
         return {
             won: won,
+            mode: mode,
+            modeLabel: gameConfig.label,
+            maxRows: gameConfig.maxRows,
+            maxHand: gameConfig.maxHand,
+            maxRounds: gameConfig.maxRounds,
             roundsPlayed: rounds.length,
             totalSourceWords: totalWordsInSource,
             totalDrawn: totalDrawn,
@@ -578,16 +551,16 @@
         };
     }
 
-    /*
-     * Build a reusable song bundle from the two JSON files.
-     */
     function prepareSongBundle(lyricsData, wordCountData) {
         const pool = buildPhysicalPool(wordCountData);
         const lines = buildLineOccurrences(lyricsData);
 
-        const sourceWordTotal = lines.reduce(function (sum, line) {
-            return sum + line.wordCount;
-        }, 0);
+        const sourceWordTotal = lines.reduce(
+            function (sum, line) {
+                return sum + line.wordCount;
+            },
+            0
+        );
 
         const poolWordTotal = pool.length;
 
@@ -606,8 +579,8 @@
     }
 
     /*
-     * Combine multiple songs into one physical word pool and one set
-     * of lyric-line occurrences.
+     * Combine selected songs into one physical pool and one collection of
+     * distinct lyric-line occurrences.
      */
     function combineSongBundles(bundles) {
         const combinedPool = [];
@@ -630,6 +603,13 @@
             });
         });
 
+        const sourceWordTotal = combinedLines.reduce(
+            function (sum, line) {
+                return sum + line.wordCount;
+            },
+            0
+        );
+
         return {
             title: bundles.map(function (bundle) {
                 return bundle.title;
@@ -641,47 +621,52 @@
             }).join(", "),
             pool: combinedPool,
             lines: combinedLines,
-            sourceWordTotal: combinedLines.reduce(function (sum, line) {
-                return sum + line.wordCount;
-            }, 0),
+            sourceWordTotal: sourceWordTotal,
             poolWordTotal: combinedPool.length,
-            poolMatchesLyrics: combinedLines.reduce(function (sum, line) {
-                return sum + line.wordCount;
-            }, 0) === combinedPool.length
+            poolMatchesLyrics: sourceWordTotal === combinedPool.length
         };
     }
 
     /*
-     * Run multiple trials and return aggregate statistics.
+     * Every individual trial is retained. This is necessary for later
+     * histograms and distribution analysis.
      */
-    function runTrials(songBundle, trialCount, randomFactory) {
+    function runTrials(songBundle, trialCount, randomFactory, options) {
         const trials = [];
+        const mode = options?.mode || CONFIG.defaultMode;
 
         for (let i = 0; i < trialCount; i += 1) {
-            const result = simulateGame(
-                songBundle,
-                {
-                    random: randomFactory()
-                }
+            trials.push(
+                simulateGame(songBundle, {
+                    random: randomFactory(),
+                    mode: mode
+                })
             );
-
-            trials.push(result);
         }
 
-        const average = function (field) {
-            return trials.reduce(function (sum, result) {
-                return sum + result[field];
-            }, 0) / Math.max(1, trials.length);
-        };
+        function average(field) {
+            return (
+                trials.reduce(function (sum, result) {
+                    return sum + result[field];
+                }, 0) / Math.max(1, trials.length)
+            );
+        }
+
+        const wins = trials.filter(function (result) {
+            return result.won;
+        }).length;
+
+        const allWordsUsedTrials = trials.filter(function (trial) {
+            return (
+                Number(trial.totalPlayed) ===
+                Number(trial.totalSourceWords)
+            );
+        }).length;
 
         return {
             trialCount: trials.length,
-            wins: trials.filter(function (result) {
-                return result.won;
-            }).length,
-            winRate: trials.filter(function (result) {
-                return result.won;
-            }).length / Math.max(1, trials.length),
+            wins: wins,
+            winRate: wins / Math.max(1, trials.length),
             averageRounds: average("roundsPlayed"),
             averageDrawn: average("totalDrawn"),
             averagePlayed: average("totalPlayed"),
@@ -689,20 +674,18 @@
             averageCompletedLines: average("completedLines"),
             averagePoolRemaining: average("poolRemaining"),
             averageActiveLines: average("activeLines"),
+            allWordsUsedTrials: allWordsUsedTrials,
+            allWordsUsedRate:
+                allWordsUsedTrials / Math.max(1, trials.length),
+            everAllWordsUsed: allWordsUsedTrials > 0,
             trials: trials
         };
     }
 
-    /*
-     * Public API.
-     *
-     * Exposing the simulator through one namespace keeps it usable by:
-     * - the browser simulator tool
-     * - future automated tests
-     * - future game-development utilities
-     */
     global.LyricSolitaireSimulator = {
         CONFIG: CONFIG,
+        MODE_CONFIG: MODE_CONFIG,
+        getModeConfig: getModeConfig,
         normalizeWord: normalizeWord,
         tokenizeLine: tokenizeLine,
         buildPhysicalPool: buildPhysicalPool,
@@ -713,5 +696,4 @@
         simulateGame: simulateGame,
         runTrials: runTrials
     };
-
 })(window);

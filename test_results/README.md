@@ -1,9 +1,7 @@
 # Simulator Test Results
 
-This directory stores JSON exports from the Lyric Solitaire Simulator Lab.
+Exported simulator experiments belong here.
 
-Use the simulator's **Export Results (JSON)** control after an experiment. Save the downloaded file here, preserving its experiment ID filename.
+Each experiment JSON should contain its simulator version, mode and rule parameters, songs, aggregate results, complete individual trial results, and all-words-used measures.
 
-Later, multiple experiment files can be combined into a master dataset for charts, song comparisons, and development of the game's challenge-level algorithm.
-
-Do not manually edit result values unless correcting a documented data-entry error. The simulator itself is the source of the experimental record.
+v0.1.0 Standard/Hard records are retained as historical data, but they are not valid evidence of those modes because the v0.1.0 engine remained Easy-only.

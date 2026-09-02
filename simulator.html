@@ -1,87 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lyric Solitaire — Simulator Lab</title>
-  <style>
-    /*
-     * Simulator Lab page styles.
-     * Responsibility: Provide the visual developer/test interface. Simulation
-     * rules remain in js/utilities/simulator.js.
-     */
-    :root{--paper:#f5f0e4;--white:#fffdf7;--ink:#16232d;--muted:#66727a;--navy:#102936;--gold:#d59a1a;--line:#d4c6aa;--green:#2d754e}
-    *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-    header{background:var(--navy);border-bottom:5px solid var(--gold);position:relative}.hero{display:block;width:100%;height:250px;object-fit:cover}
-    .version-badge{position:absolute;top:18px;right:18px;background:#102936ee;color:#f8e7b6;border:1px solid #d59a1a;border-radius:9px;padding:9px 13px;text-align:center;font-weight:800;letter-spacing:.03em}
-    .version-badge small{display:block;font-size:10px;opacity:.8}.version-badge strong{display:block;font-size:18px}
-    main{width:min(1500px,calc(100% - 32px));margin:18px auto 45px;display:grid;gap:16px}
-    .grid{display:grid;grid-template-columns:280px 1fr 300px;gap:16px}.panel{background:var(--white);border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:0 3px 12px rgba(35,28,16,.06)}
-    .panel h2{margin:0;padding:11px 14px;background:var(--navy);color:#f6e5b5;font-size:16px}.body{padding:14px}
-    label{display:grid;gap:5px;font-size:13px;font-weight:700;margin-bottom:11px}select,input,button{font:inherit;border:1px solid #b6ab96;border-radius:7px;padding:8px;background:#fff}
-    select[multiple]{min-height:112px}button{cursor:pointer;font-weight:800;background:var(--gold);border-color:#8d650f;color:#fff}button.secondary{background:#fff;color:var(--ink)}
-    .buttons{display:grid;grid-template-columns:1fr 1fr;gap:8px}.status{padding:9px;border-radius:8px;background:#eee8da;color:var(--muted);font-size:13px;margin-top:8px}.status.ok{color:var(--green)}
-    .metrics{display:grid;grid-template-columns:repeat(5,1fr);gap:9px}.metric{border:1px solid var(--line);border-radius:9px;padding:11px;background:#fffcf5;text-align:center}.metric span{display:block;font-size:11px;color:var(--muted);text-transform:uppercase}.metric strong{display:block;font-size:24px;margin-top:4px}
-    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:9px}.stat{padding:10px;border:1px solid var(--line);border-radius:8px}.stat small{display:block;color:var(--muted)}.stat b{font-size:19px}
-    .chips span{display:inline-block;padding:4px 8px;border:1px solid var(--line);border-radius:15px;margin:3px;background:#fffdf7;font-size:12px}
-    .two{display:grid;grid-template-columns:1fr 1fr;gap:16px}table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:7px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{background:#f4eee1}
-    pre{margin:0;background:#172026;color:#edf1f2;padding:12px;max-height:560px;overflow:auto;font-size:12px;line-height:1.45}.log{line-height:1.6;font-size:13px}.log .ok::before{content:"✓ ";color:var(--green);font-weight:900}
-    .export-box{margin-top:12px;padding:10px;border:1px dashed var(--line);border-radius:8px;background:#faf7ef}.export-box p{margin:0 0 7px;color:var(--muted);font-size:12px}
-    footer{text-align:center;color:var(--muted);font-size:12px;padding:15px}
-    @media(max-width:1100px){.grid{grid-template-columns:1fr 1fr}.results{grid-column:1/-1}.metrics{grid-template-columns:repeat(3,1fr)}}@media(max-width:720px){.grid,.two{grid-template-columns:1fr}.metrics,.stats{grid-template-columns:1fr 1fr}.hero{height:190px}.version-badge{top:10px;right:10px}}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lyric Solitaire — Simulator Lab</title>
+<style>
+:root{--paper:#f5f0e4;--white:#fffdf7;--ink:#17232b;--muted:#66727a;--navy:#102936;--gold:#d59a1a;--line:#d3c5a8;--green:#2d754e}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{background:var(--navy);border-bottom:5px solid var(--gold);position:relative}.hero{width:100%;height:250px;display:block;object-fit:cover}.version-badge{position:absolute;top:16px;right:16px;background:#102936ee;color:#f5e3b5;border:1px solid var(--gold);border-radius:9px;padding:8px 12px;text-align:center}.version-badge small{display:block;font-size:10px}.version-badge strong{font-size:18px}
+main{width:min(1500px,calc(100% - 32px));margin:18px auto 45px;display:grid;gap:16px}.grid{display:grid;grid-template-columns:280px 1fr 300px;gap:16px}.panel{background:var(--white);border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:0 3px 12px rgba(35,28,16,.06)}.panel h2{margin:0;padding:11px 14px;background:var(--navy);color:#f6e5b5;font-size:16px}.body{padding:14px}
+label{display:grid;gap:5px;font-size:13px;font-weight:700;margin-bottom:11px}select,input,button{font:inherit;border:1px solid #b6ab96;border-radius:7px;padding:8px;background:#fff}select[multiple]{min-height:112px}button{cursor:pointer;font-weight:800;background:var(--gold);border-color:#8d650f;color:#fff}button.secondary{background:#fff;color:var(--ink)}button:disabled{opacity:.5;cursor:not-allowed}.buttons{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.status{padding:9px;border-radius:8px;background:#eee8da;color:var(--muted);font-size:13px;margin-top:8px}.status.ok{color:var(--green)}.status.error{color:#8b403c}.status.warn{color:#876014}
+.metrics{display:grid;grid-template-columns:repeat(6,1fr);gap:9px}.metric{padding:11px;border:1px solid var(--line);border-radius:9px;background:#fffcf5;text-align:center}.metric span{display:block;font-size:11px;color:var(--muted);text-transform:uppercase}.metric strong{display:block;font-size:24px;margin-top:4px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:9px}.stat{padding:10px;border:1px solid var(--line);border-radius:8px}.stat small{display:block;color:var(--muted)}.stat b{font-size:19px}
+.chips span{display:inline-block;padding:4px 8px;border:1px solid var(--line);border-radius:15px;margin:3px;background:#fffdf7;font-size:12px}.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:7px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{background:#f4eee1}
+pre{margin:0;background:#172026;color:#edf1f2;padding:12px;max-height:560px;overflow:auto;font-size:12px;line-height:1.45}.log{line-height:1.6;font-size:13px}.log .ok::before{content:"✓ ";color:var(--green);font-weight:900}.export-box{margin-top:12px;padding:10px;border:1px dashed var(--line);border-radius:8px;background:#faf7ef}.export-box p{margin:0 0 7px;color:var(--muted);font-size:12px}footer{text-align:center;color:var(--muted);font-size:12px;padding:15px}
+@media(max-width:1100px){.grid{grid-template-columns:1fr 1fr}.results{grid-column:1/-1}.metrics{grid-template-columns:repeat(3,1fr)}}@media(max-width:720px){.grid,.two{grid-template-columns:1fr}.metrics,.stats{grid-template-columns:1fr 1fr}.hero{height:190px}}
+</style>
 </head>
 <body>
 <header>
-  <img class="hero" src="images/lyric-solitaire-simulator-lab-header.png" alt="Lyric Solitaire Simulator Lab">
-  <div class="version-badge"><small>SIMULATOR</small><strong id="simVersion">v—</strong></div>
+<img class="hero" src="images/lyric-solitaire-simulator-lab-header.png" alt="Lyric Solitaire Simulator Lab">
+<div class="version-badge"><small>SIMULATOR</small><strong id="headerVersion">v—</strong></div>
 </header>
 
 <main>
-  <section class="grid">
-    <aside class="panel">
-      <h2>Experiment Setup</h2><div class="body">
-        <label>Artist(s)<select id="artistSelect" multiple></select></label>
-        <label>Song(s)<select id="songSelect" multiple></select></label>
-        <label>Difficulty / Mode<select id="difficulty"><option value="easy">Easy / Open</option><option value="standard">Standard</option><option value="hard">Hard</option></select></label>
-        <label>Trials<input id="trials" type="number" min="1" max="10000" value="100"></label>
-        <label>Random Seed<input id="seed" type="number" value="12345"></label>
-        <div class="buttons"><button id="runButton">Run Simulation</button><button class="secondary" id="resetButton">Reset</button></div>
-        <div id="status" class="status">Loading song catalog…</div>
-      </div>
-    </aside>
+<section class="grid">
+<aside class="panel"><h2>Experiment Setup</h2><div class="body">
+<label>Artist(s)<select id="artistSelect" multiple></select></label>
+<label>Song(s)<select id="songSelect" multiple></select></label>
+<label>Difficulty / Mode
+<select id="difficulty">
+<option value="easy">Easy / Open — 12 rows / 50 tiles / 12 rounds</option>
+<option value="standard">Standard — 10 rows / 40 tiles / 10 rounds</option>
+<option value="hard">Hard — 8 rows / 30 tiles / 8 rounds</option>
+</select>
+</label>
+<label>Trials<input id="trials" type="number" min="1" max="10000" value="1000"></label>
+<label>Random Seed<input id="seed" type="number" value="12345"></label>
+<div class="buttons"><button id="runButton">Run Simulation</button><button class="secondary" id="resetButton">Reset</button></div>
+<div id="status" class="status">Loading song catalog…</div>
+</div></aside>
 
-    <section class="panel results">
-      <h2>Simulation Results</h2><div class="body">
-        <div class="metrics">
-          <div class="metric"><span>Trials</span><strong id="mTrials">—</strong></div>
-          <div class="metric"><span>Wins</span><strong id="mWins">—</strong></div>
-          <div class="metric"><span>Win Rate</span><strong id="mWinRate">—</strong></div>
-          <div class="metric"><span>Avg Rounds</span><strong id="mRounds">—</strong></div>
-          <div class="metric"><span>Avg Words Played</span><strong id="mWords">—</strong></div>
-        </div>
-        <div class="stats">
-          <div class="stat"><small>Total Words</small><b id="totalWords">—</b></div>
-          <div class="stat"><small>Unique Words</small><b id="uniqueWords">—</b></div>
-          <div class="stat"><small>Word Pool</small><b id="poolWords">—</b></div>
-          <div class="stat"><small>Avg Completed Lines</small><b id="mLines">—</b></div>
-        </div>
-        <h3 style="margin-bottom:6px">Selected Songs</h3><div id="selectedSongs" class="chips">No songs selected.</div>
-        <div class="export-box"><p>Export this experiment as a standardized JSON record for <code>test_results/</code>.</p>
-          <div class="buttons"><button id="exportButton" disabled>Export Results (JSON)</button><button class="secondary" id="exportHistoryButton">Export Session History</button></div>
-        </div>
-      </div>
-    </section>
+<section class="panel results"><h2>Simulation Results</h2><div class="body">
+<div class="metrics">
+<div class="metric"><span>Trials</span><strong id="mTrials">—</strong></div>
+<div class="metric"><span>Wins</span><strong id="mWins">—</strong></div>
+<div class="metric"><span>Win Rate</span><strong id="mWinRate">—</strong></div>
+<div class="metric"><span>Avg Rounds</span><strong id="mRounds">—</strong></div>
+<div class="metric"><span>Avg Words Played</span><strong id="mWords">—</strong></div>
+<div class="metric"><span>All Words Used</span><strong id="mAllWords">—</strong></div>
+</div>
+<div class="stats">
+<div class="stat"><small>Total Words</small><b id="totalWords">—</b></div>
+<div class="stat"><small>Unique Words</small><b id="uniqueWords">—</b></div>
+<div class="stat"><small>Physical Pool</small><b id="poolWords">—</b></div>
+<div class="stat"><small>Avg Completed Lines</small><b id="mLines">—</b></div>
+</div>
+<h3 style="margin-bottom:6px">Selected Songs</h3><div id="selectedSongs" class="chips">No songs selected.</div>
+<div class="export-box">
+<p>Export the complete experiment record and place the downloaded JSON in <code>test_results/</code>.</p>
+<p><strong>Experiment ID:</strong> <span id="experimentId">—</span></p>
+<div class="buttons"><button id="exportButton" disabled>Export Results (JSON)</button><button class="secondary" id="exportHistoryButton">Export Session History</button></div>
+</div>
+</div></section>
 
-    <aside class="panel"><h2>Simulation Log</h2><div class="body log" id="log"><div class="ok">Waiting for experiment.</div></div></aside>
-  </section>
+<aside class="panel"><h2>Simulation Log</h2><div class="body log" id="log"><div class="ok">Waiting for experiment.</div></div></aside>
+</section>
 
-  <section class="two">
-    <section class="panel"><h2>Song Information</h2><div class="body" id="songData">Select one or more songs.</div></section>
-    <section class="panel"><h2>Individual Game Trace — Sample Trial</h2><div class="body"><pre id="trace">No simulation has been run.</pre></div></section>
-  </section>
+<section class="two">
+<section class="panel"><h2>Song Information</h2><div class="body" id="songData">Select one or more songs.</div></section>
+<section class="panel"><h2>Individual Game Trace — Sample Trial</h2><div class="body"><pre id="trace">No simulation has been run.</pre></div></section>
+</section>
 
-  <section class="panel"><h2>Aggregate Engine Result</h2><pre id="rawResult">No result.</pre></section>
+<section class="panel"><h2>Aggregate Engine Result</h2><pre id="rawResult">No result.</pre></section>
 </main>
 
 <footer>Lyric Solitaire Simulator <span id="footerVersion">v—</span> — Experimental results may change as the game model evolves.</footer>
@@ -91,141 +83,28 @@
 <script src="js/utilities/simulator.js"></script>
 <script src="js/utilities/testResultLogger.js"></script>
 <script>
-  /*
-   * Simulator Lab Controller
-   *
-   * Responsibility:
-   * Connects the developer-facing controls to the song catalog, simulation
-   * engine, and test-result logger. It does not implement game rules.
-   */
-
-  const state = {catalog:null, loadedSongs:[], lastRecord:null};
-
-  const $ = id => document.getElementById(id);
-
-  function escapeHtml(v){return String(v ?? "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");}
-  function status(text,kind=""){$("status").textContent=text;$("status").className=`status ${kind}`;}
-  function log(text){const d=document.createElement("div");d.className="ok";d.textContent=text;$("log").appendChild(d);}
-  function selectedSongs(){const ids=new Set([...$("songSelect").selectedOptions].map(o=>o.value));return state.catalog.songs.filter(s=>ids.has(s.id));}
-
-  function seededRandom(seed){
-    let t=(Number(seed)>>>0)||1;
-    return function(){t+=0x6D2B79F5;let x=t;x=Math.imul(x^x>>>15,x|1);x^=x+Math.imul(x^x>>>7,x|61);return((x^x>>>14)>>>0)/4294967296;};
-  }
-
-  function updateSongOptions(){
-    const keys=[...$("artistSelect").selectedOptions].map(o=>o.value);
-    const old=new Set([...$("songSelect").selectedOptions].map(o=>o.value));
-    $("songSelect").replaceChildren();
-    state.catalog.songs.filter(s=>!keys.length||keys.includes(s.artistKey)).sort((a,b)=>a.title.localeCompare(b.title)).forEach(s=>{
-      const o=document.createElement("option");o.value=s.id;o.textContent=`${s.title} — ${s.artist}`;o.selected=old.has(s.id);$("songSelect").appendChild(o);
-    });
-    updateSongInfo();
-  }
-
-  async function fetchSongs(songs){
-    return Promise.all(songs.map(async song=>{
-      const lyricsPath=window.LyricSolitaireSongCatalog.resolveDataPath(song.lyrics);
-      const wordPath=window.LyricSolitaireSongCatalog.resolveDataPath(song.wordCount);
-      const [lr,wr]=await Promise.all([fetch(lyricsPath,{cache:"no-store"}),fetch(wordPath,{cache:"no-store"})]);
-      if(!lr.ok)throw new Error(`Could not load ${lyricsPath}`);
-      if(!wr.ok)throw new Error(`Could not load ${wordPath}`);
-      return {...song,lyricsData:await lr.json(),wordCountData:await wr.json()};
-    }));
-  }
-
-  function wordStats(data){
-    const words=data.flatMap(s=>s.wordCountData.words||[]);
-    const total=words.reduce((n,w)=>n+(Number(w.count)||0),0);
-    const unique=new Set(words.map(w=>String(w.word).normalize("NFKC").toLocaleLowerCase())).size;
-    return {total,unique};
-  }
-
-  function updateSongInfo(){
-    const songs=selectedSongs();
-    $("selectedSongs").innerHTML=songs.length?songs.map(s=>`<span>${escapeHtml(s.title)} — ${escapeHtml(s.artist)}</span>`).join(""):"No songs selected.";
-    $("songData").innerHTML=songs.length?`<table><thead><tr><th>Song</th><th>Artist</th><th>Album</th><th>Year</th><th>Genre</th></tr></thead><tbody>${songs.map(s=>`<tr><td>${escapeHtml(s.title)}</td><td>${escapeHtml(s.artist)}</td><td>${escapeHtml(s.album)}</td><td>${s.year??"—"}</td><td>${escapeHtml(s.genre??"—")}</td></tr>`).join("")}</tbody></table>`:"Select one or more songs.";
-  }
-
-  function clearResults(){
-    ["mTrials","mWins","mWinRate","mRounds","mWords","totalWords","uniqueWords","poolWords","mLines"].forEach(id=>$(id).textContent="—");
-    $("trace").textContent="No simulation has been run."; $("rawResult").textContent="No result."; $("exportButton").disabled=true;
-  }
-
-  async function run(){
-    const songs=selectedSongs();
-    if(!songs.length){status("Select at least one song.","warn");return;}
-    const trials=Math.max(1,Math.min(10000,Number($("trials").value)||1));
-    const seed=Number($("seed").value)||12345;
-    const mode=$("difficulty").value;
-
-    try{
-      clearResults(); status("Loading selected song data…");
-      const data=await fetchSongs(songs); state.loadedSongs=data;
-      const stats=wordStats(data); $("totalWords").textContent=stats.total;$("uniqueWords").textContent=stats.unique;$("poolWords").textContent=stats.total;
-      log(`Loaded ${songs.length} song${songs.length===1?"":"s"}.`);
-      log(`Total words: ${stats.total} • Unique words: ${stats.unique}.`);
-
-      const engine=window.LyricSolitaireSimulator;
-      if(!engine)throw new Error("Simulation engine is not loaded.");
-
-      const bundles=data.map(s=>engine.prepareSongBundle(s.lyricsData,s.wordCountData));
-      const bundle=bundles.length===1?bundles[0]:engine.combineSongBundles(bundles);
-      log(`Word-pool check: ${bundle.poolMatchesLyrics?"matches lyric data":"DOES NOT MATCH lyric data"}.`);
-
-      status("Running simulation…");
-      let trialSeedOffset = 0;
-      const result=engine.runTrials(
-        bundle,
-        trials,
-        ()=>seededRandom(seed + trialSeedOffset++)
-      );
-
-      $("mTrials").textContent=result.trialCount;$("mWins").textContent=result.wins;$("mWinRate").textContent=`${(result.winRate*100).toFixed(1)}%`;
-      $("mRounds").textContent=result.averageRounds.toFixed(2);$("mWords").textContent=result.averagePlayed.toFixed(2);$("mLines").textContent=result.averageCompletedLines.toFixed(2);
-      $("trace").textContent=JSON.stringify(result.trials?.[0]??null,null,2);
-      $("rawResult").textContent=JSON.stringify(result,null,2);
-
-      const experimentId=`LS-SIM-${Date.now()}`;
-      const record=window.LyricSolitaireTestLogger.createRecord({
-        version:window.LyricSolitaireProject.simulatorVersion,
-        experimentId,
-        parameters:{
-          mode,
-          modeLabel:$("difficulty").selectedOptions[0].textContent,
-          trials,
-          randomSeed:seed,
-          startingRows:mode==="easy"?12:(mode==="standard"?10:8),
-          handLimit:50,
-          maximumRounds:12
-        },
-        songs:data.map(s=>({id:s.id,title:s.title,artist:s.artist,album:s.album,year:s.year,genre:s.genre,...wordStats([s])})),
-        result,
-        sampleTrial:result.trials?.[0]??null
-      });
-      window.LyricSolitaireTestLogger.saveRecord(record);
-      state.lastRecord=record;$("exportButton").disabled=false;
-
-      log(`Results saved to browser test history: ${experimentId}.`);
-      log(`Simulation complete: ${result.trialCount} trials.`);
-      status("Simulation complete.","ok");
-    }catch(err){console.error(err);status(err.message,"error");log(`ERROR: ${err.message}`);}
-  }
-
-  async function init(){
-    $("simVersion").textContent=`v${window.LyricSolitaireProject.simulatorVersion}`;
-    $("footerVersion").textContent=`v${window.LyricSolitaireProject.simulatorVersion}`;
-    try{
-      state.catalog=await window.LyricSolitaireSongCatalog.load();
-      state.catalog.artists.forEach(a=>{const o=document.createElement("option");o.value=a.key;o.textContent=a.name;$("artistSelect").appendChild(o);});
-      $("artistSelect").addEventListener("change",updateSongOptions);$("songSelect").addEventListener("change",updateSongInfo);
-      $("runButton").addEventListener("click",run);$("resetButton").addEventListener("click",()=>{clearResults();$("log").innerHTML='<div class="ok">Waiting for experiment.</div>';status("Ready.");});
-      $("exportButton").addEventListener("click",()=>state.lastRecord&&window.LyricSolitaireTestLogger.exportRecord(state.lastRecord));
-      $("exportHistoryButton").addEventListener("click",()=>window.LyricSolitaireTestLogger.exportHistory());
-      updateSongOptions();status(`Catalog loaded: ${state.catalog.artists.length} artists, ${state.catalog.songs.length} songs.`,"ok");
-    }catch(err){console.error(err);status(`Catalog load failed: ${err.message}`,"error");}
-  }
-  init();
+/*
+ * Simulator Lab Controller
+ *
+ * Responsibility:
+ * Connect the developer-facing UI to the song catalog, simulation engine,
+ * and test-result logger. Game rules remain in simulator.js.
+ */
+const state={catalog:null,lastRecord:null};
+const $=id=>document.getElementById(id);
+function esc(v){return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
+function setStatus(text,kind=""){$("status").textContent=text;$("status").className=`status ${kind}`}
+function addLog(text){const d=document.createElement("div");d.className="ok";d.textContent=text;$("log").appendChild(d)}
+function seededRandom(seed){let t=(Number(seed)>>>0)||1;return function(){t+=0x6D2B79F5;let x=t;x=Math.imul(x^x>>>15,x|1);x^=x+Math.imul(x^x>>>7,x|61);return((x^x>>>14)>>>0)/4294967296}}
+function selectedSongs(){const ids=new Set([...$("songSelect").selectedOptions].map(o=>o.value));return state.catalog.songs.filter(s=>ids.has(s.id))}
+function updateSongOptions(){const keys=[...$("artistSelect").selectedOptions].map(o=>o.value);const old=new Set([...$("songSelect").selectedOptions].map(o=>o.value));$("songSelect").replaceChildren();state.catalog.songs.filter(s=>!keys.length||keys.includes(s.artistKey)).sort((a,b)=>a.title.localeCompare(b.title)).forEach(s=>{const o=document.createElement("option");o.value=s.id;o.textContent=`${s.title} — ${s.artist}`;o.selected=old.has(s.id);$("songSelect").appendChild(o)});updateSongInfo()}
+async function loadSongs(songs){return Promise.all(songs.map(async s=>{const l=window.LyricSolitaireSongCatalog.resolveDataPath(s.lyrics);const w=window.LyricSolitaireSongCatalog.resolveDataPath(s.wordCount);const [lr,wr]=await Promise.all([fetch(l,{cache:"no-store"}),fetch(w,{cache:"no-store"})]);if(!lr.ok)throw new Error(`Could not load ${l}`);if(!wr.ok)throw new Error(`Could not load ${w}`);return {...s,lyricsData:await lr.json(),wordCountData:await wr.json()}}))}
+function wordStats(data){const words=data.flatMap(s=>s.wordCountData.words||[]);return{total:words.reduce((n,w)=>n+(Number(w.count)||0),0),unique:new Set(words.map(w=>String(w.word).normalize("NFKC").toLocaleLowerCase())).size}}
+function updateSongInfo(){const songs=selectedSongs();$("selectedSongs").innerHTML=songs.length?songs.map(s=>`<span>${esc(s.title)} — ${esc(s.artist)}</span>`).join(""):"No songs selected.";$("songData").innerHTML=songs.length?`<table><thead><tr><th>Song</th><th>Artist</th><th>Album</th><th>Year</th><th>Genre</th></tr></thead><tbody>${songs.map(s=>`<tr><td>${esc(s.title)}</td><td>${esc(s.artist)}</td><td>${esc(s.album)}</td><td>${s.year??"—"}</td><td>${esc(s.genre??"—")}</td></tr>`).join("")}</tbody></table>`:"Select one or more songs."}
+function clearResults(){["mTrials","mWins","mWinRate","mRounds","mWords","mAllWords","totalWords","uniqueWords","poolWords","mLines"].forEach(id=>$(id).textContent="—");$("trace").textContent="No simulation has been run.";$("rawResult").textContent="No result.";$("exportButton").disabled=true;$("experimentId").textContent="—"}
+async function run(){const songs=selectedSongs();if(!songs.length){setStatus("Select at least one song.","warn");return}const trials=Math.max(1,Math.min(10000,Number($("trials").value)||1));const seed=Number($("seed").value)||12345;const mode=$("difficulty").value;try{clearResults();$("log").innerHTML='<div class="ok">Starting new experiment.</div>';setStatus("Loading selected song data…");const data=await loadSongs(songs);const stats=wordStats(data);$("totalWords").textContent=stats.total;$("uniqueWords").textContent=stats.unique;$("poolWords").textContent=stats.total;addLog(`Loaded ${songs.length} song${songs.length===1?"":"s"}.`);addLog(`Total words: ${stats.total} • Unique words: ${stats.unique}.`);const engine=window.LyricSolitaireSimulator;const bundles=data.map(s=>engine.prepareSongBundle(s.lyricsData,s.wordCountData));const bundle=bundles.length===1?bundles[0]:engine.combineSongBundles(bundles);addLog(`Word-pool check: ${bundle.poolMatchesLyrics?"matches lyric data":"DOES NOT MATCH lyric data"}.`);setStatus("Running simulation…");let offset=0;const result=engine.runTrials(bundle,trials,()=>seededRandom(seed+offset++),{mode});$("mTrials").textContent=result.trialCount;$("mWins").textContent=result.wins;$("mWinRate").textContent=`${(result.winRate*100).toFixed(1)}%`;$("mRounds").textContent=result.averageRounds.toFixed(2);$("mWords").textContent=result.averagePlayed.toFixed(2);$("mAllWords").textContent=result.everAllWordsUsed?`${result.allWordsUsedTrials}/${result.trialCount}`:"No";$("mLines").textContent=result.averageCompletedLines.toFixed(2);addLog(`All words used in ${result.allWordsUsedTrials} of ${result.trialCount} trials.`);$("trace").textContent=JSON.stringify(result.trials?.[0]??null,null,2);$("rawResult").textContent=JSON.stringify(result,null,2);const experimentId=`LS-SIM-${Date.now()}`;$("experimentId").textContent=experimentId;const cfg=engine.getModeConfig(mode);const record=window.LyricSolitaireTestLogger.createRecord({version:window.LyricSolitaireProject.simulatorVersion,experimentId,parameters:{mode,modeLabel:cfg.label,trials,randomSeed:seed,startingRows:cfg.maxRows,handLimit:cfg.maxHand,maximumRounds:cfg.maxRounds},songs:data.map(s=>({id:s.id,title:s.title,artist:s.artist,album:s.album,year:s.year,genre:s.genre,...wordStats([s])})),result});window.LyricSolitaireTestLogger.saveRecord(record);state.lastRecord=record;$("exportButton").disabled=false;addLog(`Complete trial collection retained: ${record.trials.length} trials.`);addLog(`Simulation complete: ${result.trialCount} trials.`);setStatus("Simulation complete.","ok")}catch(err){console.error(err);setStatus(err.message,"error");addLog(`ERROR: ${err.message}`)}}
+async function init(){$("headerVersion").textContent=`v${window.LyricSolitaireProject.simulatorVersion}`;$("footerVersion").textContent=`v${window.LyricSolitaireProject.simulatorVersion}`;try{state.catalog=await window.LyricSolitaireSongCatalog.load();state.catalog.artists.forEach(a=>{const o=document.createElement("option");o.value=a.key;o.textContent=a.name;$("artistSelect").appendChild(o)});$("artistSelect").addEventListener("change",updateSongOptions);$("songSelect").addEventListener("change",updateSongInfo);$("runButton").addEventListener("click",run);$("resetButton").addEventListener("click",()=>{clearResults();$("log").innerHTML='<div class="ok">Waiting for experiment.</div>';setStatus("Ready.")});$("exportButton").addEventListener("click",()=>state.lastRecord&&window.LyricSolitaireTestLogger.exportRecord(state.lastRecord));$("exportHistoryButton").addEventListener("click",()=>window.LyricSolitaireTestLogger.exportHistory());updateSongOptions();setStatus(`Catalog loaded: ${state.catalog.artists.length} artists, ${state.catalog.songs.length} songs.`,"ok")}catch(err){console.error(err);setStatus(`Catalog load failed: ${err.message}`,"error")}}
+init();
 </script>
 </body>
 </html>
