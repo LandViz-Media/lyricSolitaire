@@ -50,7 +50,7 @@
     };
 
     const CONFIG = {
-        version: "0.1.2",
+        version: "0.1.3",
         initialDraw: 12,
         defaultMode: "easy",
         modes: MODE_CONFIG
@@ -424,6 +424,7 @@
         const random = options.random;
         const mode = options.mode || CONFIG.defaultMode;
         const gameConfig = getModeConfig(mode);
+        const persona = options.persona || "aggressive_row_filler";
 
         const allLines = songBundle.lines;
         const pool = songBundle.pool.slice();
@@ -534,6 +535,10 @@
 
         return {
             simulatorVersion: CONFIG.version,
+            persona: persona,
+            personaLabel: persona === "aggressive_row_filler"
+                ? "Dolly — Aggressive Row Filler"
+                : persona,
             won: won,
             mode: mode,
             modeLabel: gameConfig.label,
@@ -635,12 +640,14 @@
     function runTrials(songBundle, trialCount, randomFactory, options) {
         const trials = [];
         const mode = options?.mode || CONFIG.defaultMode;
+        const persona = options?.persona || "aggressive_row_filler";
 
         for (let i = 0; i < trialCount; i += 1) {
             trials.push(
                 simulateGame(songBundle, {
                     random: randomFactory(),
-                    mode: mode
+                    mode: mode,
+                    persona: persona
                 })
             );
         }

@@ -1,50 +1,52 @@
 /*
- * Lyric Solitaire — Simulation Test Result Logger
+ * Lyric Solitaire — Simulation Session Logger
  *
  * Responsibility:
- * Creates, stores, and exports complete simulator experiment records.
+ * Keeps complete experiments in browser memory for the current session and
+ * exports them as one JSON file. The browser's localStorage is intentionally
+ * not used for full trial collections because 1,000+ trial runs can exceed
+ * browser storage quotas.
  *
- * All individual trials are retained so later tools can create histograms,
- * compare distributions, inspect outliers, and evaluate challenge levels.
+ * The repository's /test_results directory is the permanent archive.
  */
 window.LyricSolitaireTestLogger = {
-    storageKey: "lyricSolitaire.simulator.testResults",
+    session: [],
 
-    createRecord({
+    createExperimentRecord({
         version,
         experimentId,
+        sessionId,
         parameters,
+        persona,
         songs,
         result
     }) {
         const trials = result.trials || [];
 
         const allWordsUsedTrials = trials.filter(function (trial) {
-            return (
-                Number(trial.totalPlayed) ===
-                Number(trial.totalSourceWords)
-            );
+            return Number(trial.totalPlayed) === Number(trial.totalSourceWords);
         }).length;
 
         const wins = trials.filter(function (trial) {
             return trial.won === true;
         }).length;
 
-        const wordsPlayed = trials.map(function (trial) {
-            return Number(trial.totalPlayed) || 0;
-        });
-
-        const completedLines = trials.map(function (trial) {
-            return Number(trial.completedLines) || 0;
-        });
-
         return {
-            schemaVersion: "1.1",
-            experimentId: experimentId,
+            schemaVersion: "1.3",
+            experimentId,
+            sessionId,
             timestamp: new Date().toISOString(),
             simulatorVersion: version,
+
+            persona: {
+                id: persona.id,
+                name: persona.name,
+                description: persona.description
+            },
+
             parameters: { ...parameters },
-            songs: songs,
+            songs,
+
             songTotals: {
                 totalWords: songs.reduce(function (sum, song) {
                     return sum + (Number(song.total) || 0);
@@ -53,9 +55,10 @@ window.LyricSolitaireTestLogger = {
                     ? Number(songs[0].unique) || 0
                     : null
             },
+
             results: {
                 trialCount: trials.length,
-                wins: wins,
+                wins,
                 losses: trials.length - wins,
                 winRate: wins / Math.max(1, trials.length),
                 averageRounds: result.averageRounds,
@@ -65,56 +68,57 @@ window.LyricSolitaireTestLogger = {
                 averageCompletedLines: result.averageCompletedLines,
                 averagePoolRemaining: result.averagePoolRemaining,
                 averageActiveLines: result.averageActiveLines,
-
-                // These are useful even if a future definition of "win"
-                // changes.
-                allWordsUsedTrials: allWordsUsedTrials,
+                allWordsUsedTrials,
                 allWordsUsedRate:
                     allWordsUsedTrials / Math.max(1, trials.length),
                 everAllWordsUsed: allWordsUsedTrials > 0,
-
-                bestWordsPlayed: wordsPlayed.length
-                    ? Math.max(...wordsPlayed)
+                bestWordsPlayed: trials.length
+                    ? Math.max(...trials.map(t => Number(t.totalPlayed) || 0))
                     : 0,
-                worstWordsPlayed: wordsPlayed.length
-                    ? Math.min(...wordsPlayed)
+                worstWordsPlayed: trials.length
+                    ? Math.min(...trials.map(t => Number(t.totalPlayed) || 0))
                     : 0,
-                bestCompletedLines: completedLines.length
-                    ? Math.max(...completedLines)
+                bestCompletedLines: trials.length
+                    ? Math.max(...trials.map(t => Number(t.completedLines) || 0))
                     : 0,
-                worstCompletedLines: completedLines.length
-                    ? Math.min(...completedLines)
+                worstCompletedLines: trials.length
+                    ? Math.min(...trials.map(t => Number(t.completedLines) || 0))
                     : 0
             },
 
-            // Complete individual trial collection.
-            trials: trials,
-
-            // Convenient trace for quick inspection.
+            // Every individual trial is permanent once this session is exported.
+            trials,
             sampleTrial: trials[0] || null
         };
     },
 
-    loadHistory() {
-        try {
-            return JSON.parse(
-                localStorage.getItem(this.storageKey) || "[]"
-            );
-        } catch (error) {
-            console.warn("Could not read simulator test history:", error);
-            return [];
-        }
+    addExperiment(record) {
+        this.session.push(record);
+        return record;
     },
 
-    saveRecord(record) {
-        const history = this.loadHistory();
-        history.push(record);
+    clearSession() {
+        this.session = [];
+    },
 
-        // Browser history is a convenience. Exported JSON is the permanent
-        // experiment record intended for /test_results/.
-        localStorage.setItem(
-            this.storageKey,
-            JSON.stringify(history.slice(-100))
+    exportSession(simulatorVersion) {
+        if (!this.session.length) {
+            throw new Error("There are no experiments to export yet.");
+        }
+
+        const output = {
+            schemaVersion: "1.3",
+            sessionId: this.session[0].sessionId,
+            exportedAt: new Date().toISOString(),
+            simulatorVersion,
+            experimentCount: this.session.length,
+            experiments: this.session
+        };
+
+        const date = new Date().toISOString().slice(0, 10);
+        this.downloadJson(
+            output,
+            `lyric-solitaire-simulator-session-${date}.json`
         );
     },
 
@@ -132,26 +136,5 @@ window.LyricSolitaireTestLogger = {
         link.click();
         link.remove();
         URL.revokeObjectURL(url);
-    },
-
-    exportRecord(record) {
-        this.downloadJson(
-            record,
-            `${record.experimentId}.json`
-        );
-    },
-
-    exportHistory() {
-        const history = this.loadHistory();
-
-        this.downloadJson(
-            {
-                schemaVersion: "1.1",
-                exportedAt: new Date().toISOString(),
-                resultCount: history.length,
-                results: history
-            },
-            `lyric-solitaire-simulator-history-${new Date().toISOString().slice(0, 10)}.json`
-        );
     }
 };

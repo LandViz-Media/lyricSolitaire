@@ -1,41 +1,22 @@
 # Changelog
 
-All notable Lyric Solitaire development changes are recorded here.
-
-## [0.1.2] — 2026-09-02
+## [0.1.3] — 2026-09-02
 
 ### Added
-- Added simulator-version provenance to every individual trial.
-- Added an explicit Simulator Version field to the current experiment display.
-- Added simulator-version filtering to the Results Viewer.
-- Established v0.1.2 as the clean baseline for the next systematic test campaign.
+- Added the first named simulator persona: **Dolly — Aggressive Row Filler**.
+- Added persona metadata to experiment records and individual trials.
+- Added a single-session export workflow for multiple experiments.
+- Added complete individual-trial retention without localStorage.
+- Added the first Results Viewer header artwork.
+- Added shared tool navigation between Home, Simulator, Generator, and Results.
+- Added a new `generator.html` interface for converting maintained lyric `.txt` files into lyric and word-count JSON.
+- Added simulator-version filtering and persona filtering to the Results Viewer.
+- Added cache-busting to simulator JavaScript references.
 
-### Clarified
-- `Export Results (JSON)` is the canonical permanent experiment record.
-- `Export Session History` is a browser convenience export and is not required for normal testing.
-- Reset is optional between experiments because Run Simulation starts a fresh experiment.
+### Changed
+- Export Results is now the single permanent export control.
+- Browser refresh starts a new simulator session.
+- The previous session-history/localStorage approach is no longer used for full experiment data.
 
 ### Testing
-- Standard/Hard mode parameters are now applied by the v0.1.1+ simulation engine.
-- Older v0.1.0 Standard/Hard records remain historical and should not be treated as valid evidence for those modes.
-
-## [0.1.1] — 2026-09-02
-
-### Added
-- Complete individual-trial collections in simulator exports.
-- All-words-used tracking.
-- Initial Results Viewer.
-- Centralized simulator-version display.
-
-### Fixed
-- Standard and Hard mode configuration in the simulation engine.
-- Deterministic seed progression.
-- Automatic clearing when a new simulation begins.
-
-## [0.1.0] — 2026-09-02
-
-Initial Simulator Lab release.
-
-## Data Changelog
-
-New songs discovered or added to `/song_library` may be recorded here. Lyric and word-count source files remain maintained by the project owner.
+- v0.1.3 is the first clean baseline for the large systematic test campaign.

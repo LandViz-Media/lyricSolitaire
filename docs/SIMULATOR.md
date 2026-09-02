@@ -1,44 +1,46 @@
 # Simulator Lab
 
-**Simulator version: 0.1.2**
+**Simulator version: 0.1.3**
 
-The simulator is a balance and solvability research tool, not the final player-facing game engine.
+## Persona
 
-## v0.1.2
+The simulator now records a named persona. The first persona is:
 
-Simulator v0.1.2 is the clean baseline for the next test campaign.
+**Dolly — Aggressive Row Filler**
 
-### Experiment identity
-- The simulator version appears in the page header.
-- The simulator version appears in the current experiment panel.
-- Every individual trial contains `simulatorVersion`.
-- Every exported experiment contains `simulatorVersion`.
+Dolly represents the current decision-making strategy: prefer active lines
+closest to completion, play every usable word, and when opening a new row favor
+shorter candidate lines.
 
-### Mode configuration
-- Easy / Open: 12 rows, 50-tile hand limit, 12 rounds.
-- Standard: 10 rows, 40-tile hand limit, 10 rounds.
-- Hard: 8 rows, 30-tile hand limit, 8 rounds.
+The persona is recorded in each experiment and each trial so alternate
+decision-making strategies can later be compared without ambiguity.
 
-### Results
-Every exported experiment retains the complete individual-trial collection, plus aggregate measures and:
-- `allWordsUsedTrials`
-- `allWordsUsedRate`
-- `everAllWordsUsed`
+## Session workflow
 
-### Reset
-Reset is not required between normal experiments. Pressing Run Simulation starts a fresh experiment. Reset is only for intentionally clearing the current page.
+Run as many experiments as desired during one browser session. Complete
+individual trial collections stay in browser memory rather than localStorage.
 
-### Export workflow
-Use **Export Results (JSON)** for the permanent test record. Put that file in `/test_results/`.
+Press the single **Export Results (JSON)** button when the session is ready.
+The exported JSON contains every experiment and every individual trial from
+that session.
 
-**Export Session History** is a convenience export of browser-local history. It is not the primary test-archive workflow.
+Refresh the browser to start a new session.
 
-## Results Viewer
+## Why localStorage is not used
 
-`results.html` loads exported experiment JSON files and provides initial comparison and histogram capabilities. It can filter by song, mode, and simulator version.
+Full 1,000-trial collections can exceed browser storage quotas. The simulator
+therefore keeps experiment data in memory until export. The downloaded JSON is
+the permanent record for `/test_results/`.
 
-As the test collection grows, the viewer can be expanded to compare songs and modes and calculate challenge-level diagnostics.
+## Mode configuration
 
-## Testing rule
+| Mode | Rows | Hand Limit | Maximum Rounds |
+|---|---:|---:|---:|
+| Easy / Open | 12 | 50 | 12 |
+| Standard | 10 | 40 | 10 |
+| Hard | 8 | 30 | 8 |
 
-Do not compare v0.1.0 Standard/Hard experiments directly with v0.1.2 Standard/Hard experiments as though they used the same rules. v0.1.0 displayed those modes but its engine remained Easy-only.
+## Cache busting
+
+Simulator JavaScript references use the simulator version as a query string,
+so new releases are more likely to bypass stale browser/GitHub Pages caches.

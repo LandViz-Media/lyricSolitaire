@@ -16,19 +16,31 @@ label{display:grid;gap:5px;font-size:13px;font-weight:700;margin-bottom:11px}sel
 .chips span{display:inline-block;padding:4px 8px;border:1px solid var(--line);border-radius:15px;margin:3px;background:#fffdf7;font-size:12px}.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:7px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{background:#f4eee1}
 pre{margin:0;background:#172026;color:#edf1f2;padding:12px;max-height:560px;overflow:auto;font-size:12px;line-height:1.45}.log{line-height:1.6;font-size:13px}.log .ok::before{content:"✓ ";color:var(--green);font-weight:900}.export-box{margin-top:12px;padding:10px;border:1px dashed var(--line);border-radius:8px;background:#faf7ef}.export-box p{margin:0 0 7px;color:var(--muted);font-size:12px}footer{text-align:center;color:var(--muted);font-size:12px;padding:15px}
 @media(max-width:1100px){.grid{grid-template-columns:1fr 1fr}.results{grid-column:1/-1}.metrics{grid-template-columns:repeat(3,1fr)}}@media(max-width:720px){.grid,.two{grid-template-columns:1fr}.metrics,.stats{grid-template-columns:1fr 1fr}.hero{height:190px}}
+
+.tool-nav{display:flex;gap:7px;padding:8px 16px;background:#0a1d26;border-top:1px solid #8d650f}
+.tool-nav a{color:#f3e4bd;text-decoration:none;border:1px solid #80651f;border-radius:6px;padding:6px 12px;font-size:12px;font-weight:800}
+.tool-nav a.active,.tool-nav a:hover{background:#d59a1a;color:#102936}
 </style>
 </head>
 <body>
 <header>
 <img class="hero" src="images/lyric-solitaire-simulator-lab-header.png" alt="Lyric Solitaire Simulator Lab">
 <div class="version-badge"><small>SIMULATOR</small><strong id="headerVersion">v—</strong></div>
-</header>
+<nav class="tool-nav" aria-label="Lyric Solitaire tools">
+  <a href="index.html">Home</a>
+  <a class="active" href="simulator.html">Simulator</a>
+  <a href="generator.html">Generator</a>
+  <a href="results.html">Results</a>
+</nav></header>
 
 <main>
 <section class="grid">
 <aside class="panel"><h2>Experiment Setup</h2><div class="body">
 <label>Artist(s)<select id="artistSelect" multiple></select></label>
 <label>Song(s)<select id="songSelect" multiple></select></label>
+<label>Persona
+<select id="personaSelect"></select>
+</label>
 <label>Difficulty / Mode
 <select id="difficulty">
 <option value="easy">Easy / Open — 12 rows / 50 tiles / 12 rounds</option>
@@ -40,6 +52,7 @@ pre{margin:0;background:#172026;color:#edf1f2;padding:12px;max-height:560px;over
 <label>Random Seed<input id="seed" type="number" value="12345"></label>
 <div class="buttons"><button id="runButton">Run Simulation</button><button class="secondary" id="resetButton">Reset</button></div>
 <p id="resetHelp" style="font-size:12px;color:#66727a;margin:8px 0 0">Reset is optional between tests. Run Simulation starts a fresh experiment.</p>
+<div id="personaInfo" class="status">Loading persona…</div>
 <div id="status" class="status">Loading song catalog…</div>
 </div></aside>
 
@@ -63,7 +76,7 @@ pre{margin:0;background:#172026;color:#edf1f2;padding:12px;max-height:560px;over
 <p>Canonical test record: export this experiment and place the JSON file in <code>test_results/</code>.</p>
 <p><strong>Experiment ID:</strong> <span id="experimentId">—</span></p>
 <p><strong>Simulator Version:</strong> <span id="experimentVersion">v—</span></p>
-<div class="buttons"><button id="exportButton" disabled>Export Results (JSON)</button><button class="secondary" id="exportHistoryButton">Export Session History</button></div>
+<div class="buttons"><button id="exportButton" disabled>Export Results (JSON)</button></div>
 </div>
 </div></section>
 
@@ -80,10 +93,10 @@ pre{margin:0;background:#172026;color:#edf1f2;padding:12px;max-height:560px;over
 
 <footer>Lyric Solitaire Simulator <span id="footerVersion">v—</span> — Experimental results may change as the game model evolves.</footer>
 
-<script src="js/config/projectVersion.js"></script>
-<script src="js/data/songCatalog.js"></script>
-<script src="js/utilities/simulator.js"></script>
-<script src="js/utilities/testResultLogger.js"></script>
+<script src="js/config/projectVersion.js?v=0.1.3"></script>
+<script src="js/data/songCatalog.js?v=0.1.3"></script>
+<script src="js/utilities/simulator.js?v=0.1.3"></script>
+<script src="js/utilities/testResultLogger.js?v=0.1.3"></script>
 <script>
 /*
  * Simulator Lab Controller
@@ -92,21 +105,73 @@ pre{margin:0;background:#172026;color:#edf1f2;padding:12px;max-height:560px;over
  * Connect the developer-facing UI to the song catalog, simulation engine,
  * and test-result logger. Game rules remain in simulator.js.
  */
-const state={catalog:null,lastRecord:null};
+const state={catalog:null,lastRecord:null,sessionId:`LS-SESSION-${Date.now()}`};
 const $=id=>document.getElementById(id);
 function esc(v){return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
 function setStatus(text,kind=""){$("status").textContent=text;$("status").className=`status ${kind}`}
 function addLog(text){const d=document.createElement("div");d.className="ok";d.textContent=text;$("log").appendChild(d)}
 function seededRandom(seed){let t=(Number(seed)>>>0)||1;return function(){t+=0x6D2B79F5;let x=t;x=Math.imul(x^x>>>15,x|1);x^=x+Math.imul(x^x>>>7,x|61);return((x^x>>>14)>>>0)/4294967296}}
 function selectedSongs(){const ids=new Set([...$("songSelect").selectedOptions].map(o=>o.value));return state.catalog.songs.filter(s=>ids.has(s.id))}
+function selectedPersona(){
+  const id=$("personaSelect").value;
+  return window.LyricSolitaireProject.personas.find(p=>p.id===id) ||
+    window.LyricSolitaireProject.personas[0];
+}
 function updateSongOptions(){const keys=[...$("artistSelect").selectedOptions].map(o=>o.value);const old=new Set([...$("songSelect").selectedOptions].map(o=>o.value));$("songSelect").replaceChildren();state.catalog.songs.filter(s=>!keys.length||keys.includes(s.artistKey)).sort((a,b)=>a.title.localeCompare(b.title)).forEach(s=>{const o=document.createElement("option");o.value=s.id;o.textContent=`${s.title} — ${s.artist}`;o.selected=old.has(s.id);$("songSelect").appendChild(o)});updateSongInfo()}
 async function loadSongs(songs){return Promise.all(songs.map(async s=>{const l=window.LyricSolitaireSongCatalog.resolveDataPath(s.lyrics);const w=window.LyricSolitaireSongCatalog.resolveDataPath(s.wordCount);const [lr,wr]=await Promise.all([fetch(l,{cache:"no-store"}),fetch(w,{cache:"no-store"})]);if(!lr.ok)throw new Error(`Could not load ${l}`);if(!wr.ok)throw new Error(`Could not load ${w}`);return {...s,lyricsData:await lr.json(),wordCountData:await wr.json()}}))}
 function wordStats(data){const words=data.flatMap(s=>s.wordCountData.words||[]);return{total:words.reduce((n,w)=>n+(Number(w.count)||0),0),unique:new Set(words.map(w=>String(w.word).normalize("NFKC").toLocaleLowerCase())).size}}
 function updateSongInfo(){const songs=selectedSongs();$("selectedSongs").innerHTML=songs.length?songs.map(s=>`<span>${esc(s.title)} — ${esc(s.artist)}</span>`).join(""):"No songs selected.";$("songData").innerHTML=songs.length?`<table><thead><tr><th>Song</th><th>Artist</th><th>Album</th><th>Year</th><th>Genre</th></tr></thead><tbody>${songs.map(s=>`<tr><td>${esc(s.title)}</td><td>${esc(s.artist)}</td><td>${esc(s.album)}</td><td>${s.year??"—"}</td><td>${esc(s.genre??"—")}</td></tr>`).join("")}</tbody></table>`:"Select one or more songs."}
 function clearResults(){["mTrials","mWins","mWinRate","mRounds","mWords","mAllWords","totalWords","uniqueWords","poolWords","mLines"].forEach(id=>$(id).textContent="—");$("trace").textContent="No simulation has been run.";$("rawResult").textContent="No result.";$("exportButton").disabled=true;$("experimentId").textContent="—"}
-async function run(){const songs=selectedSongs();if(!songs.length){setStatus("Select at least one song.","warn");return}const trials=Math.max(1,Math.min(10000,Number($("trials").value)||1));const seed=Number($("seed").value)||12345;const mode=$("difficulty").value;try{clearResults();$("log").innerHTML='<div class="ok">Starting new experiment.</div>';setStatus("Loading selected song data…");const data=await loadSongs(songs);const stats=wordStats(data);$("totalWords").textContent=stats.total;$("uniqueWords").textContent=stats.unique;$("poolWords").textContent=stats.total;addLog(`Loaded ${songs.length} song${songs.length===1?"":"s"}.`);addLog(`Total words: ${stats.total} • Unique words: ${stats.unique}.`);const engine=window.LyricSolitaireSimulator;const bundles=data.map(s=>engine.prepareSongBundle(s.lyricsData,s.wordCountData));const bundle=bundles.length===1?bundles[0]:engine.combineSongBundles(bundles);addLog(`Word-pool check: ${bundle.poolMatchesLyrics?"matches lyric data":"DOES NOT MATCH lyric data"}.`);setStatus("Running simulation…");let offset=0;const result=engine.runTrials(bundle,trials,()=>seededRandom(seed+offset++),{mode});$("mTrials").textContent=result.trialCount;$("mWins").textContent=result.wins;$("mWinRate").textContent=`${(result.winRate*100).toFixed(1)}%`;$("mRounds").textContent=result.averageRounds.toFixed(2);$("mWords").textContent=result.averagePlayed.toFixed(2);$("mAllWords").textContent=result.everAllWordsUsed?`${result.allWordsUsedTrials}/${result.trialCount}`:"No";$("mLines").textContent=result.averageCompletedLines.toFixed(2);addLog(`All words used in ${result.allWordsUsedTrials} of ${result.trialCount} trials.`);$("trace").textContent=JSON.stringify(result.trials?.[0]??null,null,2);$("rawResult").textContent=JSON.stringify(result,null,2);const experimentId=`LS-SIM-${Date.now()}`;$("experimentId").textContent=experimentId;
-      $("experimentVersion").textContent=`v${window.LyricSolitaireProject.simulatorVersion}`;const cfg=engine.getModeConfig(mode);const record=window.LyricSolitaireTestLogger.createRecord({version:window.LyricSolitaireProject.simulatorVersion,experimentId,parameters:{mode,modeLabel:cfg.label,trials,randomSeed:seed,startingRows:cfg.maxRows,handLimit:cfg.maxHand,maximumRounds:cfg.maxRounds},songs:data.map(s=>({id:s.id,title:s.title,artist:s.artist,album:s.album,year:s.year,genre:s.genre,...wordStats([s])})),result});window.LyricSolitaireTestLogger.saveRecord(record);state.lastRecord=record;$("exportButton").disabled=false;addLog(`Complete trial collection retained: ${record.trials.length} trials.`);addLog(`Simulation complete: ${result.trialCount} trials.`);setStatus("Simulation complete.","ok")}catch(err){console.error(err);setStatus(err.message,"error");addLog(`ERROR: ${err.message}`)}}
-async function init(){$("headerVersion").textContent=`v${window.LyricSolitaireProject.simulatorVersion}`;$("footerVersion").textContent=`v${window.LyricSolitaireProject.simulatorVersion}`;try{state.catalog=await window.LyricSolitaireSongCatalog.load();state.catalog.artists.forEach(a=>{const o=document.createElement("option");o.value=a.key;o.textContent=a.name;$("artistSelect").appendChild(o)});$("artistSelect").addEventListener("change",updateSongOptions);$("songSelect").addEventListener("change",updateSongInfo);$("runButton").addEventListener("click",run);$("resetButton").addEventListener("click",()=>{clearResults();$("log").innerHTML='<div class="ok">Waiting for experiment.</div>';setStatus("Ready.")});$("exportButton").addEventListener("click",()=>state.lastRecord&&window.LyricSolitaireTestLogger.exportRecord(state.lastRecord));$("exportHistoryButton").addEventListener("click",()=>window.LyricSolitaireTestLogger.exportHistory());updateSongOptions();setStatus(`Catalog loaded: ${state.catalog.artists.length} artists, ${state.catalog.songs.length} songs.`,"ok")}catch(err){console.error(err);setStatus(`Catalog load failed: ${err.message}`,"error")}}
+async function run(){const songs=selectedSongs();if(!songs.length){setStatus("Select at least one song.","warn");return}const trials=Math.max(1,Math.min(10000,Number($("trials").value)||1));const seed=Number($("seed").value)||12345;const mode=$("difficulty").value;try{clearResults();$("log").innerHTML='<div class="ok">Starting new experiment.</div>';setStatus("Loading selected song data…");const data=await loadSongs(songs);const stats=wordStats(data);$("totalWords").textContent=stats.total;$("uniqueWords").textContent=stats.unique;$("poolWords").textContent=stats.total;addLog(`Loaded ${songs.length} song${songs.length===1?"":"s"}.`);addLog(`Total words: ${stats.total} • Unique words: ${stats.unique}.`);const engine=window.LyricSolitaireSimulator;const bundles=data.map(s=>engine.prepareSongBundle(s.lyricsData,s.wordCountData));const bundle=bundles.length===1?bundles[0]:engine.combineSongBundles(bundles);addLog(`Word-pool check: ${bundle.poolMatchesLyrics?"matches lyric data":"DOES NOT MATCH lyric data"}.`);setStatus("Running simulation…");let offset=0;const persona=selectedPersona();
+const result=engine.runTrials(
+  bundle,
+  trials,
+  ()=>seededRandom(seed+offset++),
+  {mode,persona:persona.id}
+);$("mTrials").textContent=result.trialCount;$("mWins").textContent=result.wins;$("mWinRate").textContent=`${(result.winRate*100).toFixed(1)}%`;$("mRounds").textContent=result.averageRounds.toFixed(2);$("mWords").textContent=result.averagePlayed.toFixed(2);$("mAllWords").textContent=result.everAllWordsUsed?`${result.allWordsUsedTrials}/${result.trialCount}`:"No";$("mLines").textContent=result.averageCompletedLines.toFixed(2);addLog(`All words used in ${result.allWordsUsedTrials} of ${result.trialCount} trials.`);$("trace").textContent=JSON.stringify(result.trials?.[0]??null,null,2);$("rawResult").textContent=JSON.stringify(result,null,2);const experimentId=`LS-SIM-${Date.now()}`;
+$("experimentId").textContent=experimentId;
+$("experimentVersion").textContent=`v${window.LyricSolitaireProject.simulatorVersion}`;
+const persona=selectedPersona();
+const cfg=engine.getModeConfig(mode);
+
+const record=window.LyricSolitaireTestLogger.createExperimentRecord({
+  version:window.LyricSolitaireProject.simulatorVersion,
+  experimentId,
+  sessionId:state.sessionId,
+  parameters:{
+    mode,
+    modeLabel:cfg.label,
+    trials,
+    randomSeed:seed,
+    startingRows:cfg.maxRows,
+    handLimit:cfg.maxHand,
+    maximumRounds:cfg.maxRounds
+  },
+  persona,
+  songs:data.map(s=>({
+    id:s.id,title:s.title,artist:s.artist,album:s.album,
+    year:s.year,genre:s.genre,...wordStats([s])
+  })),
+  result
+});
+
+window.LyricSolitaireTestLogger.addExperiment(record);
+state.lastRecord=record;
+$("exportSessionButton").disabled=false;
+addLog(`Complete trial collection retained: ${record.trials.length} trials.`);
+addLog(`Session experiments: ${window.LyricSolitaireTestLogger.session.length}.`);
+addLog(`Simulation complete: ${result.trialCount} trials.`);
+setStatus("Simulation complete.","ok")}catch(err){console.error(err);setStatus(err.message,"error");addLog(`ERROR: ${err.message}`)}}
+async function init(){$("headerVersion").textContent=`v${window.LyricSolitaireProject.simulatorVersion}`;$("footerVersion").textContent=`v${window.LyricSolitaireProject.simulatorVersion}`;$("experimentVersion").textContent=`v${window.LyricSolitaireProject.simulatorVersion}`;try{state.catalog=await window.LyricSolitaireSongCatalog.load();state.catalog.artists.forEach(a=>{const o=document.createElement("option");o.value=a.key;o.textContent=a.name;$("artistSelect").appendChild(o)});
+window.LyricSolitaireProject.personas.forEach(p=>{
+  const o=document.createElement("option");o.value=p.id;o.textContent=p.name;$("personaSelect").appendChild(o);
+});
+$("personaSelect").value=window.LyricSolitaireProject.defaultPersonaId;
+$("personaSelect").addEventListener("change",()=>{
+  const p=selectedPersona();
+  $("personaInfo").textContent=`${p.name}: ${p.description}`;
+});
+$("personaInfo").textContent=selectedPersona().description;$("artistSelect").addEventListener("change",updateSongOptions);$("songSelect").addEventListener("change",updateSongInfo);$("runButton").addEventListener("click",run);$("resetButton").addEventListener("click",()=>{clearResults();$("log").innerHTML='<div class="ok">Waiting for experiment.</div>';setStatus("Ready.")});$("exportSessionButton").addEventListener("click",()=>window.LyricSolitaireTestLogger.exportSession(window.LyricSolitaireProject.simulatorVersion));updateSongOptions();setStatus(`Catalog loaded: ${state.catalog.artists.length} artists, ${state.catalog.songs.length} songs.`,"ok")}catch(err){console.error(err);setStatus(`Catalog load failed: ${err.message}`,"error")}}
 init();
 </script>
 </body>
