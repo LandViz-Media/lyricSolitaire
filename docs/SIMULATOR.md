@@ -1,38 +1,37 @@
 # Simulator Lab
 
-**Simulator version: 0.1.3**
+**Simulator version: 0.1.3.1**
 
-## Persona
-
-The simulator now records a named persona. The first persona is:
+## First named persona
 
 **Dolly — Aggressive Row Filler**
 
-Dolly represents the current decision-making strategy: prefer active lines
-closest to completion, play every usable word, and when opening a new row favor
-shorter candidate lines.
+Dolly represents the current simulator decision-making strategy:
+- prefer active lyric lines closest to completion
+- play every usable word
+- open a new candidate line when an available row permits it
+- favor shorter candidate lines when opening a row
 
-The persona is recorded in each experiment and each trial so alternate
-decision-making strategies can later be compared without ambiguity.
+The persona is recorded at the experiment and individual-trial levels so
+alternate strategies can later be compared directly.
 
 ## Session workflow
 
-Run as many experiments as desired during one browser session. Complete
-individual trial collections stay in browser memory rather than localStorage.
+Run as many experiments as desired during one browser session. The simulator
+keeps complete experiment data in memory rather than localStorage.
 
-Press the single **Export Results (JSON)** button when the session is ready.
-The exported JSON contains every experiment and every individual trial from
-that session.
+Use the single **Export Results (JSON)** button when the session is ready.
+The resulting JSON contains every experiment from that session and every
+individual trial in each experiment.
 
-Refresh the browser to start a new session.
+Refresh the browser to begin a new session.
 
-## Why localStorage is not used
+## Reset
 
-Full 1,000-trial collections can exceed browser storage quotas. The simulator
-therefore keeps experiment data in memory until export. The downloaded JSON is
-the permanent record for `/test_results/`.
+Reset only clears the page display. It does not need to be pressed between
+experiments.
 
-## Mode configuration
+## Modes
 
 | Mode | Rows | Hand Limit | Maximum Rounds |
 |---|---:|---:|---:|
@@ -40,7 +39,19 @@ the permanent record for `/test_results/`.
 | Standard | 10 | 40 | 10 |
 | Hard | 8 | 30 | 8 |
 
-## Cache busting
+## Results
 
-Simulator JavaScript references use the simulator version as a query string,
-so new releases are more likely to bypass stale browser/GitHub Pages caches.
+Every experiment records aggregate values plus:
+- complete individual trial collection
+- `allWordsUsedTrials`
+- `allWordsUsedRate`
+- `everAllWordsUsed`
+- simulator version
+- persona and persona description
+- mode and rule parameters
+
+## Cache Busting
+
+Simulator JavaScript references include the simulator version in their query
+string so browser/GitHub Pages caches are less likely to serve an older
+JavaScript file after an update.

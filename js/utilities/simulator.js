@@ -50,10 +50,11 @@
     };
 
     const CONFIG = {
-        version: "0.1.3",
+        version: "0.1.3.1",
         initialDraw: 12,
         defaultMode: "easy",
-        modes: MODE_CONFIG
+        modes: MODE_CONFIG,
+        defaultPersona: "aggressive_row_filler"
     };
 
     function getModeConfig(mode) {

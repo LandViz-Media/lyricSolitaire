@@ -1,14 +1,14 @@
 /*
- * Lyric Solitaire — Project Version and Persona Configuration
+ * Lyric Solitaire — Project Version Configuration
  *
  * Responsibility:
- * Stores project/tool versions and the named simulator personas. The UI and
- * exported experiment records read version/persona information from here.
+ * Stores application/tool versions and named simulator personas used by
+ * the simulator UI and exported experiment records.
  */
 window.LyricSolitaireProject = {
     gameVersion: "0.1.0",
-    simulatorVersion: "0.1.3",
-    dataSchemaVersion: "1.3",
+    simulatorVersion: "0.1.3.1",
+    dataSchemaVersion: "1.3.1",
 
     personas: [
         {

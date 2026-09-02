@@ -1,22 +1,34 @@
 # Changelog
 
-## [0.1.3] — 2026-09-02
+## [0.1.3.1] — 2026-09-02
+
+### Fixed
+- Corrected the v0.1.3 overlay so all required JavaScript dependencies are
+  actually installed.
+- Fixed the blank Artist, Song, and Persona controls caused by the missing
+  JavaScript dependency tree.
+- Added explicit cache-busting to simulator JavaScript references.
+- Added the current simulator version to every individual trial.
+- Kept experiment data in browser memory instead of localStorage, avoiding
+  quota failures for 1,000-trial experiments.
 
 ### Added
-- Added the first named simulator persona: **Dolly — Aggressive Row Filler**.
-- Added persona metadata to experiment records and individual trials.
-- Added a single-session export workflow for multiple experiments.
-- Added complete individual-trial retention without localStorage.
-- Added the first Results Viewer header artwork.
-- Added shared tool navigation between Home, Simulator, Generator, and Results.
-- Added a new `generator.html` interface for converting maintained lyric `.txt` files into lyric and word-count JSON.
-- Added simulator-version filtering and persona filtering to the Results Viewer.
-- Added cache-busting to simulator JavaScript references.
+- First named persona: **Dolly — Aggressive Row Filler**.
+- Single session-wide **Export Results (JSON)** workflow.
+- Persona metadata and filtering.
+- Initial Results Viewer session-file support.
+- Shared navigation between Home, Simulator, Generator, and Results.
 
-### Changed
-- Export Results is now the single permanent export control.
-- Browser refresh starts a new simulator session.
-- The previous session-history/localStorage approach is no longer used for full experiment data.
+### Important
+v0.1.3 was not a valid testing release because its installer package did not
+reliably install the JavaScript dependency tree. Do not use v0.1.3 as the
+baseline for experiments. Use v0.1.3.1.
 
-### Testing
-- v0.1.3 is the first clean baseline for the large systematic test campaign.
+## [0.1.3] — 2026-09-02
+
+Initial persona, single-session export, results viewer, generator, and shared
+navigation work.
+
+## Data Changelog
+
+New songs discovered or added to `/song_library` may be recorded here.

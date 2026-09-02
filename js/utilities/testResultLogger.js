@@ -2,15 +2,22 @@
  * Lyric Solitaire — Simulation Session Logger
  *
  * Responsibility:
- * Keeps complete experiments in browser memory for the current session and
- * exports them as one JSON file. The browser's localStorage is intentionally
- * not used for full trial collections because 1,000+ trial runs can exceed
- * browser storage quotas.
- *
- * The repository's /test_results directory is the permanent archive.
+ * Stores completed experiments in browser memory for one session and exports
+ * the complete session as one JSON file. It deliberately does not use
+ * localStorage because 1,000+ complete trial collections can exceed browser
+ * storage quotas.
  */
 window.LyricSolitaireTestLogger = {
     session: [],
+
+    addExperiment(record) {
+        this.session.push(record);
+        return record;
+    },
+
+    clearSession() {
+        this.session = [];
+    },
 
     createExperimentRecord({
         version,
@@ -22,7 +29,6 @@ window.LyricSolitaireTestLogger = {
         result
     }) {
         const trials = result.trials || [];
-
         const allWordsUsedTrials = trials.filter(function (trial) {
             return Number(trial.totalPlayed) === Number(trial.totalSourceWords);
         }).length;
@@ -32,7 +38,7 @@ window.LyricSolitaireTestLogger = {
         }).length;
 
         return {
-            schemaVersion: "1.3",
+            schemaVersion: "1.3.1",
             experimentId,
             sessionId,
             timestamp: new Date().toISOString(),
@@ -41,10 +47,12 @@ window.LyricSolitaireTestLogger = {
             persona: {
                 id: persona.id,
                 name: persona.name,
-                description: persona.description
+                description: persona.description,
+                strategy: persona.strategy
             },
 
             parameters: { ...parameters },
+
             songs,
 
             songTotals: {
@@ -61,6 +69,7 @@ window.LyricSolitaireTestLogger = {
                 wins,
                 losses: trials.length - wins,
                 winRate: wins / Math.max(1, trials.length),
+
                 averageRounds: result.averageRounds,
                 averageDrawn: result.averageDrawn,
                 averagePlayed: result.averagePlayed,
@@ -68,10 +77,12 @@ window.LyricSolitaireTestLogger = {
                 averageCompletedLines: result.averageCompletedLines,
                 averagePoolRemaining: result.averagePoolRemaining,
                 averageActiveLines: result.averageActiveLines,
+
                 allWordsUsedTrials,
                 allWordsUsedRate:
                     allWordsUsedTrials / Math.max(1, trials.length),
                 everAllWordsUsed: allWordsUsedTrials > 0,
+
                 bestWordsPlayed: trials.length
                     ? Math.max(...trials.map(t => Number(t.totalPlayed) || 0))
                     : 0,
@@ -86,28 +97,20 @@ window.LyricSolitaireTestLogger = {
                     : 0
             },
 
-            // Every individual trial is permanent once this session is exported.
+            // Keep every trial so later analysis does not require rerunning.
             trials,
+
             sampleTrial: trials[0] || null
         };
     },
 
-    addExperiment(record) {
-        this.session.push(record);
-        return record;
-    },
-
-    clearSession() {
-        this.session = [];
-    },
-
     exportSession(simulatorVersion) {
         if (!this.session.length) {
-            throw new Error("There are no experiments to export yet.");
+            throw new Error("There are no completed experiments to export.");
         }
 
         const output = {
-            schemaVersion: "1.3",
+            schemaVersion: "1.3.1",
             sessionId: this.session[0].sessionId,
             exportedAt: new Date().toISOString(),
             simulatorVersion,
