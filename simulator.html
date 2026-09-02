@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lyric Solitaire — Simulator Lab</title>
+
+  <style>
+    /*
+     * Simulator Lab styles.
+     * This page is a developer/testing interface, not the player game UI.
+     */
+
+    :root {
+      --paper: #f7f3e9;
+      --ink: #202020;
+      --muted: #666;
+      --panel: #ffffff;
+      --line: #d8d1c2;
+      --accent: #b8860b;
+      --accent-dark: #775800;
+      --success: #246b45;
+      --warning: #9a6512;
+      --danger: #8b3a3a;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    header {
+      padding: 24px 28px;
+      border-bottom: 1px solid var(--line);
+      background: #fffdf8;
+    }
+
+    header h1 { margin: 0 0 4px; font-size: 28px; }
+    header p { margin: 0; color: var(--muted); }
+
+    main {
+      width: min(1400px, calc(100% - 40px));
+      margin: 20px auto 50px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.04);
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(140px, 1fr));
+      gap: 12px;
+      align-items: end;
+    }
+
+    label {
+      display: grid;
+      gap: 5px;
+      font-weight: 650;
+      font-size: 14px;
+    }
+
+    select, input, button {
+      font: inherit;
+      padding: 9px 10px;
+      border: 1px solid #bbb3a5;
+      border-radius: 7px;
+      background: white;
+    }
+
+    select[multiple] { min-height: 118px; }
+
+    button {
+      cursor: pointer;
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent-dark);
+      font-weight: 700;
+    }
+
+    button.secondary {
+      background: white;
+      color: var(--ink);
+      border-color: #aaa;
+    }
+
+    button:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+    }
+
+    .status {
+      margin-top: 12px;
+      padding: 10px 12px;
+      border-radius: 7px;
+      background: #f3f0e9;
+      color: var(--muted);
+    }
+
+    .status.ok { color: var(--success); }
+    .status.warn { color: var(--warning); }
+    .status.error { color: var(--danger); }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 10px;
+    }
+
+    .metric {
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fffdf8;
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 24px;
+      margin-top: 3px;
+    }
+
+    .metric span {
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    th, td {
+      padding: 8px 7px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th { background: #faf7f0; }
+
+    pre {
+      margin: 0;
+      padding: 12px;
+      max-height: 520px;
+      overflow: auto;
+      background: #1e1e1e;
+      color: #eee;
+      border-radius: 8px;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .song-chip {
+      display: inline-block;
+      margin: 3px 5px 3px 0;
+      padding: 4px 8px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: #fffdf8;
+    }
+
+    @media (max-width: 900px) {
+      .controls, .summary, .grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .controls, .summary, .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Lyric Solitaire — Simulator Lab</h1>
+    <p>Developer/testing page for the simulation engine and song data.</p>
+  </header>
+
+  <main>
+    <section class="panel">
+      <h2>Simulation Setup</h2>
+
+      <div class="controls">
+        <label>
+          Artist(s)
+          <select id="artistSelect" multiple></select>
+        </label>
+
+        <label>
+          Song(s)
+          <select id="songSelect" multiple></select>
+        </label>
+
+        <label>
+          Difficulty
+          <select id="difficulty">
+            <option value="easy">Easy / Open</option>
+            <option value="standard">Standard</option>
+            <option value="hard">Hard</option>
+          </select>
+        </label>
+
+        <label>
+          Trials
+          <input id="trials" type="number" min="1" max="100000" value="100">
+        </label>
+
+        <label>
+          Seed
+          <input id="seed" type="number" value="12345">
+        </label>
+
+        <button id="runButton" type="button">Run Simulation</button>
+      </div>
+
+      <div id="status" class="status">Loading song catalog…</div>
+    </section>
+
+    <section class="panel">
+      <h2>Selected Songs</h2>
+      <div id="selectedSongs">No songs selected.</div>
+    </section>
+
+    <section class="panel">
+      <h2>Results</h2>
+
+      <div class="summary">
+        <div class="metric"><span>Trials</span><strong id="mTrials">—</strong></div>
+        <div class="metric"><span>Wins</span><strong id="mWins">—</strong></div>
+        <div class="metric"><span>Win Rate</span><strong id="mWinRate">—</strong></div>
+        <div class="metric"><span>Avg. Rounds</span><strong id="mRounds">—</strong></div>
+        <div class="metric"><span>Avg. Words Played</span><strong id="mWords">—</strong></div>
+        <div class="metric"><span>Avg. Final Hand</span><strong id="mHand">—</strong></div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="panel">
+        <h2>Song Data</h2>
+        <div id="songData">Select one or more songs.</div>
+      </div>
+
+      <div class="panel">
+        <h2>Simulation Trace</h2>
+        <pre id="trace">No simulation has been run.</pre>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Raw Engine Result</h2>
+      <pre id="rawResult">No result.</pre>
+    </section>
+  </main>
+
+  <!--
+    The catalog loader is intentionally separate from the simulator.
+    This lets the game and developer tools use the same song manifest.
+  -->
+  <script src="js/data/songCatalog.js"></script>
+
+  <!--
+    The simulation engine is a library. It should expose
+    window.LyricSolitaireSimulator.
+  -->
+  <script src="js/utilities/simulator.js"></script>
+
+  <script>
+    /*
+     * Simulator Lab Controller
+     *
+     * Responsibility:
+     * Connects the developer-facing HTML controls to the song catalog and
+     * the simulation engine. It does not contain the actual game rules.
+     *
+     * Keeping the engine in simulator.js means game rules can be tested
+     * without mixing DOM code into the simulation logic.
+     */
+
+    const state = {
+      catalog: null,
+      selectedSongs: [],
+      lastResult: null
+    };
+
+    const $ = (id) => document.getElementById(id);
+
+    function setStatus(message, kind = "") {
+      $("status").textContent = message;
+      $("status").className = `status ${kind}`;
+    }
+
+    function populateArtists() {
+      const select = $("artistSelect");
+
+      for (const artist of state.catalog.artists) {
+        const option = document.createElement("option");
+        option.value = artist.key;
+        option.textContent = artist.name;
+        select.appendChild(option);
+      }
+
+      select.addEventListener("change", updateSongOptions);
+    }
+
+    function getSelectedArtistKeys() {
+      return [...$("artistSelect").selectedOptions].map(option => option.value);
+    }
+
+    function updateSongOptions() {
+      const artistKeys = getSelectedArtistKeys();
+      const select = $("songSelect");
+      const previous = new Set([...select.selectedOptions].map(o => o.value));
+
+      select.replaceChildren();
+
+      const available = state.catalog.songs
+        .filter(song => artistKeys.length === 0 || artistKeys.includes(song.artistKey))
+        .sort((a, b) => a.title.localeCompare(b.title));
+
+      for (const song of available) {
+        const option = document.createElement("option");
+        option.value = song.id;
+        option.textContent = `${song.title} — ${song.artist}`;
+        option.selected = previous.has(song.id);
+        select.appendChild(option);
+      }
+
+      updateSelectedSongDisplay();
+    }
+
+    function getSelectedSongRecords() {
+      const ids = new Set([...$("songSelect").selectedOptions].map(o => o.value));
+      return state.catalog.songs.filter(song => ids.has(song.id));
+    }
+
+    $("songSelect").addEventListener("change", updateSelectedSongDisplay);
+
+    function updateSelectedSongDisplay() {
+      const songs = getSelectedSongRecords();
+
+      if (!songs.length) {
+        $("selectedSongs").textContent = "No songs selected.";
+        $("songData").textContent = "Select one or more songs.";
+        return;
+      }
+
+      $("selectedSongs").innerHTML = songs
+        .map(song => `<span class="song-chip">${escapeHtml(song.title)} — ${escapeHtml(song.artist)}</span>`)
+        .join("");
+
+      $("songData").innerHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th>Song</th>
+              <th>Artist</th>
+              <th>Year</th>
+              <th>Genre</th>
+              <th>Lyrics JSON</th>
+              <th>Word Count JSON</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${songs.map(song => `
+              <tr>
+                <td>${escapeHtml(song.title)}</td>
+                <td>${escapeHtml(song.artist)}</td>
+                <td>${song.year ?? "—"}</td>
+                <td>${escapeHtml(song.genre ?? "—")}</td>
+                <td>${escapeHtml(song.lyrics)}</td>
+                <td>${escapeHtml(song.wordCount)}</td>
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>
+      `;
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    async function loadSongData(songs) {
+      return Promise.all(songs.map(async song => {
+        const [lyricsResponse, wordCountResponse] = await Promise.all([
+          fetch(song.lyrics, { cache: "no-store" }),
+          fetch(song.wordCount, { cache: "no-store" })
+        ]);
+
+        if (!lyricsResponse.ok) {
+          throw new Error(`Could not load ${song.lyrics}`);
+        }
+
+        if (!wordCountResponse.ok) {
+          throw new Error(`Could not load ${song.wordCount}`);
+        }
+
+        return {
+          ...song,
+          lyricsData: await lyricsResponse.json(),
+          wordCountData: await wordCountResponse.json()
+        };
+      }));
+    }
+
+    /*
+     * The engine adapter intentionally accepts several common result shapes.
+     * This keeps the lab UI tolerant while the simulator API is still being
+     * refined. Once the engine API is finalized, this adapter can be narrowed.
+     */
+    function normalizeSimulationResult(result, trials) {
+      if (!result) return null;
+
+      const wins =
+        result.wins ??
+        result.successes ??
+        result.completedGames ??
+        (result.winRate != null ? Math.round(result.winRate * trials) : null);
+
+      const winRate =
+        result.winRate ??
+        result.successRate ??
+        (wins != null ? wins / trials : null);
+
+      return {
+        trials: result.trials ?? trials,
+        wins,
+        winRate,
+        averageRounds: result.averageRounds ?? result.avgRounds ?? result.meanRounds,
+        averageWordsPlayed: result.averageWordsPlayed ?? result.avgWordsPlayed,
+        averageFinalHand: result.averageFinalHand ?? result.avgFinalHand,
+        raw: result
+      };
+    }
+
+    async function runSimulation() {
+      const songs = getSelectedSongRecords();
+
+      if (!songs.length) {
+        setStatus("Select at least one song.", "warn");
+        return;
+      }
+
+      const trials = Math.max(1, Number($("trials").value) || 1);
+      const seed = Number($("seed").value) || 12345;
+      const difficulty = $("difficulty").value;
+
+      setStatus("Loading selected song data…");
+
+      try {
+        const songData = await loadSongData(songs);
+
+        const engine = window.LyricSolitaireSimulator;
+
+        if (!engine) {
+          setStatus(
+            "Song data loaded, but simulator.js does not currently expose window.LyricSolitaireSimulator. The HTML is ready for the simulation engine.",
+            "warn"
+          );
+
+          $("trace").textContent = JSON.stringify({
+            message: "Simulation engine unavailable.",
+            loadedSongs: songData.map(song => ({
+              title: song.title,
+              artist: song.artist,
+              lyrics: song.lyrics,
+              wordCount: song.wordCount
+            }))
+          }, null, 2);
+
+          $("rawResult").textContent = "No engine result.";
+          return;
+        }
+
+        setStatus("Running simulation…");
+
+        /*
+         * Preferred API:
+         *   runTrials(songData, options)
+         *
+         * The adapter also checks for simulateGame when runTrials is not
+         * available. This is deliberately isolated here rather than spread
+         * through the interface.
+         */
+        let result;
+
+        if (typeof engine.runTrials === "function") {
+          result = await engine.runTrials(songData, {
+            trials,
+            seed,
+            difficulty,
+            mode: difficulty === "easy" ? "open" : difficulty
+          });
+        } else if (typeof engine.simulateGame === "function") {
+          const games = [];
+
+          for (let i = 0; i < trials; i++) {
+            games.push(await engine.simulateGame(songData, {
+              seed: seed + i,
+              difficulty,
+              mode: difficulty === "easy" ? "open" : difficulty
+            }));
+          }
+
+          result = {
+            trials,
+            games,
+            wins: games.filter(game => game?.win === true || game?.won === true).length
+          };
+        } else {
+          throw new Error(
+            "Simulator engine loaded, but neither runTrials() nor simulateGame() is available."
+          );
+        }
+
+        state.lastResult = result;
+        const normalized = normalizeSimulationResult(result, trials);
+
+        $("mTrials").textContent = normalized?.trials ?? trials;
+        $("mWins").textContent = normalized?.wins ?? "—";
+        $("mWinRate").textContent =
+          normalized?.winRate != null
+            ? `${(normalized.winRate * 100).toFixed(1)}%`
+            : "—";
+        $("mRounds").textContent = normalized?.averageRounds != null
+          ? Number(normalized.averageRounds).toFixed(2)
+          : "—";
+        $("mWords").textContent = normalized?.averageWordsPlayed != null
+          ? Number(normalized.averageWordsPlayed).toFixed(2)
+          : "—";
+        $("mHand").textContent = normalized?.averageFinalHand != null
+          ? Number(normalized.averageFinalHand).toFixed(2)
+          : "—";
+
+        $("trace").textContent = JSON.stringify(
+          result?.trace ?? result?.games?.[0] ?? result,
+          null,
+          2
+        );
+
+        $("rawResult").textContent = JSON.stringify(result, null, 2);
+        setStatus("Simulation complete.", "ok");
+
+      } catch (error) {
+        console.error(error);
+        setStatus(error.message, "error");
+        $("trace").textContent = error.stack || error.message;
+        $("rawResult").textContent = "Simulation failed.";
+      }
+    }
+
+    $("runButton").addEventListener("click", runSimulation);
+
+    async function initialize() {
+      try {
+        state.catalog = await window.LyricSolitaireSongCatalog.load();
+        populateArtists();
+        updateSongOptions();
+
+        setStatus(
+          `Catalog loaded: ${state.catalog.artists.length} artists and ${state.catalog.songs.length} songs.`,
+          "ok"
+        );
+      } catch (error) {
+        console.error(error);
+        setStatus(`Could not load song catalog: ${error.message}`, "error");
+      }
+    }
+
+    initialize();
+  </script>
+</body>
+</html>
