@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lyric Solitaire — Lyric Generator</title>
-<link rel="stylesheet" href="css/generator.css?v=0.1.4.4">
+<link rel="stylesheet" href="css/generator.css?v=0.1.4.3">
 </head>
 <body>
 <header class="site-header">
@@ -121,11 +121,15 @@ More lyrics..."></textarea>
     </section>
   </section>
 
-
+  <section class="help-card">
+    <div class="help-icon">i</div>
+    <div><strong>Song-generation requirements</strong><p>Before generating a song, have both the maintained <code>.txt</code> source and its album-art thumbnail ready. The source must begin with <b>Artist</b>, <b>Song Title</b>, <b>Album</b>, <b>Year</b>, <b>Genre</b>. Album art must currently be <b>200×200 px</b> PNG, JPG, or JPEG. Future larger artwork will use the same base filename with <code>_lg</code>.</p></div>
+  </section>
 </main>
 
+<footer>Lyric Solitaire Generator <span id="footerVersion">v—</span> · Maintained song source data belongs in <code>/song_library</code>.</footer>
 
-<script src="js/config/projectVersion.js?v=0.1.4.4"></script>
-<script src="js/generator.js?v=0.1.4.4"></script>
+<script src="js/config/projectVersion.js?v=0.1.4.3"></script>
+<script src="js/generator.js?v=0.1.4.3"></script>
 </body>
 </html>

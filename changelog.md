@@ -118,3 +118,11 @@ New songs discovered or added to `/song_library` may be recorded here.
 
 ### Fixed
 - Removed the browser-based local-library catalog scan, avoiding the need to grant the generator access to the entire `song_library`.
+## [0.1.4.4] — 2026-09-03
+
+### Changed
+- Simplified the generator page by removing the redundant song-generation requirements/help panel and footer beneath the JSON output previews.
+- Kept catalog construction as a separate local Mac command utility.
+
+### Fixed
+- Reduced the amount of non-essential content below the generated JSON output so the page ends cleanly after the two output previews.
