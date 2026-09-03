@@ -24,9 +24,17 @@ footer{text-align:center;color:var(--muted);padding:15px;font-size:12px}@media(m
 
 <main>
 <section class="panel"><h2>Source Lyric File</h2><div class="body">
+<div style="display:grid;grid-template-columns:1fr auto;gap:8px;align-items:end">
+<label style="margin:0">Raw GitHub URL
+<input id="urlInput" type="url" placeholder="https://raw.githubusercontent.com/.../song.txt">
+</label>
+<button id="loadUrlButton" class="secondary" type="button">Load URL</button>
+</div>
+<div style="margin-top:12px"><label style="margin:0">Or browse for a lyric text file
 <input id="fileInput" type="file" accept=".txt,text/plain">
+</label></div>
 <label style="margin-top:10px">Or paste lyric text
-<textarea id="source" placeholder="Line 1: Title&#10;Line 2: Artist&#10;Line 3: Album&#10;Line 4: Year&#10;Line 5: Genre&#10;&#10;[Verse]&#10;Lyrics go here...&#10;&#10;[Chorus]&#10;More lyrics..."></textarea>
+<textarea id="source" placeholder="Line 1: Artist&#10;Line 2: Song Title&#10;Line 3: Album&#10;Line 4: Year&#10;Line 5: Genre&#10;&#10;[Verse]&#10;Lyrics go here...&#10;&#10;[Chorus]&#10;More lyrics..."></textarea>
 </label>
 <div id="status" class="status">Waiting for a lyric text file.</div>
 </div></section>
@@ -49,13 +57,13 @@ footer{text-align:center;color:var(--muted);padding:15px;font-size:12px}@media(m
 
 <section class="panel"><h2>Generate Game Data</h2><div class="body">
 <label>Artist key / folder
-<input id="artistKey" placeholder="bryan_zach">
+<input id="artistKey" placeholder="artist_key">
 </label>
 <div class="buttons" style="display:flex;gap:8px">
 <button id="parseButton">Preview Parsed Data</button>
 <button id="downloadButton" disabled>Download Both JSON Files</button>
 </div>
-<p style="font-size:12px;color:#66727a">The generator downloads the lyric JSON and word-count JSON separately. Place those maintained source files in <code>song_library/&lt;artistKey&gt;/</code> and update the catalog afterward.</p>
+<p style="font-size:12px;color:#66727a">The generator downloads the lyric JSON and word-count JSON separately. The artist key is derived from the artist name but remains editable. Place the maintained source files in <code>song_library/&lt;artistKey&gt;/</code> and update the catalog afterward.</p>
 </div></section>
 </section>
 
@@ -78,9 +86,24 @@ footer{text-align:center;color:var(--muted);padding:15px;font-size:12px}@media(m
  *
  * It does not write directly into the GitHub repository.
  */
-const state={lyrics:null,wordCounts:null};
+const state={lyrics:null,wordCounts:null,knownArtistKeys:{}};
 
 const $=id=>document.getElementById(id);
+
+// Load existing artist keys so established folder names are preserved.
+async function loadArtistCatalog(){
+  try{
+    const response=await fetch("song_library/song_catalog.json");
+    if(!response.ok)throw new Error(`HTTP ${response.status}`);
+    const catalog=await response.json();
+    for(const artist of (catalog.artists||[])){
+      state.knownArtistKeys[String(artist.name||"").trim().toLocaleLowerCase()]=artist.key;
+    }
+  }catch(error){
+    // The generator can still work when opened outside GitHub Pages.
+    console.warn("Artist catalog could not be loaded; using derived artist keys.",error);
+  }
+}
 
 function normalizeWord(word){
   return String(word||"").normalize("NFKC").replace(/[’‘ʼʻ`´]/g,"'").toLocaleLowerCase();
@@ -94,15 +117,44 @@ function slugify(text){
   return String(text||"untitled").toLocaleLowerCase().replace(/['’]/g,"").replace(/[^a-z0-9]+/g,"_").replace(/^_+|_+$/g,"");
 }
 
+// Use an existing catalog key when possible; otherwise derive surname_firstname.
+function deriveArtistKey(artist){
+  const normalized=String(artist||"").trim().toLocaleLowerCase();
+  if(state.knownArtistKeys[normalized])return state.knownArtistKeys[normalized];
+
+  const primary=String(artist||"").split(/\s+(?:feat\.?|ft\.?|featuring)\s+/i)[0].trim();
+  const words=primary.split(/\s+/).filter(Boolean);
+  if(words.length<2)return slugify(primary);
+  const surname=words[words.length-1];
+  const given=words.slice(0,-1).join(" ");
+  return slugify(`${surname} ${given}`);
+}
+
+// Accept the raw.githubusercontent.com URL form and GitHub /raw/ URLs.
+function normalizeRawUrl(value){
+  const url=String(value||"").trim();
+  if(!url)return "";
+  if(/^https:\/\/raw\.githubusercontent\.com\//i.test(url))return url;
+  const match=url.match(/^https:\/\/github\.com\/([^/]+)\/([^/]+)\/raw\/(?:refs\/heads\/)?(.+)$/i);
+  if(match)return `https://raw.githubusercontent.com/${match[1]}/${match[2]}/${match[3]}`;
+  return url;
+}
+
+function validateMetadata({artist,title}){
+  if(!artist)throw new Error("Line 1 must contain the artist name.");
+  if(!title)throw new Error("Line 2 must contain the song title.");
+}
+
 function parseSource(raw){
   const lines=String(raw||"").replace(/\r\n?/g,"\n").split("\n");
   while(lines.length && !lines[lines.length-1].trim())lines.pop();
 
-  const title=(lines.shift()||"").trim();
   const artist=(lines.shift()||"").trim();
+  const title=(lines.shift()||"").trim();
   const album=(lines.shift()||"").trim();
   const yearText=(lines.shift()||"").trim();
   const genre=(lines.shift()||"").trim();
+  validateMetadata({artist,title});
 
   let year=Number.parseInt(yearText,10);
   if(Number.isNaN(year))year=null;
@@ -176,19 +228,44 @@ function render(){
   $("title").textContent=l.title||"—";$("artist").textContent=l.artist||"—";$("album").textContent=l.album||"—";$("year").textContent=l.year??"—";$("genre").textContent=l.genre||"—";
   $("total").textContent=w.totalWords;$("unique").textContent=w.uniqueWords;$("sections").textContent=l.sections.length;$("lines").textContent=l.sections.reduce((n,s)=>n+s.lyrics.length,0);
   const base=slugify(l.title);$("baseName").textContent=base;
+  if(!$(("artistKey")).value.trim())$("artistKey").value=deriveArtistKey(l.artist);
   $("lyricsPreview").textContent=JSON.stringify(l,null,2);$("wordPreview").textContent=JSON.stringify(w,null,2);
   $("downloadButton").disabled=false;
 }
 
+async function loadText(text,sourceLabel){
+  $("source").value=text;
+  $("status").textContent=`Loaded ${sourceLabel}. Click Preview Parsed Data.`;
+  $("status").className="status";
+}
+
 $("fileInput").addEventListener("change",async e=>{
   const file=e.target.files[0];if(!file)return;
-  $("source").value=await file.text();
-  $("status").textContent=`Loaded ${file.name}. Click Preview Parsed Data.`;
+  try{await loadText(await file.text(),file.name);}
+  catch(error){console.error(error);$("status").textContent=`Could not read file: ${error.message}`;}
 });
+
+$("loadUrlButton").addEventListener("click",async()=>{
+  const rawUrl=normalizeRawUrl($("urlInput").value);
+  if(!rawUrl){$("status").textContent="Enter a Raw GitHub URL first.";return;}
+  try{
+    $("status").textContent="Loading lyric source...";
+    const response=await fetch(rawUrl);
+    if(!response.ok)throw new Error(`HTTP ${response.status}`);
+    await loadText(await response.text(),rawUrl);
+  }catch(error){
+    console.error(error);
+    $("status").textContent=`Could not load URL: ${error.message}`;
+    $("status").className="status";
+  }
+});
+
 $("parseButton").addEventListener("click",()=>{
   try{
     const parsed=parseSource($("source").value);
-    state.lyrics=parsed.lyricsData;state.wordCounts=parsed.wordCountData;render();
+    state.lyrics=parsed.lyricsData;state.wordCounts=parsed.wordCountData;
+    $("artistKey").value=deriveArtistKey(parsed.lyricsData.artist);
+    render();
     $("status").textContent="Parsed successfully.";
     $("status").className="status ok";
   }catch(error){
@@ -201,7 +278,8 @@ $("downloadButton").addEventListener("click",()=>{
   download(state.lyrics,`${base}_lyrics.json`);
   setTimeout(()=>download(state.wordCounts,`${base}_word_count.json`),350);
 });
-$("version").textContent=`v${window.LyricSolitaireProject.simulatorVersion}`;
+$("version").textContent=`v${window.LyricSolitaireProject.generatorVersion||window.LyricSolitaireProject.simulatorVersion}`;
+loadArtistCatalog();
 </script>
 </body>
 </html>

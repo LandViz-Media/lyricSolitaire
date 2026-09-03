@@ -1,5 +1,32 @@
 # Changelog
 
+## [0.1.3.2] — 2026-09-02
+
+### Fixed
+- Fixed the lyric generator metadata parser to use the maintained source format:
+  Artist, Song Title, Album, Year, Genre.
+- Fixed the generator so Artist and Song Title are no longer reversed when JSON is generated.
+
+### Added
+- Added Raw GitHub URL loading to the lyric generator.
+- Added file-browser and pasted-text source options to the generator workflow.
+- Added automatic artist-key/folder detection using existing entries in
+  `song_library/song_catalog.json`, with a surname-first fallback for new artists.
+- Added generator version `0.1.3.2` to the shared project version configuration.
+
+### Changed
+- Updated generator instructions and source-text examples to match the established
+  five-line lyric source convention.
+- Kept the artist key editable after automatic detection.
+
+### Repository Cleanup
+- Removed the obsolete `/json` song-data location and retired the old lyric-generator tool path.
+- Removed obsolete backup/update files from the active repository; project history is now maintained in this changelog.
+
+### Data
+- No new song was added in this release. Dolly Parton / 9 to 5 remains intentionally
+  out of the maintained song library until it can be regenerated with the corrected generator.
+
 ## [0.1.3.1] — 2026-09-02
 
 ### Fixed
