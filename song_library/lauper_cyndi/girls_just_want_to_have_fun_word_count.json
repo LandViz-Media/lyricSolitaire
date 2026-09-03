@@ -1,0 +1,327 @@
+{
+  "title": "Girls Just Want To Have Fun",
+  "artist": "Cyndi Lauper",
+  "album": "She’s So Unusual",
+  "year": 1983,
+  "genre": "Pop, New Wave",
+  "totalWords": 357,
+  "uniqueWords": 79,
+  "words": [
+    {
+      "word": "a",
+      "count": 1
+    },
+    {
+      "word": "all",
+      "count": 2
+    },
+    {
+      "word": "And",
+      "count": 2
+    },
+    {
+      "word": "away",
+      "count": 1
+    },
+    {
+      "word": "be",
+      "count": 1
+    },
+    {
+      "word": "beautiful",
+      "count": 1
+    },
+    {
+      "word": "boys",
+      "count": 1
+    },
+    {
+      "word": "But",
+      "count": 1
+    },
+    {
+      "word": "come",
+      "count": 1
+    },
+    {
+      "word": "daddy",
+      "count": 1
+    },
+    {
+      "word": "day",
+      "count": 6
+    },
+    {
+      "word": "dear",
+      "count": 2
+    },
+    {
+      "word": "do",
+      "count": 1
+    },
+    {
+      "word": "done",
+      "count": 6
+    },
+    {
+      "word": "Everybody",
+      "count": 1
+    },
+    {
+      "word": "father",
+      "count": 1
+    },
+    {
+      "word": "fortunate",
+      "count": 1
+    },
+    {
+      "word": "from",
+      "count": 1
+    },
+    {
+      "word": "fun",
+      "count": 22
+    },
+    {
+      "word": "girl",
+      "count": 1
+    },
+    {
+      "word": "girls",
+      "count": 34
+    },
+    {
+      "word": "go",
+      "count": 3
+    },
+    {
+      "word": "gonna",
+      "count": 2
+    },
+    {
+      "word": "have",
+      "count": 24
+    },
+    {
+      "word": "her",
+      "count": 1
+    },
+    {
+      "word": "hide",
+      "count": 1
+    },
+    {
+      "word": "Hit",
+      "count": 1
+    },
+    {
+      "word": "home",
+      "count": 1
+    },
+    {
+      "word": "hoo",
+      "count": 2
+    },
+    {
+      "word": "I",
+      "count": 2
+    },
+    {
+      "word": "in",
+      "count": 3
+    },
+    {
+      "word": "is",
+      "count": 7
+    },
+    {
+      "word": "just",
+      "count": 39
+    },
+    {
+      "word": "know",
+      "count": 1
+    },
+    {
+      "word": "life",
+      "count": 2
+    },
+    {
+      "word": "light",
+      "count": 1
+    },
+    {
+      "word": "live",
+      "count": 1
+    },
+    {
+      "word": "me",
+      "count": 1
+    },
+    {
+      "word": "middle",
+      "count": 1
+    },
+    {
+      "word": "morning",
+      "count": 1
+    },
+    {
+      "word": "mother",
+      "count": 2
+    },
+    {
+      "word": "My",
+      "count": 2
+    },
+    {
+      "word": "night",
+      "count": 1
+    },
+    {
+      "word": "not",
+      "count": 1
+    },
+    {
+      "word": "now",
+      "count": 1
+    },
+    {
+      "word": "number",
+      "count": 1
+    },
+    {
+      "word": "of",
+      "count": 2
+    },
+    {
+      "word": "Oh",
+      "count": 15
+    },
+    {
+      "word": "one",
+      "count": 2
+    },
+    {
+      "word": "ones",
+      "count": 1
+    },
+    {
+      "word": "Ooh",
+      "count": 1
+    },
+    {
+      "word": "phone",
+      "count": 1
+    },
+    {
+      "word": "really",
+      "count": 2
+    },
+    {
+      "word": "rest",
+      "count": 1
+    },
+    {
+      "word": "right",
+      "count": 1
+    },
+    {
+      "word": "rings",
+      "count": 1
+    },
+    {
+      "word": "says",
+      "count": 1
+    },
+    {
+      "word": "some",
+      "count": 3
+    },
+    {
+      "word": "still",
+      "count": 1
+    },
+    {
+      "word": "sun",
+      "count": 1
+    },
+    {
+      "word": "take",
+      "count": 1
+    },
+    {
+      "word": "That's",
+      "count": 2
+    },
+    {
+      "word": "the",
+      "count": 17
+    },
+    {
+      "word": "they",
+      "count": 31
+    },
+    {
+      "word": "to",
+      "count": 1
+    },
+    {
+      "word": "walk",
+      "count": 1
+    },
+    {
+      "word": "wanna",
+      "count": 48
+    },
+    {
+      "word": "want",
+      "count": 4
+    },
+    {
+      "word": "we're",
+      "count": 1
+    },
+    {
+      "word": "What",
+      "count": 1
+    },
+    {
+      "word": "When",
+      "count": 9
+    },
+    {
+      "word": "with",
+      "count": 1
+    },
+    {
+      "word": "workin'",
+      "count": 8
+    },
+    {
+      "word": "world",
+      "count": 1
+    },
+    {
+      "word": "yeah",
+      "count": 1
+    },
+    {
+      "word": "yells",
+      "count": 1
+    },
+    {
+      "word": "you",
+      "count": 3
+    },
+    {
+      "word": "you're",
+      "count": 1
+    },
+    {
+      "word": "your",
+      "count": 2
+    }
+  ]
+}
