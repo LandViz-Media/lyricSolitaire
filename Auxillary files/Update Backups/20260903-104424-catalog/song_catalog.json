@@ -88,10 +88,10 @@
       "title": "Exile",
       "year": 2020,
       "genre": "Indie Folk",
-      "album": "Folklore",
+      "album": "Foklore",
       "lyrics": "song_library/swift_taylor/exile_lyrics.json",
       "wordCount": "song_library/swift_taylor/exile_word_count.json",
-      "albumArt": "song_library/swift_taylor/Folklore.png"
+      "albumArt": "song_library/swift_taylor/exile.png"
     },
     {
       "id": "tom_petty_and_the_heartbreakers__learning_to_fly",
