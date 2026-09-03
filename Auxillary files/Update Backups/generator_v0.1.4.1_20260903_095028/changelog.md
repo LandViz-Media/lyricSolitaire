@@ -96,9 +96,3 @@ New songs discovered or added to `/song_library` may be recorded here.
 
 ### Notes
 - No song-library data was changed in this release. New or changed songs should continue to be verified against `song_library/` before catalog updates.
-
-## v0.1.4.1 — Generator parse-error fix and JavaScript split
-- Fixed the Parse Selected Song error caused by the new generator controller still referencing the removed `#source` textarea.
-- Local TXT selection now stores the selected source text in generator state and parsing uses that state directly.
-- Moved generator controller JavaScript out of `generator.html` into `js/generator.js` for maintainability.
-- Kept the v0.1.4 album-art validation and complete local-library catalog rebuild workflow unchanged.
