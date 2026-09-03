@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lyric Solitaire — Lyric Generator</title>
-<link rel="stylesheet" href="css/generator.css?v=0.1.3.2">
+<link rel="stylesheet" href="css/generator.css?v=0.1.4">
 </head>
 <body>
 <header class="site-header">
@@ -29,49 +29,38 @@
     <div class="intro-icon" aria-hidden="true">✦</div>
     <div>
       <h2>Build Song Data</h2>
-      <p>Use the project's maintained five-line source format, review the parsed metadata, then download both JSON files for <code>song_library/</code>.</p>
+      <p>Start with the lyric <code>.txt</code> and its 200×200 album-art thumbnail in your local song folder. Generate the two song JSON files, then rebuild the complete catalog from your local <code>song_library</code> whenever you are ready to publish.</p>
     </div>
-    <div class="format-pill">Artist · Title · Album · Year · Genre</div>
+    <div class="format-pill">TXT + ART → JSON → CATALOG</div>
   </section>
 
   <section class="panel source-panel">
     <div class="panel-heading">
-      <div><span class="step">01</span><div><h2>Source Lyric File</h2><p>Load a maintained <code>.txt</code> file or paste its contents.</p></div></div>
+      <div><span class="step">01</span><div><h2>Select Song Source</h2><p>Both source files should already be in the same local artist folder.</p></div></div>
     </div>
     <div class="body">
       <div class="source-grid">
         <div class="source-method">
-          <label for="githubUrl"><span>Raw GitHub URL</span><small>Use a raw.githubusercontent.com URL.</small></label>
-          <div class="input-action"><input id="githubUrl" type="url" placeholder="https://raw.githubusercontent.com/.../song.txt"><button id="loadUrlButton">Load URL</button></div>
-        </div>
-        <div class="source-method">
-          <label for="fileInput"><span>Local lyric text file</span><small>Browse for a plain-text <code>.txt</code> file.</small></label>
+          <label for="fileInput"><span>Lyrics text file</span><small>Select the maintained plain-text <code>.txt</code> file.</small></label>
           <input id="fileInput" type="file" accept=".txt,text/plain">
         </div>
+        <div class="source-method">
+          <label for="artInput"><span>Album-art thumbnail</span><small>Select a <code>.jpg</code>, <code>.jpeg</code>, or <code>.png</code>. Current standard: 200×200 px.</small></label>
+          <input id="artInput" type="file" accept=".jpg,.jpeg,.png,image/jpeg,image/png">
+          <div id="artStatus" class="file-status">No album art selected.</div>
+        </div>
       </div>
-      <div class="divider"><span>OR PASTE LYRIC TEXT</span></div>
-      <label for="source" class="paste-label"><span>Source text</span><small>First five lines must be Artist, Song Title, Album, Year, Genre.</small></label>
-      <textarea id="source" placeholder="Dolly Parton
-9 to 5
-9 to 5 and Odd Jobs
-1980
-Country Pop, Folk, and Country
-
-[Verse]
-Lyrics go here...
-
-[Chorus]
-More lyrics..."></textarea>
+      <div class="source-note"><strong>File rule</strong> Keep the lyric TXT and album-art thumbnail in the artist's <code>song_library/&lt;artistKey&gt;/</code> directory. If larger art is introduced later, use the same base filename with <code>_lg</code> before the extension.</div>
       <div class="source-actions">
-        <button id="parseButton">Preview Parsed Data</button>
-        <div id="status" class="status" role="status" aria-live="polite"><span class="status-dot"></span>Waiting for source text.</div>
+        <button id="parseButton">Parse Selected Song</button>
+        <div id="status" class="status" role="status" aria-live="polite"><span class="status-dot"></span>Select both source files.</div>
       </div>
     </div>
   </section>
 
   <section class="workspace-grid">
     <section class="panel">
-      <div class="panel-heading compact"><div><span class="step">02</span><div><h2>Parsed Song Metadata</h2><p>Verify the values before generating files.</p></div></div></div>
+      <div class="panel-heading compact"><div><span class="step">02</span><div><h2>Parsed Song Metadata</h2><p>Verify the source values before generating files.</p></div></div></div>
       <div class="body">
         <div class="meta-grid">
           <div class="meta-card primary"><span>Song Title</span><strong id="title">—</strong></div>
@@ -87,16 +76,20 @@ More lyrics..."></textarea>
           <div><span>Lyric Lines</span><strong id="lines">0</strong></div>
           <div><span>Output Base Name</span><strong id="baseName">—</strong></div>
         </div>
+        <div class="art-preview-row">
+          <img id="artPreview" alt="Selected album art preview">
+          <div><span class="preview-label">Selected album art</span><strong id="artName">—</strong><small id="artDimensions">—</small></div>
+        </div>
       </div>
     </section>
 
     <section class="panel generate-panel">
-      <div class="panel-heading compact"><div><span class="step">03</span><div><h2>Generate Game Data</h2><p>Confirm the maintained artist folder.</p></div></div></div>
+      <div class="panel-heading compact"><div><span class="step">03</span><div><h2>Generate Song Files</h2><p>Use the established artist key and download both JSON files.</p></div></div></div>
       <div class="body">
         <label for="artistKey">Artist key / folder <small>Existing artists use the catalog's established key.</small></label>
         <div class="key-row"><input id="artistKey" placeholder="artist_key"><span id="keySource" class="key-source">Waiting for artist</span></div>
-        <button class="download-button" id="downloadButton" disabled>Download Both JSON Files</button>
-        <div class="destination-note"><strong>Destination</strong><code>song_library/&lt;artistKey&gt;/</code><span>After download, update <code>song_catalog.json</code> to register a new song.</span></div>
+        <button class="download-button" id="downloadButton" disabled>Download Song JSON Files</button>
+        <div class="destination-note"><strong>Destination</strong><code>song_library/&lt;artistKey&gt;/</code><span>Place the two downloaded JSON files beside the source TXT and album art.</span></div>
       </div>
     </section>
   </section>
@@ -112,35 +105,49 @@ More lyrics..."></textarea>
     </section>
   </section>
 
+  <section class="panel catalog-panel">
+    <div class="panel-heading compact">
+      <div><span class="step">06</span><div><h2>Rebuild Complete Song Catalog</h2><p>After generating one or many songs, scan your local <code>song_library</code> and create a fresh catalog from the files that actually exist.</p></div></div>
+    </div>
+    <div class="body catalog-body">
+      <div class="catalog-instructions"><strong>Recommended workflow</strong><span>Generate all new songs → put their JSON files in the local repository → select the local <code>song_library</code> folder below → build one complete catalog → push everything to GitHub.</span></div>
+      <label for="libraryInput"><span>Local song library</span><small>Select the entire <code>song_library</code> folder. The generator scans artist folders, TXT files, JSON files, and album-art thumbnails.</small></label>
+      <input id="libraryInput" type="file" webkitdirectory directory multiple>
+      <div class="catalog-actions"><button id="buildCatalogButton">Build Catalog from Local Library</button><div id="catalogStatus" class="status"><span class="status-dot"></span>No local library selected.</div></div>
+      <div id="catalogReport" class="catalog-report" hidden></div>
+      <button class="download-button catalog-download" id="downloadCatalogButton" disabled>Download song_catalog.json</button>
+    </div>
+  </section>
+
   <section class="help-card">
     <div class="help-icon">i</div>
-    <div><strong>Maintained source format</strong><p>Keep every lyric source file in this order: <b>Artist</b>, <b>Song Title</b>, <b>Album</b>, <b>Year</b>, <b>Genre</b>. The generator reads those first five lines and treats subsequent <code>[Section]</code> headings as lyric sections.</p></div>
+    <div><strong>Source and catalog rules</strong><p>Every lyric source keeps the order <b>Artist</b>, <b>Song Title</b>, <b>Album</b>, <b>Year</b>, <b>Genre</b>. Album art is currently a 200×200 thumbnail. The catalog is treated as a derived manifest: rebuilding it from the complete local library prevents sequential song generation from dropping earlier additions.</p></div>
   </section>
 </main>
 
 <footer>Lyric Solitaire Generator <span id="footerVersion">v—</span> · Maintained song source data belongs in <code>/song_library</code>.</footer>
 
-<script src="js/config/projectVersion.js?v=0.1.3.2"></script>
-<script>
-/*
+<script src="js/config/projectVersion.js?v=0.1.4"></script>
+<script>/*
  * Lyric Generator Controller
  *
  * Responsibility:
- * Converts the project's maintained five-line metadata + [Section] text
- * convention into lyric JSON and physical word-count JSON previews/downloads.
- * It supports local .txt files, raw GitHub URLs, and pasted source text.
- * It does not write directly into the GitHub repository.
+ * Converts the project's maintained five-line lyric source into game-ready
+ * JSON, validates the required local album-art thumbnail, and rebuilds the
+ * complete song catalog from a selected local song_library directory.
+ * The catalog is derived from the local library rather than incrementally
+ * appended to the catalog after each song, so batches of new songs remain safe.
  */
-const state={lyrics:null,wordCounts:null,catalog:null};
+const state={lyrics:null,wordCounts:null,catalog:null,art:null,libraryFiles:[],generatedCatalog:null};
 const $=id=>document.getElementById(id);
 
-function setStatus(text,kind=""){
-  $("status").textContent=text;
-  $("status").className=`status ${kind}`;
-}
+function setStatus(text,kind=""){$("status").innerHTML=`<span class="status-dot"></span>${escapeHtml(text)}`;$('status').className=`status ${kind}`;}
+function setCatalogStatus(text,kind=""){$("catalogStatus").innerHTML=`<span class="status-dot"></span>${escapeHtml(text)}`;$('catalogStatus').className=`status ${kind}`;}
+function escapeHtml(text){return String(text??"").replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function normalizeWord(word){return String(word||"").normalize("NFKC").replace(/[’‘ʼʻ`´]/g,"'").toLocaleLowerCase();}
+function normalizeName(text){return String(text||"").normalize("NFKC").replace(/[’‘ʼʻ`´]/g,"'").replace(/\s+/g," ").trim().toLocaleLowerCase();}
 function tokenize(text){return String(text||"").match(/[\p{L}\p{M}]+(?:['’][\p{L}\p{M}]*)?/gu)||[];}
-function slugify(text){return String(text||"untitled").toLocaleLowerCase().replace(/['’]/g,"").replace(/[^a-z0-9]+/g,"_").replace(/^_+|_+$/g,"");}
+function slugify(text){return String(text||"untitled").toLocaleLowerCase().replace(/[’‘ʼʻ`´']/g,"").replace(/[^a-z0-9]+/g,"_").replace(/^_+|_+$/g,"");}
 function deriveArtistKey(artist){
   const name=String(artist||"").trim();
   const normalized=name.toLocaleLowerCase().replace(/&/g," and ").replace(/[^a-z0-9\s-]/g," ").replace(/\s+/g," ").trim();
@@ -149,90 +156,127 @@ function deriveArtistKey(artist){
   return slugify(normalized)||"artist";
 }
 async function loadCatalog(){
-  try{
-    const response=await fetch(`song_library/song_catalog.json?v=${window.LyricSolitaireProject.generatorVersion}`,{cache:"no-store"});
-    if(!response.ok)throw new Error(`HTTP ${response.status}`);
-    state.catalog=await response.json();
-  }catch(error){
-    console.warn("Song catalog could not be loaded; artist keys will be derived.",error);
-    state.catalog=null;
-  }
+  try{const response=await fetch(`song_library/song_catalog.json?v=${window.LyricSolitaireProject.generatorVersion}`,{cache:"no-store"});if(!response.ok)throw new Error(`HTTP ${response.status}`);state.catalog=await response.json();}
+  catch(error){console.warn("Song catalog could not be loaded; artist keys will be derived.",error);state.catalog=null;}
 }
 function artistKeyFor(artist){
-  const match=(state.catalog?.artists||[]).find(a=>String(a.name||"").trim().toLocaleLowerCase()===String(artist||"").trim().toLocaleLowerCase());
-  if(match)return {key:match.key,source:"Existing catalog key"};
+  const exact=(state.catalog?.artists||[]).find(a=>normalizeName(a.name)===normalizeName(artist));
+  if(exact)return {key:exact.key,source:"Existing catalog key"};
+  const related=(state.catalog?.artists||[]).find(a=>normalizeName(artist).startsWith(`${normalizeName(a.name)} `));
+  if(related)return {key:related.key,source:"Existing catalog key (featured artist)"};
   return {key:deriveArtistKey(artist),source:"Derived from artist name"};
 }
 function parseSource(raw){
-  const lines=String(raw||"").replace(/\r\n?/g,"\n").split("\n");
-  while(lines.length && !lines[lines.length-1].trim())lines.pop();
+  const lines=String(raw||"").replace(/\r\n?/g,"\n").split("\n");while(lines.length&&!lines[lines.length-1].trim())lines.pop();
   if(lines.length<5)throw new Error("Source text must contain at least five metadata lines.");
-
   // Project convention: Artist, Song Title, Album, Year, Genre.
-  const artist=(lines.shift()||"").trim();
-  const title=(lines.shift()||"").trim();
-  const album=(lines.shift()||"").trim();
-  const yearText=(lines.shift()||"").trim();
-  const genre=(lines.shift()||"").trim();
+  const artist=(lines.shift()||"").trim(),title=(lines.shift()||"").trim(),album=(lines.shift()||"").trim(),yearText=(lines.shift()||"").trim(),genre=(lines.shift()||"").trim();
   if(!artist||!title)throw new Error("Artist and Song Title are required in the first two lines.");
-
-  let year=Number.parseInt(yearText,10);
-  if(Number.isNaN(year))year=null;
+  let year=Number.parseInt(yearText,10);if(Number.isNaN(year))year=null;
   const sections=[];let current=null;
-  for(const rawLine of lines){
-    const line=rawLine.trim();
-    if(!line)continue;
-    const match=line.match(/^\[([^\]]+)\]$/);
-    if(match){current={type:match[1].trim(),lyrics:[]};sections.push(current);continue;}
-    if(!current){current={type:"Verse",lyrics:[]};sections.push(current);}
-    current.lyrics.push(line);
-  }
+  for(const rawLine of lines){const line=rawLine.trim();if(!line)continue;const match=line.match(/^\[([^\]]+)\]$/);if(match){current={type:match[1].trim(),lyrics:[]};sections.push(current);continue;}if(!current){current={type:"Verse",lyrics:[]};sections.push(current);}current.lyrics.push(line);}
   const wordMap=new Map();
-  for(const section of sections)for(const lyricLine of section.lyrics)for(const token of tokenize(lyricLine)){
-    const key=normalizeWord(token);
-    if(!wordMap.has(key))wordMap.set(key,{word:token,count:0});
-    wordMap.get(key).count++;
-  }
+  for(const section of sections)for(const lyricLine of section.lyrics)for(const token of tokenize(lyricLine)){const key=normalizeWord(token);if(!wordMap.has(key))wordMap.set(key,{word:token,count:0});wordMap.get(key).count++;}
   const words=[...wordMap.values()].sort((a,b)=>a.word.localeCompare(b.word,undefined,{sensitivity:"base"}));
-  const lyricsData={title,artist,album,year,genre,sections};
-  const wordCountData={title,artist,album,year,genre,totalWords:words.reduce((sum,w)=>sum+w.count,0),uniqueWords:words.length,words};
-  return {lyricsData,wordCountData};
+  return {lyricsData:{title,artist,album,year,genre,sections},wordCountData:{title,artist,album,year,genre,totalWords:words.reduce((sum,w)=>sum+w.count,0),uniqueWords:words.length,words}};
 }
 function render(){
   const l=state.lyrics,w=state.wordCounts;if(!l||!w)return;
   $("title").textContent=l.title||"—";$("artist").textContent=l.artist||"—";$("album").textContent=l.album||"—";$("year").textContent=l.year??"—";$("genre").textContent=l.genre||"—";
   $("total").textContent=w.totalWords;$("unique").textContent=w.uniqueWords;$("sections").textContent=l.sections.length;$("lines").textContent=l.sections.reduce((n,s)=>n+s.lyrics.length,0);
-  const base=slugify(l.title);$("baseName").textContent=base;
-  const key=artistKeyFor(l.artist);$("artistKey").value=key.key;$("keySource").textContent=key.source;
+  const base=slugify(l.title);$("baseName").textContent=base;const key=artistKeyFor(l.artist);$("artistKey").value=key.key;$("keySource").textContent=key.source;
   $("lyricsPreview").textContent=JSON.stringify(l,null,2);$("wordPreview").textContent=JSON.stringify(w,null,2);
-  $("downloadButton").disabled=false;
+  $("downloadButton").disabled=!(state.lyrics&&state.wordCounts&&state.art);
+}
+async function validateAlbumArt(file){
+  if(!file)throw new Error("Select an album-art thumbnail.");
+  if(!/\.(png|jpe?g)$/i.test(file.name))throw new Error("Album art must be a PNG, JPG, or JPEG file.");
+  if(/_lg\.(png|jpe?g)$/i.test(file.name))throw new Error("Select the standard thumbnail, not the future _lg large-art variant.");
+  const url=URL.createObjectURL(file);
+  try{
+    const image=new Image();
+    await new Promise((resolve,reject)=>{image.onload=resolve;image.onerror=()=>reject(new Error("The selected album-art file could not be read."));image.src=url;});
+    if(image.naturalWidth!==200||image.naturalHeight!==200)throw new Error(`Album art must be exactly 200×200 px. Selected image is ${image.naturalWidth}×${image.naturalHeight} px.`);
+    return {file,name:file.name,width:image.naturalWidth,height:image.naturalHeight,url};
+  }catch(error){URL.revokeObjectURL(url);throw error;}
+}
+async function selectAlbumArt(file){
+  try{if(state.art?.url)URL.revokeObjectURL(state.art.url);const art=await validateAlbumArt(file);state.art=art;$("artStatus").textContent=`✓ ${file.name} · 200×200 px`;$('artStatus').className='file-status ok';$("artPreview").src=art.url;$("artPreview").hidden=false;$("artName").textContent=file.name;$("artDimensions").textContent="200 × 200 pixels";if(state.lyrics)render();setStatus(state.lyrics?"Song and album art are ready to generate.":"Album art validated. Parse the lyric file.",state.lyrics?"ok":"");}
+  catch(error){state.art=null;$("artStatus").textContent=`✕ ${error.message}`;$('artStatus').className='file-status error';$("artPreview").hidden=true;$("downloadButton").disabled=true;setStatus(error.message,"error");}
 }
 function parseCurrentSource(){
-  try{const parsed=parseSource($("source").value);state.lyrics=parsed.lyricsData;state.wordCounts=parsed.wordCountData;render();setStatus("Parsed successfully.","ok");}
-  catch(error){console.error(error);setStatus(error.message,"error");$("downloadButton").disabled=true;}
+  try{if(!$('fileInput').files[0])throw new Error("Select a lyric TXT file first.");if(!state.art)throw new Error("Select a valid 200×200 album-art thumbnail first.");const parsed=parseSource($("source").value);state.lyrics=parsed.lyricsData;state.wordCounts=parsed.wordCountData;render();setStatus("Parsed successfully. Song files are ready to download.","ok");}
+  catch(error){console.error(error);state.lyrics=null;state.wordCounts=null;$("downloadButton").disabled=true;setStatus(error.message,"error");}
 }
-async function loadText(text,label){$("source").value=text;parseCurrentSource();if(!$('status').classList.contains('error'))setStatus(`Loaded ${label}.`,"ok");}
-async function loadUrl(){
-  const url=$("githubUrl").value.trim();
-  if(!url){setStatus("Enter a Raw GitHub URL first.","warn");return;}
-  try{
-    setStatus("Loading Raw GitHub file…");
-    const response=await fetch(url,{cache:"no-store"});
-    if(!response.ok)throw new Error(`HTTP ${response.status}`);
-    await loadText(await response.text(),"Raw GitHub source");
-  }catch(error){console.error(error);setStatus(`Could not load URL: ${error.message}`,"error");}
+function download(data,filename){const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+
+function pathParts(file){return (file.webkitRelativePath||file.name).split('/').filter(Boolean);}
+function isImage(file){return /\.(png|jpe?g)$/i.test(file.name);}
+function isJson(file){return /\.json$/i.test(file.name);}
+function fileText(file){return file.text();}
+function relativeLibraryPath(file){
+  const parts=pathParts(file);const idx=parts.findIndex(p=>p.toLocaleLowerCase()==='song_library');return idx>=0?parts.slice(idx+1).join('/'):parts.join('/');
 }
-function download(data,filename){
-  const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
-  const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+function normalizePath(path){return path.replace(/\\/g,'/').replace(/^\.\//,'');}
+function sourceArtistFolder(file){const rel=relativeLibraryPath(file).split('/');return rel.length>1?rel[0]:null;}
+function imageMatchScore(image,album){
+  const imageBase=image.name.replace(/\.[^.]+$/,'');const a=normalizeName(imageBase),b=normalizeName(album);if(a===b)return 100;if(slugify(imageBase)===slugify(album))return 90;return 0;
+}
+async function imageDimensions(file){
+  const url=URL.createObjectURL(file);
+  try{const image=new Image();await new Promise((resolve,reject)=>{image.onload=resolve;image.onerror=()=>reject(new Error("Image could not be read."));image.src=url;});return {width:image.naturalWidth,height:image.naturalHeight};}
+  finally{URL.revokeObjectURL(url);}
+}
+async function parseLibraryFiles(files){
+  const list=[...files];const catalogFile=list.find(f=>relativeLibraryPath(f).toLocaleLowerCase()==='song_catalog.json');let priorCatalog=null;
+  if(catalogFile){try{priorCatalog=JSON.parse(await catalogFile.text());}catch(e){throw new Error("The local song_catalog.json could not be parsed.");}}
+  const txts=list.filter(f=>/\.txt$/i.test(f.name));const jsons=list.filter(isJson).filter(f=>f!==catalogFile);const images=list.filter(isImage);
+  if(!txts.length)throw new Error("No lyric TXT files were found in the selected song_library folder.");
+  const parsedSongs=[];const warnings=[];
+  for(const txt of txts){
+    const rel=relativeLibraryPath(txt);const folder=sourceArtistFolder(txt);if(!folder){warnings.push(`${txt.name}: could not determine artist folder.`);continue;}
+    let source;try{source=parseSource(await fileText(txt));}catch(e){warnings.push(`${rel}: ${e.message}`);continue;}
+    const lyricsCandidates=[];const wcCandidates=[];
+    for(const jf of jsons){if(sourceArtistFolder(jf)!==folder)continue;try{const data=JSON.parse(await jf.text());if(normalizeName(data.title)===normalizeName(source.title)&&normalizeName(data.artist)===normalizeName(source.artist)){if(/_lyrics\.json$/i.test(jf.name))lyricsCandidates.push({file:jf,data});if(/_word_count\.json$/i.test(jf.name))wcCandidates.push({file:jf,data});}}catch(e){warnings.push(`${relativeLibraryPath(jf)}: invalid JSON.`);}}
+    const lyrics=lyricsCandidates[0],wordCount=wcCandidates[0];if(!lyrics)warnings.push(`${rel}: missing _lyrics.json.`);if(!wordCount)warnings.push(`${rel}: missing _word_count.json.`);if(!lyrics||!wordCount)continue;
+    let art=images.filter(i=>sourceArtistFolder(i)===folder).sort((a,b)=>imageMatchScore(b,source.album)-imageMatchScore(a,source.album))[0];
+    if(!art||imageMatchScore(art,source.album)===0){
+      const prior=(priorCatalog?.songs||[]).find(s=>normalizeName(s.artist)===normalizeName(source.artist)&&normalizeName(s.title)===normalizeName(source.title));
+      if(prior?.albumArt){art=images.find(i=>normalizePath(relativeLibraryPath(i))===normalizePath(prior.albumArt.replace(/^song_library\//,'')));}
+    }
+    if(!art)warnings.push(`${rel}: album art could not be matched to album "${source.album}".`);
+    else {
+      if(art.name.replace(/\.[^.]+$/,'').toLocaleLowerCase().endsWith('_lg'))warnings.push(`${rel}: matched _lg art; standard thumbnail should be used.`);
+      try{const dims=await imageDimensions(art);if(dims.width!==200||dims.height!==200)warnings.push(`${rel}: album art ${art.name} is ${dims.width}×${dims.height}; current thumbnail standard is 200×200 px.`);}
+      catch(e){warnings.push(`${rel}: album art ${art.name} could not be read.`);}
+    }
+    const keyMatch=(priorCatalog?.artists||[]).find(a=>normalizeName(a.name)===normalizeName(source.artist)||normalizeName(source.artist).startsWith(`${normalizeName(a.name)} `));const artistKey=keyMatch?.key||folder||deriveArtistKey(source.artist);
+    const id=`${slugify(source.artist)}__${slugify(source.title)}`;
+    parsedSongs.push({id,artist:source.artist,artistKey,title:source.title,year:source.year,genre:source.genre,album:source.album,lyrics:`song_library/${folder}/${lyrics.file.name}`,wordCount:`song_library/${folder}/${wordCount.file.name}`,albumArt:art?`song_library/${folder}/${art.name}`:null,totalWords:wordCount.data.totalWords,uniqueWords:wordCount.data.uniqueWords});
+  }
+  const artistsMap=new Map();for(const song of parsedSongs)if(!artistsMap.has(song.artistKey))artistsMap.set(song.artistKey,{key:song.artistKey,name:song.artist});
+  const songs=parsedSongs.sort((a,b)=>a.artist.localeCompare(b.artist)||a.title.localeCompare(b.title));
+  const artists=[...artistsMap.values()].sort((a,b)=>a.name.localeCompare(b.name));
+  const catalog={version:"1.1",description:"Composite song manifest for Lyric Solitaire.",maintenance:"Generated from the maintained song_library files. Rebuild this manifest after adding or changing songs.",artists,songs};
+  return {catalog,warnings,stats:{artists:artists.length,songs:songs.length,lyrics:songs.length,wordCounts:songs.length,albumArt:songs.filter(s=>s.albumArt).length}};
+}
+function renderCatalogReport(result){
+  const r=result.stats;const missing=r.songs-r.albumArt;let html=`<div class="report-grid"><div><span>Artists</span><strong>${r.artists}</strong></div><div><span>Songs</span><strong>${r.songs}</strong></div><div><span>Lyrics JSON</span><strong>${r.lyrics}</strong></div><div><span>Word Counts</span><strong>${r.wordCounts}</strong></div><div><span>Album Art</span><strong>${r.albumArt}</strong></div></div>`;
+  if(missing)html+=`<div class="report-warning">⚠ ${missing} song(s) have no matched album art and will be flagged in the catalog output.</div>`;
+  if(result.warnings.length)html+=`<details class="report-details"><summary>${result.warnings.length} warning(s)</summary><ul>${result.warnings.map(w=>`<li>${escapeHtml(w)}</li>`).join('')}</ul></details>`;
+  else html+=`<div class="report-success">✓ Library scan completed with no warnings.</div>`;
+  $("catalogReport").innerHTML=html;$("catalogReport").hidden=false;
 }
 
-$("fileInput").addEventListener("change",async e=>{const file=e.target.files[0];if(!file)return;try{await loadText(await file.text(),file.name);}catch(error){setStatus(`Could not read file: ${error.message}`,"error");}});
-$("loadUrlButton").addEventListener("click",loadUrl);
-$("githubUrl").addEventListener("keydown",e=>{if(e.key==="Enter")loadUrl();});
+$("fileInput").addEventListener("change",async e=>{const file=e.target.files[0];if(!file)return;try{$("source").value=await file.text();if(state.art)parseCurrentSource();else setStatus(`Loaded ${file.name}. Now select album art.`); }catch(error){setStatus(`Could not read file: ${error.message}`,"error");}});
+$("artInput").addEventListener("change",async e=>{const file=e.target.files[0];if(file)await selectAlbumArt(file);});
 $("parseButton").addEventListener("click",parseCurrentSource);
+$("artistKey").addEventListener("input",()=>$('keySource').textContent="Custom artist key");
 $("downloadButton").addEventListener("click",()=>{if(!state.lyrics||!state.wordCounts)return;const base=slugify(state.lyrics.title);download(state.lyrics,`${base}_lyrics.json`);setTimeout(()=>download(state.wordCounts,`${base}_word_count.json`),350);});
-$("artistKey").addEventListener("input",()=>$("keySource").textContent="Custom artist key");
+$("libraryInput").addEventListener("change",e=>{state.libraryFiles=[...e.target.files];setCatalogStatus(`${state.libraryFiles.length} local files selected. Ready to scan.`);$("downloadCatalogButton").disabled=true;$("catalogReport").hidden=true;});
+$("buildCatalogButton").addEventListener("click",async()=>{if(!state.libraryFiles.length){setCatalogStatus("Select the local song_library folder first.","warn");return;}try{setCatalogStatus("Scanning local song library…");const result=await parseLibraryFiles(state.libraryFiles);state.generatedCatalog=result.catalog;renderCatalogReport(result);$("downloadCatalogButton").disabled=false;setCatalogStatus(`Catalog built: ${result.stats.songs} songs across ${result.stats.artists} artists.`,result.warnings.length?"warn":"ok");}catch(error){console.error(error);state.generatedCatalog=null;$("downloadCatalogButton").disabled=true;setCatalogStatus(error.message,"error");$("catalogReport").hidden=true;}});
+$("downloadCatalogButton").addEventListener("click",()=>{if(state.generatedCatalog)download(state.generatedCatalog,"song_catalog.json");});
+$("artPreview").hidden=true;
 (async()=>{await loadCatalog();$("version").textContent=`v${window.LyricSolitaireProject.generatorVersion}`;$("footerVersion").textContent=`v${window.LyricSolitaireProject.generatorVersion}`;})();
 </script>
 </body>

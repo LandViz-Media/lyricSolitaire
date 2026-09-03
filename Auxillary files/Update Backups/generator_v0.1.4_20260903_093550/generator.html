@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lyric Solitaire — Lyric Generator</title>
+<link rel="stylesheet" href="css/generator.css?v=0.1.3.2">
+</head>
+<body>
+<header class="site-header">
+  <div class="header-inner">
+    <div>
+      <div class="eyebrow">LYRIC SOLITAIRE</div>
+      <h1>Lyric Generator</h1>
+      <p>Convert maintained lyric text into game-ready JSON.</p>
+    </div>
+    <div class="version-badge"><span>GENERATOR</span><strong id="version">v—</strong></div>
+  </div>
+  <nav class="tool-nav" aria-label="Lyric Solitaire tools">
+    <a href="index.html">Home</a>
+    <a href="simulator.html">Simulator</a>
+    <a class="active" href="generator.html">Generator</a>
+    <a href="results.html">Results</a>
+  </nav>
+</header>
+
+<main>
+  <section class="intro-card">
+    <div class="intro-icon" aria-hidden="true">✦</div>
+    <div>
+      <h2>Build Song Data</h2>
+      <p>Use the project's maintained five-line source format, review the parsed metadata, then download both JSON files for <code>song_library/</code>.</p>
+    </div>
+    <div class="format-pill">Artist · Title · Album · Year · Genre</div>
+  </section>
+
+  <section class="panel source-panel">
+    <div class="panel-heading">
+      <div><span class="step">01</span><div><h2>Source Lyric File</h2><p>Load a maintained <code>.txt</code> file or paste its contents.</p></div></div>
+    </div>
+    <div class="body">
+      <div class="source-grid">
+        <div class="source-method">
+          <label for="githubUrl"><span>Raw GitHub URL</span><small>Use a raw.githubusercontent.com URL.</small></label>
+          <div class="input-action"><input id="githubUrl" type="url" placeholder="https://raw.githubusercontent.com/.../song.txt"><button id="loadUrlButton">Load URL</button></div>
+        </div>
+        <div class="source-method">
+          <label for="fileInput"><span>Local lyric text file</span><small>Browse for a plain-text <code>.txt</code> file.</small></label>
+          <input id="fileInput" type="file" accept=".txt,text/plain">
+        </div>
+      </div>
+      <div class="divider"><span>OR PASTE LYRIC TEXT</span></div>
+      <label for="source" class="paste-label"><span>Source text</span><small>First five lines must be Artist, Song Title, Album, Year, Genre.</small></label>
+      <textarea id="source" placeholder="Dolly Parton
+9 to 5
+9 to 5 and Odd Jobs
+1980
+Country Pop, Folk, and Country
+
+[Verse]
+Lyrics go here...
+
+[Chorus]
+More lyrics..."></textarea>
+      <div class="source-actions">
+        <button id="parseButton">Preview Parsed Data</button>
+        <div id="status" class="status" role="status" aria-live="polite"><span class="status-dot"></span>Waiting for source text.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="workspace-grid">
+    <section class="panel">
+      <div class="panel-heading compact"><div><span class="step">02</span><div><h2>Parsed Song Metadata</h2><p>Verify the values before generating files.</p></div></div></div>
+      <div class="body">
+        <div class="meta-grid">
+          <div class="meta-card primary"><span>Song Title</span><strong id="title">—</strong></div>
+          <div class="meta-card primary"><span>Artist</span><strong id="artist">—</strong></div>
+          <div class="meta-card"><span>Album</span><strong id="album">—</strong></div>
+          <div class="meta-card"><span>Year</span><strong id="year">—</strong></div>
+          <div class="meta-card wide"><span>Genre</span><strong id="genre">—</strong></div>
+        </div>
+        <div class="stat-strip">
+          <div><span>Total Words</span><strong id="total">0</strong></div>
+          <div><span>Unique Words</span><strong id="unique">0</strong></div>
+          <div><span>Sections</span><strong id="sections">0</strong></div>
+          <div><span>Lyric Lines</span><strong id="lines">0</strong></div>
+          <div><span>Output Base Name</span><strong id="baseName">—</strong></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel generate-panel">
+      <div class="panel-heading compact"><div><span class="step">03</span><div><h2>Generate Game Data</h2><p>Confirm the maintained artist folder.</p></div></div></div>
+      <div class="body">
+        <label for="artistKey">Artist key / folder <small>Existing artists use the catalog's established key.</small></label>
+        <div class="key-row"><input id="artistKey" placeholder="artist_key"><span id="keySource" class="key-source">Waiting for artist</span></div>
+        <button class="download-button" id="downloadButton" disabled>Download Both JSON Files</button>
+        <div class="destination-note"><strong>Destination</strong><code>song_library/&lt;artistKey&gt;/</code><span>After download, update <code>song_catalog.json</code> to register a new song.</span></div>
+      </div>
+    </section>
+  </section>
+
+  <section class="preview-grid">
+    <section class="panel preview-panel">
+      <div class="panel-heading compact"><div><span class="step">04</span><div><h2>Lyrics JSON</h2><p>Game-ready lyric sections.</p></div></div><span class="file-chip">_lyrics.json</span></div>
+      <div class="body preview-body"><pre id="lyricsPreview">Nothing parsed yet.</pre></div>
+    </section>
+    <section class="panel preview-panel">
+      <div class="panel-heading compact"><div><span class="step">05</span><div><h2>Word Count JSON</h2><p>Physical tile counts.</p></div></div><span class="file-chip">_word_count.json</span></div>
+      <div class="body preview-body"><pre id="wordPreview">Nothing parsed yet.</pre></div>
+    </section>
+  </section>
+
+  <section class="help-card">
+    <div class="help-icon">i</div>
+    <div><strong>Maintained source format</strong><p>Keep every lyric source file in this order: <b>Artist</b>, <b>Song Title</b>, <b>Album</b>, <b>Year</b>, <b>Genre</b>. The generator reads those first five lines and treats subsequent <code>[Section]</code> headings as lyric sections.</p></div>
+  </section>
+</main>
+
+<footer>Lyric Solitaire Generator <span id="footerVersion">v—</span> · Maintained song source data belongs in <code>/song_library</code>.</footer>
+
+<script src="js/config/projectVersion.js?v=0.1.3.2"></script>
+<script>
+/*
+ * Lyric Generator Controller
+ *
+ * Responsibility:
+ * Converts the project's maintained five-line metadata + [Section] text
+ * convention into lyric JSON and physical word-count JSON previews/downloads.
+ * It supports local .txt files, raw GitHub URLs, and pasted source text.
+ * It does not write directly into the GitHub repository.
+ */
+const state={lyrics:null,wordCounts:null,catalog:null};
+const $=id=>document.getElementById(id);
+
+function setStatus(text,kind=""){
+  $("status").textContent=text;
+  $("status").className=`status ${kind}`;
+}
+function normalizeWord(word){return String(word||"").normalize("NFKC").replace(/[’‘ʼʻ`´]/g,"'").toLocaleLowerCase();}
+function tokenize(text){return String(text||"").match(/[\p{L}\p{M}]+(?:['’][\p{L}\p{M}]*)?/gu)||[];}
+function slugify(text){return String(text||"untitled").toLocaleLowerCase().replace(/['’]/g,"").replace(/[^a-z0-9]+/g,"_").replace(/^_+|_+$/g,"");}
+function deriveArtistKey(artist){
+  const name=String(artist||"").trim();
+  const normalized=name.toLocaleLowerCase().replace(/&/g," and ").replace(/[^a-z0-9\s-]/g," ").replace(/\s+/g," ").trim();
+  const words=normalized.split(/[-\s]+/).filter(Boolean);
+  if(words.length>=2)return `${words[words.length-1]}_${words.slice(0,-1).join("_")}`;
+  return slugify(normalized)||"artist";
+}
+async function loadCatalog(){
+  try{
+    const response=await fetch(`song_library/song_catalog.json?v=${window.LyricSolitaireProject.generatorVersion}`,{cache:"no-store"});
+    if(!response.ok)throw new Error(`HTTP ${response.status}`);
+    state.catalog=await response.json();
+  }catch(error){
+    console.warn("Song catalog could not be loaded; artist keys will be derived.",error);
+    state.catalog=null;
+  }
+}
+function artistKeyFor(artist){
+  const match=(state.catalog?.artists||[]).find(a=>String(a.name||"").trim().toLocaleLowerCase()===String(artist||"").trim().toLocaleLowerCase());
+  if(match)return {key:match.key,source:"Existing catalog key"};
+  return {key:deriveArtistKey(artist),source:"Derived from artist name"};
+}
+function parseSource(raw){
+  const lines=String(raw||"").replace(/\r\n?/g,"\n").split("\n");
+  while(lines.length && !lines[lines.length-1].trim())lines.pop();
+  if(lines.length<5)throw new Error("Source text must contain at least five metadata lines.");
+
+  // Project convention: Artist, Song Title, Album, Year, Genre.
+  const artist=(lines.shift()||"").trim();
+  const title=(lines.shift()||"").trim();
+  const album=(lines.shift()||"").trim();
+  const yearText=(lines.shift()||"").trim();
+  const genre=(lines.shift()||"").trim();
+  if(!artist||!title)throw new Error("Artist and Song Title are required in the first two lines.");
+
+  let year=Number.parseInt(yearText,10);
+  if(Number.isNaN(year))year=null;
+  const sections=[];let current=null;
+  for(const rawLine of lines){
+    const line=rawLine.trim();
+    if(!line)continue;
+    const match=line.match(/^\[([^\]]+)\]$/);
+    if(match){current={type:match[1].trim(),lyrics:[]};sections.push(current);continue;}
+    if(!current){current={type:"Verse",lyrics:[]};sections.push(current);}
+    current.lyrics.push(line);
+  }
+  const wordMap=new Map();
+  for(const section of sections)for(const lyricLine of section.lyrics)for(const token of tokenize(lyricLine)){
+    const key=normalizeWord(token);
+    if(!wordMap.has(key))wordMap.set(key,{word:token,count:0});
+    wordMap.get(key).count++;
+  }
+  const words=[...wordMap.values()].sort((a,b)=>a.word.localeCompare(b.word,undefined,{sensitivity:"base"}));
+  const lyricsData={title,artist,album,year,genre,sections};
+  const wordCountData={title,artist,album,year,genre,totalWords:words.reduce((sum,w)=>sum+w.count,0),uniqueWords:words.length,words};
+  return {lyricsData,wordCountData};
+}
+function render(){
+  const l=state.lyrics,w=state.wordCounts;if(!l||!w)return;
+  $("title").textContent=l.title||"—";$("artist").textContent=l.artist||"—";$("album").textContent=l.album||"—";$("year").textContent=l.year??"—";$("genre").textContent=l.genre||"—";
+  $("total").textContent=w.totalWords;$("unique").textContent=w.uniqueWords;$("sections").textContent=l.sections.length;$("lines").textContent=l.sections.reduce((n,s)=>n+s.lyrics.length,0);
+  const base=slugify(l.title);$("baseName").textContent=base;
+  const key=artistKeyFor(l.artist);$("artistKey").value=key.key;$("keySource").textContent=key.source;
+  $("lyricsPreview").textContent=JSON.stringify(l,null,2);$("wordPreview").textContent=JSON.stringify(w,null,2);
+  $("downloadButton").disabled=false;
+}
+function parseCurrentSource(){
+  try{const parsed=parseSource($("source").value);state.lyrics=parsed.lyricsData;state.wordCounts=parsed.wordCountData;render();setStatus("Parsed successfully.","ok");}
+  catch(error){console.error(error);setStatus(error.message,"error");$("downloadButton").disabled=true;}
+}
+async function loadText(text,label){$("source").value=text;parseCurrentSource();if(!$('status').classList.contains('error'))setStatus(`Loaded ${label}.`,"ok");}
+async function loadUrl(){
+  const url=$("githubUrl").value.trim();
+  if(!url){setStatus("Enter a Raw GitHub URL first.","warn");return;}
+  try{
+    setStatus("Loading Raw GitHub file…");
+    const response=await fetch(url,{cache:"no-store"});
+    if(!response.ok)throw new Error(`HTTP ${response.status}`);
+    await loadText(await response.text(),"Raw GitHub source");
+  }catch(error){console.error(error);setStatus(`Could not load URL: ${error.message}`,"error");}
+}
+function download(data,filename){
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+  const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+
+$("fileInput").addEventListener("change",async e=>{const file=e.target.files[0];if(!file)return;try{await loadText(await file.text(),file.name);}catch(error){setStatus(`Could not read file: ${error.message}`,"error");}});
+$("loadUrlButton").addEventListener("click",loadUrl);
+$("githubUrl").addEventListener("keydown",e=>{if(e.key==="Enter")loadUrl();});
+$("parseButton").addEventListener("click",parseCurrentSource);
+$("downloadButton").addEventListener("click",()=>{if(!state.lyrics||!state.wordCounts)return;const base=slugify(state.lyrics.title);download(state.lyrics,`${base}_lyrics.json`);setTimeout(()=>download(state.wordCounts,`${base}_word_count.json`),350);});
+$("artistKey").addEventListener("input",()=>$("keySource").textContent="Custom artist key");
+(async()=>{await loadCatalog();$("version").textContent=`v${window.LyricSolitaireProject.generatorVersion}`;$("footerVersion").textContent=`v${window.LyricSolitaireProject.generatorVersion}`;})();
+</script>
+</body>
+</html>
