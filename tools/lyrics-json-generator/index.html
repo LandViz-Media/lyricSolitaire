@@ -3,145 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Lyric Solitaire Game Simulator">
-    <title>Lyric Solitaire — Game Simulator</title>
-    <link rel="stylesheet" href="css/simulator.css">
+    <meta name="description" content="Lyric Solitaire Lyrics JSON Generator">
+    <title>Lyric Solitaire — Lyrics JSON Generator</title>
+    <link rel="stylesheet" href="css/generator.css">
 </head>
 
 <body>
 
     <!--
         RESPONSIBILITY:
-        User interface for the Lyric Solitaire game-balance simulator.
-        This tool loads the actual repository song data and runs repeated
-        simulations using the current Easy/Open Mode assumptions.
+        User interface for the Lyric Solitaire lyrics-data authoring tool.
+        The tool loads a structured lyrics text file and produces the
+        project's Lyrics JSON and Word Count JSON files.
     -->
 
-    <main id="simulator-app">
+    <main class="generator">
 
-        <header class="simulator-header">
-            <h1>Lyric Solitaire — Game Simulator</h1>
+        <header>
+            <h1>Lyrics JSON Generator</h1>
             <p>
-                Test game balance and solvability before implementing the
-                gameplay interface.
+                Development tool for converting Lyric Solitaire lyrics text
+                files into JSON data.
             </p>
-            <span class="version">Simulator v0.1.1</span>
+            <p class="prototype-label">Lyric Solitaire Development Tool v0.1.0</p>
         </header>
 
         <nav class="tool-nav" aria-label="Project navigation">
-            <a href="../../">Cover</a>
+            <a href="../../">Lyric Solitaire Cover</a>
             <a href="../../game.html">Game Prototype</a>
-            <a href="../lyrics-json-generator/">Lyrics JSON Generator</a>
         </nav>
 
-        <section class="panel">
-            <h2>Simulation Rules</h2>
+        <section>
+            <h2>Source Format</h2>
 
-            <div class="rule-grid">
-                <div>
-                    <strong>Mode</strong>
-                    <span>Easy / Open</span>
-                </div>
-                <div>
-                    <strong>Active Rows</strong>
-                    <span>12</span>
-                </div>
-                <div>
-                    <strong>Inventory Limit</strong>
-                    <span>50 tiles</span>
-                </div>
-                <div>
-                    <strong>Rounds</strong>
-                    <span>12 maximum</span>
-                </div>
-                <div>
-                    <strong>Initial Draw</strong>
-                    <span>12 tiles</span>
-                </div>
-                <div>
-                    <strong>Strategy</strong>
-                    <span>Aggressive</span>
-                </div>
-            </div>
-
-            <p class="note">
-                Scoring is not simulated yet. The current tool is intended
-                to answer the solvability and draw/pool questions first.
+            <p>
+                Enter the URL of a lyrics text file using this format:
             </p>
+
+            <pre>Artist
+Song Title
+Album
+Year
+Genre
+
+[Verse]
+Lyrics...
+Lyrics...
+
+[Chorus]
+Lyrics...
+Lyrics...</pre>
         </section>
 
-        <section class="panel">
-            <h2>Song Selection</h2>
+        <section>
+            <label for="lyricsUrl">Lyrics File URL</label>
 
-            <div id="song-selection" class="song-list">
-                <!-- Populated by simulator UI JavaScript. -->
-            </div>
+            <input
+                id="lyricsUrl"
+                type="url"
+                placeholder="https://raw.githubusercontent.com/..."
+                autocomplete="url"
+            >
 
-            <div class="sim-controls">
-                <label>
-                    Trials
-                    <input id="trial-count" type="number"
-                           min="1" max="5000" step="1" value="100">
-                </label>
-
-                <label>
-                    Seed
-                    <input id="seed" type="number"
-                           min="0" step="1" value="20260901">
-                </label>
-
-                <button id="run-simulation" type="button">
-                    Run Simulation
-                </button>
-            </div>
-
-            <div id="load-status" class="status" aria-live="polite">
-                Loading song data...
-            </div>
+            <button id="loadLyrics" type="button">
+                Load Lyrics
+            </button>
         </section>
 
-        <section id="results-panel" class="panel" hidden>
-            <h2>Results</h2>
-
-            <div id="results-summary"></div>
-
-            <h3>Round Summary — Representative Trial</h3>
-            <div class="table-wrap">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Round</th>
-                            <th>Requested</th>
-                            <th>Drawn</th>
-                            <th>Played</th>
-                            <th>Held</th>
-                            <th>Completed</th>
-                            <th>Rows</th>
-                            <th>Pool</th>
-                        </tr>
-                    </thead>
-                    <tbody id="round-results"></tbody>
-                </table>
-            </div>
+        <section id="status" aria-live="polite">
+            Enter a URL and click "Load Lyrics".
         </section>
 
-        <section class="panel">
-            <h2>Simulation Assumptions</h2>
-            <ul>
-                <li>Drawn tiles are never discarded.</li>
-                <li>Played tiles leave the player's hand.</li>
-                <li>Held tiles remain in the player's 50-tile inventory.</li>
-                <li>A line occurrence is separate even when lyric text is duplicated.</li>
-                <li>A completed line immediately frees its active row.</li>
-                <li>The simulated player attempts to play every usable tile.</li>
-                <li>Scoring rules are intentionally excluded until finalized.</li>
-            </ul>
+        <section>
+            <h2>Source Preview</h2>
+            <div id="preview"></div>
+        </section>
+
+        <section class="download-actions">
+            <button id="downloadLyrics" type="button" disabled>
+                Download Lyrics JSON
+            </button>
+
+            <button id="downloadWords" type="button" disabled>
+                Download Word Count JSON
+            </button>
         </section>
 
     </main>
 
-    <script src="../../js/utilities/simulator.js"></script>
-    <script src="js/simulator-ui.js"></script>
-
+    <script src="js/generator.js"></script>
 </body>
 </html>
