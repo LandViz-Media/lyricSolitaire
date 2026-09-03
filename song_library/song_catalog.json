@@ -1,11 +1,15 @@
 {
   "version": "1.0",
-  "description": "Composite song manifest for Lyric Solitaire.",
-  "maintenance": "Song lyric and word-count source files are maintained by the project owner. Update this manifest when a new song is added.",
+  "description": "Composite song manifest for Lyric Solitaire. Generated from the maintained song_library.",
+  "maintenance": "Generated locally by Build_Song_Catalog.command from song_library source files and generated song data.",
   "artists": [
     {
-      "key": "bryan_zach",
-      "name": "Zach Bryan"
+      "key": "lauper_cyndi",
+      "name": "Cyndi Lauper"
+    },
+    {
+      "key": "parton_dolly",
+      "name": "Dolly Parton"
     },
     {
       "key": "foo_fighters",
@@ -17,10 +21,90 @@
     },
     {
       "key": "swift_taylor",
-      "name": "Taylor Swift"
+      "name": "Taylor Swift feat. Bon Iver"
+    },
+    {
+      "key": "petty_tom",
+      "name": "Tom Petty and the Heartbreakers"
+    },
+    {
+      "key": "bryan_zach",
+      "name": "Zach Bryan"
     }
   ],
   "songs": [
+    {
+      "id": "cyndi_lauper__girls_just_want_to_have_fun",
+      "artist": "Cyndi Lauper",
+      "artistKey": "lauper_cyndi",
+      "title": "Girls Just Want To Have Fun",
+      "year": 1983,
+      "genre": "Pop, New Wave",
+      "album": "She’s So Unusual",
+      "lyrics": "song_library/lauper_cyndi/girls_just_want_to_have_fun_lyrics.json",
+      "wordCount": "song_library/lauper_cyndi/girls_just_want_to_have_fun_word_count.json",
+      "albumArt": "song_library/lauper_cyndi/She's So Unusual.PNG"
+    },
+    {
+      "id": "dolly_parton__9_to_5",
+      "artist": "Dolly Parton",
+      "artistKey": "parton_dolly",
+      "title": "9 to 5",
+      "year": 1980,
+      "genre": "Country Pop, Folk, and Country",
+      "album": "9 to 5 and Odd Jobs",
+      "lyrics": "song_library/parton_dolly/9_to_5_lyrics.json",
+      "wordCount": "song_library/parton_dolly/9_to_5_word_count.json",
+      "albumArt": "song_library/parton_dolly/9 to 5 and Odd Jobs.png"
+    },
+    {
+      "id": "foo_fighters__everlong",
+      "artist": "Foo Fighters",
+      "artistKey": "foo_fighters",
+      "title": "Everlong",
+      "year": 1997,
+      "genre": "Alternative Rock, Post-Grunge, Hard Rock",
+      "album": "The Colour and the Shape",
+      "lyrics": "song_library/foo_fighters/everlong_lyrics.json",
+      "wordCount": "song_library/foo_fighters/everlong_word_count.json",
+      "albumArt": "song_library/foo_fighters/The Colour and the Shape.jpg"
+    },
+    {
+      "id": "green_day__21_guns",
+      "artist": "Green Day",
+      "artistKey": "green_day",
+      "title": "21 Guns",
+      "year": 2009,
+      "genre": "Arena Rock, Pop-punk, Power Pop",
+      "album": "21st Century Breakdown",
+      "lyrics": "song_library/green_day/21_guns_lyrics.json",
+      "wordCount": "song_library/green_day/21_guns_word_count.json",
+      "albumArt": "song_library/green_day/21st Century Breakdown.png"
+    },
+    {
+      "id": "taylor_swift__exile",
+      "artist": "Taylor Swift feat. Bon Iver",
+      "artistKey": "swift_taylor",
+      "title": "Exile",
+      "year": 2020,
+      "genre": "Indie Folk",
+      "album": "Foklore",
+      "lyrics": "song_library/swift_taylor/exile_lyrics.json",
+      "wordCount": "song_library/swift_taylor/exile_word_count.json",
+      "albumArt": "song_library/swift_taylor/exile.png"
+    },
+    {
+      "id": "tom_petty_and_the_heartbreakers__learning_to_fly",
+      "artist": "Tom Petty and the Heartbreakers",
+      "artistKey": "petty_tom",
+      "title": "Learning to Fly",
+      "year": 1991,
+      "genre": "Pop Rock",
+      "album": "Into the Great Wide Open",
+      "lyrics": "song_library/petty_tom/learning_to_fly_lyrics.json",
+      "wordCount": "song_library/petty_tom/learning_to_fly_word_count.json",
+      "albumArt": "song_library/petty_tom/Into the Great Wide Open.png"
+    },
     {
       "id": "zach_bryan__appetite",
       "artist": "Zach Bryan",
@@ -80,42 +164,6 @@
       "lyrics": "song_library/bryan_zach/tourniquet_lyrics.json",
       "wordCount": "song_library/bryan_zach/tourniquet_word_count.json",
       "albumArt": "song_library/bryan_zach/Zach Bryan.png"
-    },
-    {
-      "id": "foo_fighters__everlong",
-      "artist": "Foo Fighters",
-      "artistKey": "foo_fighters",
-      "title": "Everlong",
-      "year": null,
-      "genre": null,
-      "album": "The Colour and the Shape",
-      "lyrics": "song_library/foo_fighters/everlong_lyrics.json",
-      "wordCount": "song_library/foo_fighters/everlong_word_count.json",
-      "albumArt": "song_library/foo_fighters/The Colour and the Shape.jpg"
-    },
-    {
-      "id": "green_day__21_guns",
-      "artist": "Green Day",
-      "artistKey": "green_day",
-      "title": "21 Guns",
-      "year": null,
-      "genre": null,
-      "album": "21st Century Breakdown",
-      "lyrics": "song_library/green_day/21_guns_lyrics.json",
-      "wordCount": "song_library/green_day/21_guns_word_count.json",
-      "albumArt": "song_library/green_day/21st Century Breakdown.png"
-    },
-    {
-      "id": "taylor_swift__exile",
-      "artist": "Taylor Swift feat. Bon Iver",
-      "artistKey": "swift_taylor",
-      "title": "Exile",
-      "year": 2020,
-      "genre": "Indie Folk",
-      "album": "Foklore",
-      "lyrics": "song_library/swift_taylor/exile_lyrics.json",
-      "wordCount": "song_library/swift_taylor/exile_word_count.json",
-      "albumArt": "song_library/swift_taylor/exile.png"
     }
   ]
 }

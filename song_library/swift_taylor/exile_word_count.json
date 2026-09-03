@@ -1,16 +1,18 @@
 {
   "title": "Exile",
   "artist": "Taylor Swift feat. Bon Iver",
-  "album": "Foklore",
+  "album": "Folklore",
   "year": 2020,
   "genre": "Indie Folk",
+  "totalWords": 556,
+  "uniqueWords": 126,
   "words": [
     {
-      "word": "A",
+      "word": "a",
       "count": 13
     },
     {
-      "word": "Add",
+      "word": "add",
       "count": 1
     },
     {
@@ -18,19 +20,19 @@
       "count": 2
     },
     {
-      "word": "All",
+      "word": "all",
       "count": 9
     },
     {
-      "word": "Always",
+      "word": "always",
       "count": 3
     },
     {
-      "word": "Am",
+      "word": "am",
       "count": 3
     },
     {
-      "word": "Amount",
+      "word": "amount",
       "count": 3
     },
     {
@@ -38,19 +40,19 @@
       "count": 6
     },
     {
-      "word": "Anymore",
+      "word": "anymore",
       "count": 3
     },
     {
-      "word": "Arms",
+      "word": "arms",
       "count": 1
     },
     {
-      "word": "Around",
+      "word": "around",
       "count": 9
     },
     {
-      "word": "At",
+      "word": "at",
       "count": 1
     },
     {
@@ -58,31 +60,31 @@
       "count": 1
     },
     {
-      "word": "Before",
+      "word": "before",
       "count": 6
     },
     {
-      "word": "Bloody",
+      "word": "bloody",
       "count": 1
     },
     {
-      "word": "Body",
+      "word": "body",
       "count": 1
     },
     {
-      "word": "Branches",
+      "word": "branches",
       "count": 1
     },
     {
-      "word": "Breaking",
+      "word": "breaking",
       "count": 1
     },
     {
-      "word": "But",
+      "word": "but",
       "count": 1
     },
     {
-      "word": "Can",
+      "word": "can",
       "count": 5
     },
     {
@@ -90,95 +92,95 @@
       "count": 4
     },
     {
-      "word": "Chances",
+      "word": "chances",
       "count": 1
     },
     {
-      "word": "Couldn't",
+      "word": "couldn't",
       "count": 5
     },
     {
-      "word": "Crown",
+      "word": "crown",
       "count": 1
     },
     {
-      "word": "Crying",
+      "word": "crying",
       "count": 3
     },
     {
-      "word": "Defending",
+      "word": "defending",
       "count": 2
     },
     {
-      "word": "Didn't",
+      "word": "didn't",
       "count": 11
     },
     {
-      "word": "Do",
+      "word": "do",
       "count": 3
     },
     {
-      "word": "Door",
+      "word": "door",
       "count": 2
     },
     {
-      "word": "Ending",
+      "word": "ending",
       "count": 3
     },
     {
-      "word": "Even",
+      "word": "even",
       "count": 8
     },
     {
-      "word": "Exile",
+      "word": "exile",
       "count": 3
     },
     {
-      "word": "Eyes",
+      "word": "eyes",
       "count": 1
     },
     {
-      "word": "Film",
+      "word": "film",
       "count": 6
     },
     {
-      "word": "Five",
+      "word": "five",
       "count": 1
     },
     {
-      "word": "For",
+      "word": "for",
       "count": 4
     },
     {
-      "word": "Funny",
+      "word": "funny",
       "count": 1
     },
     {
-      "word": "Gave",
+      "word": "gave",
       "count": 16
     },
     {
-      "word": "Get",
+      "word": "get",
       "count": 1
     },
     {
-      "word": "Hall",
+      "word": "hall",
       "count": 1
     },
     {
-      "word": "He's",
+      "word": "he's",
       "count": 1
     },
     {
-      "word": "Hear",
+      "word": "hear",
       "count": 6
     },
     {
-      "word": "Here",
+      "word": "here",
       "count": 1
     },
     {
-      "word": "His",
+      "word": "his",
       "count": 1
     },
     {
@@ -186,15 +188,15 @@
       "count": 1
     },
     {
-      "word": "Homeland",
+      "word": "homeland",
       "count": 2
     },
     {
-      "word": "Honey",
+      "word": "honey",
       "count": 2
     },
     {
-      "word": "Hundredth",
+      "word": "hundredth",
       "count": 1
     },
     {
@@ -210,35 +212,35 @@
       "count": 6
     },
     {
-      "word": "In",
+      "word": "in",
       "count": 4
     },
     {
-      "word": "Injury",
+      "word": "injury",
       "count": 1
     },
     {
-      "word": "Insults",
+      "word": "insults",
       "count": 1
     },
     {
-      "word": "Is",
+      "word": "is",
       "count": 3
     },
     {
-      "word": "It",
+      "word": "it",
       "count": 2
     },
     {
-      "word": "Joke's",
+      "word": "joke's",
       "count": 1
     },
     {
-      "word": "Just",
+      "word": "just",
       "count": 1
     },
     {
-      "word": "Knuckles",
+      "word": "knuckles",
       "count": 1
     },
     {
@@ -246,63 +248,63 @@
       "count": 1
     },
     {
-      "word": "Learned",
+      "word": "learned",
       "count": 7
     },
     {
-      "word": "Leave",
+      "word": "leave",
       "count": 1
     },
     {
-      "word": "Leaving",
+      "word": "leaving",
       "count": 2
     },
     {
-      "word": "Like",
+      "word": "like",
       "count": 5
     },
     {
-      "word": "Line",
+      "word": "line",
       "count": 3
     },
     {
-      "word": "Love",
+      "word": "love",
       "count": 1
     },
     {
-      "word": "Many",
+      "word": "many",
       "count": 12
     },
     {
-      "word": "Me",
+      "word": "me",
       "count": 8
     },
     {
-      "word": "Mind",
+      "word": "mind",
       "count": 7
     },
     {
-      "word": "Minutes",
+      "word": "minutes",
       "count": 1
     },
     {
-      "word": "My",
+      "word": "my",
       "count": 8
     },
     {
-      "word": "Never",
+      "word": "never",
       "count": 20
     },
     {
-      "word": "No",
+      "word": "no",
       "count": 3
     },
     {
-      "word": "Not",
+      "word": "not",
       "count": 4
     },
     {
-      "word": "Now",
+      "word": "now",
       "count": 6
     },
     {
@@ -310,11 +312,11 @@
       "count": 3
     },
     {
-      "word": "Offending",
+      "word": "offending",
       "count": 1
     },
     {
-      "word": "On",
+      "word": "on",
       "count": 1
     },
     {
@@ -322,23 +324,23 @@
       "count": 3
     },
     {
-      "word": "Out",
+      "word": "out",
       "count": 15
     },
     {
-      "word": "Pack",
+      "word": "pack",
       "count": 1
     },
     {
-      "word": "Problem",
+      "word": "problem",
       "count": 1
     },
     {
-      "word": "Read",
+      "word": "read",
       "count": 7
     },
     {
-      "word": "Right",
+      "word": "right",
       "count": 3
     },
     {
@@ -346,31 +348,31 @@
       "count": 1
     },
     {
-      "word": "See",
+      "word": "see",
       "count": 4
     },
     {
-      "word": "Seein'",
+      "word": "seein'",
       "count": 1
     },
     {
-      "word": "Seeing",
+      "word": "seeing",
       "count": 2
     },
     {
-      "word": "Seen",
+      "word": "seen",
       "count": 6
     },
     {
-      "word": "Side",
+      "word": "side",
       "count": 2
     },
     {
-      "word": "Sign",
+      "word": "sign",
       "count": 10
     },
     {
-      "word": "Signs",
+      "word": "signs",
       "count": 14
     },
     {
@@ -378,43 +380,43 @@
       "count": 20
     },
     {
-      "word": "Standing",
+      "word": "standing",
       "count": 1
     },
     {
-      "word": "Staring",
+      "word": "staring",
       "count": 1
     },
     {
-      "word": "Step",
+      "word": "step",
       "count": 3
     },
     {
-      "word": "The",
+      "word": "the",
       "count": 9
     },
     {
-      "word": "There",
+      "word": "there",
       "count": 3
     },
     {
-      "word": "Thin",
+      "word": "thin",
       "count": 3
     },
     {
-      "word": "Things",
+      "word": "things",
       "count": 8
     },
     {
-      "word": "Think",
+      "word": "think",
       "count": 6
     },
     {
-      "word": "Third",
+      "word": "third",
       "count": 1
     },
     {
-      "word": "This",
+      "word": "this",
       "count": 14
     },
     {
@@ -422,7 +424,7 @@
       "count": 1
     },
     {
-      "word": "Time",
+      "word": "time",
       "count": 7
     },
     {
@@ -430,43 +432,43 @@
       "count": 9
     },
     {
-      "word": "Took",
+      "word": "took",
       "count": 1
     },
     {
-      "word": "Town",
+      "word": "town",
       "count": 2
     },
     {
-      "word": "Turn",
+      "word": "turn",
       "count": 5
     },
     {
-      "word": "Turned",
+      "word": "turned",
       "count": 3
     },
     {
-      "word": "Understudy",
+      "word": "understudy",
       "count": 1
     },
     {
-      "word": "Up",
+      "word": "up",
       "count": 1
     },
     {
-      "word": "Us",
+      "word": "us",
       "count": 1
     },
     {
-      "word": "Very",
+      "word": "very",
       "count": 3
     },
     {
-      "word": "Walked",
+      "word": "walked",
       "count": 3
     },
     {
-      "word": "Warning",
+      "word": "warning",
       "count": 10
     },
     {
@@ -474,19 +476,19 @@
       "count": 3
     },
     {
-      "word": "Were",
+      "word": "were",
       "count": 3
     },
     {
-      "word": "What",
+      "word": "what",
       "count": 2
     },
     {
-      "word": "Who",
+      "word": "who",
       "count": 1
     },
     {
-      "word": "Whole",
+      "word": "whole",
       "count": 1
     },
     {
@@ -494,11 +496,11 @@
       "count": 2
     },
     {
-      "word": "You",
+      "word": "you",
       "count": 32
     },
     {
-      "word": "You'd",
+      "word": "you'd",
       "count": 1
     },
     {
@@ -506,13 +508,8 @@
       "count": 2
     },
     {
-      "word": "Your",
+      "word": "your",
       "count": 8
     }
-  ],
-  "punctuation": {
-    "?": 3,
-    "!": 0,
-    ".": 1
-  }
+  ]
 }

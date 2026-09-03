@@ -1,0 +1,121 @@
+{
+  "version": "1.0",
+  "description": "Composite song manifest for Lyric Solitaire.",
+  "maintenance": "Song lyric and word-count source files are maintained by the project owner. Update this manifest when a new song is added.",
+  "artists": [
+    {
+      "key": "bryan_zach",
+      "name": "Zach Bryan"
+    },
+    {
+      "key": "foo_fighters",
+      "name": "Foo Fighters"
+    },
+    {
+      "key": "green_day",
+      "name": "Green Day"
+    },
+    {
+      "key": "swift_taylor",
+      "name": "Taylor Swift"
+    }
+  ],
+  "songs": [
+    {
+      "id": "zach_bryan__appetite",
+      "artist": "Zach Bryan",
+      "artistKey": "bryan_zach",
+      "title": "Appetite",
+      "year": 2026,
+      "genre": "Country",
+      "album": "With Heaven On Top",
+      "lyrics": "song_library/bryan_zach/appetite_lyrics.json",
+      "wordCount": "song_library/bryan_zach/appetite_word_count.json",
+      "albumArt": "song_library/bryan_zach/With Heaven On Top.png"
+    },
+    {
+      "id": "zach_bryan__overtime",
+      "artist": "Zach Bryan",
+      "artistKey": "bryan_zach",
+      "title": "Overtime",
+      "year": 2023,
+      "genre": "Country",
+      "album": "Zach Bryan",
+      "lyrics": "song_library/bryan_zach/overtime_lyrics.json",
+      "wordCount": "song_library/bryan_zach/overtime_word_count.json",
+      "albumArt": "song_library/bryan_zach/Zach Bryan.png"
+    },
+    {
+      "id": "zach_bryan__pink_skies",
+      "artist": "Zach Bryan",
+      "artistKey": "bryan_zach",
+      "title": "Pink Skies",
+      "year": 2024,
+      "genre": "Country",
+      "album": "The Great American Bar Scene",
+      "lyrics": "song_library/bryan_zach/pink_skies_lyrics.json",
+      "wordCount": "song_library/bryan_zach/pink_skies_word_count.json",
+      "albumArt": "song_library/bryan_zach/The Great American Bar Scene.png"
+    },
+    {
+      "id": "zach_bryan__quittin_time",
+      "artist": "Zach Bryan",
+      "artistKey": "bryan_zach",
+      "title": "Quittin' Time",
+      "year": 2022,
+      "genre": "Country",
+      "album": "Summertime Blues",
+      "lyrics": "song_library/bryan_zach/quittin_time_lyrics.json",
+      "wordCount": "song_library/bryan_zach/quittin_time_word_count.json",
+      "albumArt": "song_library/bryan_zach/Summertime Blues.png"
+    },
+    {
+      "id": "zach_bryan__tourniquet",
+      "artist": "Zach Bryan",
+      "artistKey": "bryan_zach",
+      "title": "Tourniquet",
+      "year": 2023,
+      "genre": "Country Rock, Folk, Country",
+      "album": "Zach Bryan",
+      "lyrics": "song_library/bryan_zach/tourniquet_lyrics.json",
+      "wordCount": "song_library/bryan_zach/tourniquet_word_count.json",
+      "albumArt": "song_library/bryan_zach/Zach Bryan.png"
+    },
+    {
+      "id": "foo_fighters__everlong",
+      "artist": "Foo Fighters",
+      "artistKey": "foo_fighters",
+      "title": "Everlong",
+      "year": null,
+      "genre": null,
+      "album": "The Colour and the Shape",
+      "lyrics": "song_library/foo_fighters/everlong_lyrics.json",
+      "wordCount": "song_library/foo_fighters/everlong_word_count.json",
+      "albumArt": "song_library/foo_fighters/The Colour and the Shape.jpg"
+    },
+    {
+      "id": "green_day__21_guns",
+      "artist": "Green Day",
+      "artistKey": "green_day",
+      "title": "21 Guns",
+      "year": null,
+      "genre": null,
+      "album": "21st Century Breakdown",
+      "lyrics": "song_library/green_day/21_guns_lyrics.json",
+      "wordCount": "song_library/green_day/21_guns_word_count.json",
+      "albumArt": "song_library/green_day/21st Century Breakdown.png"
+    },
+    {
+      "id": "taylor_swift__exile",
+      "artist": "Taylor Swift feat. Bon Iver",
+      "artistKey": "swift_taylor",
+      "title": "Exile",
+      "year": 2020,
+      "genre": "Indie Folk",
+      "album": "Foklore",
+      "lyrics": "song_library/swift_taylor/exile_lyrics.json",
+      "wordCount": "song_library/swift_taylor/exile_word_count.json",
+      "albumArt": "song_library/swift_taylor/exile.png"
+    }
+  ]
+}
