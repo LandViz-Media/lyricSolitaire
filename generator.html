@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lyric Solitaire — Lyric Generator</title>
-<link rel="stylesheet" href="css/generator.css?v=0.1.4.1">
+<link rel="stylesheet" href="css/generator.css?v=0.1.4.3">
 </head>
 <body>
 <header class="site-header">
@@ -29,38 +29,54 @@
     <div class="intro-icon" aria-hidden="true">✦</div>
     <div>
       <h2>Build Song Data</h2>
-      <p>Start with the lyric <code>.txt</code> and its 200×200 album-art thumbnail in your local song folder. Generate the two song JSON files, then rebuild the complete catalog from your local <code>song_library</code> whenever you are ready to publish.</p>
+      <p>Select the maintained lyric <code>.txt</code> and its 200×200 album-art thumbnail, review the parsed metadata, then download both JSON files for <code>song_library/</code>.</p>
     </div>
-    <div class="format-pill">TXT + ART → JSON → CATALOG</div>
+    <div class="format-pill">Artist · Title · Album · Year · Genre</div>
   </section>
 
   <section class="panel source-panel">
     <div class="panel-heading">
-      <div><span class="step">01</span><div><h2>Select Song Source</h2><p>Both source files should already be in the same local artist folder.</p></div></div>
+      <div><span class="step">01</span><div><h2>Source Lyric File</h2><p>Load a maintained <code>.txt</code> file or paste its contents.</p></div></div>
     </div>
     <div class="body">
       <div class="source-grid">
         <div class="source-method">
-          <label for="fileInput"><span>Lyrics text file</span><small>Select the maintained plain-text <code>.txt</code> file.</small></label>
+          <label for="githubUrl"><span>Raw GitHub URL</span><small>Use a raw.githubusercontent.com URL.</small></label>
+          <div class="input-action"><input id="githubUrl" type="url" placeholder="https://raw.githubusercontent.com/.../song.txt"><button id="loadUrlButton">Load URL</button></div>
+        </div>
+        <div class="source-method">
+          <label for="fileInput"><span>Local lyric text file</span><small>Select the maintained <code>.txt</code> source for this song.</small></label>
           <input id="fileInput" type="file" accept=".txt,text/plain">
         </div>
         <div class="source-method">
-          <label for="artInput"><span>Album-art thumbnail</span><small>Select a <code>.jpg</code>, <code>.jpeg</code>, or <code>.png</code>. Current standard: 200×200 px.</small></label>
-          <input id="artInput" type="file" accept=".jpg,.jpeg,.png,image/jpeg,image/png">
-          <div id="artStatus" class="file-status">No album art selected.</div>
+          <label for="artInput"><span>Album-art thumbnail</span><small>Select the matching PNG/JPG/JPEG. Current standard: <b>200×200 px</b>.</small></label>
+          <input id="artInput" type="file" accept=".png,.jpg,.jpeg,image/png,image/jpeg">
+          <div id="artStatus" class="key-source">Album art required before generation.</div>
         </div>
       </div>
-      <div class="source-note"><strong>File rule</strong> Keep the lyric TXT and album-art thumbnail in the artist's <code>song_library/&lt;artistKey&gt;/</code> directory. If larger art is introduced later, use the same base filename with <code>_lg</code> before the extension.</div>
+      <div class="divider"><span>OR PASTE LYRIC TEXT</span></div>
+      <label for="source" class="paste-label"><span>Source text</span><small>First five lines must be Artist, Song Title, Album, Year, Genre.</small></label>
+      <textarea id="source" placeholder="Dolly Parton
+9 to 5
+9 to 5 and Odd Jobs
+1980
+Country Pop, Folk, and Country
+
+[Verse]
+Lyrics go here...
+
+[Chorus]
+More lyrics..."></textarea>
       <div class="source-actions">
-        <button id="parseButton">Parse Selected Song</button>
-        <div id="status" class="status" role="status" aria-live="polite"><span class="status-dot"></span>Select both source files.</div>
+        <button id="parseButton">Preview Parsed Data</button>
+        <div id="status" class="status" role="status" aria-live="polite"><span class="status-dot"></span>Waiting for source text.</div>
       </div>
     </div>
   </section>
 
   <section class="workspace-grid">
     <section class="panel">
-      <div class="panel-heading compact"><div><span class="step">02</span><div><h2>Parsed Song Metadata</h2><p>Verify the source values before generating files.</p></div></div></div>
+      <div class="panel-heading compact"><div><span class="step">02</span><div><h2>Parsed Song Metadata</h2><p>Verify the values before generating files.</p></div></div></div>
       <div class="body">
         <div class="meta-grid">
           <div class="meta-card primary"><span>Song Title</span><strong id="title">—</strong></div>
@@ -69,6 +85,10 @@
           <div class="meta-card"><span>Year</span><strong id="year">—</strong></div>
           <div class="meta-card wide"><span>Genre</span><strong id="genre">—</strong></div>
         </div>
+        <div class="art-preview-row">
+          <div class="art-preview"><img id="artPreview" alt="Selected album art preview"></div>
+          <div><strong>Album Art</strong><p id="artDetails">No thumbnail selected.</p></div>
+        </div>
         <div class="stat-strip">
           <div><span>Total Words</span><strong id="total">0</strong></div>
           <div><span>Unique Words</span><strong id="unique">0</strong></div>
@@ -76,20 +96,16 @@
           <div><span>Lyric Lines</span><strong id="lines">0</strong></div>
           <div><span>Output Base Name</span><strong id="baseName">—</strong></div>
         </div>
-        <div class="art-preview-row">
-          <img id="artPreview" alt="Selected album art preview">
-          <div><span class="preview-label">Selected album art</span><strong id="artName">—</strong><small id="artDimensions">—</small></div>
-        </div>
       </div>
     </section>
 
     <section class="panel generate-panel">
-      <div class="panel-heading compact"><div><span class="step">03</span><div><h2>Generate Song Files</h2><p>Use the established artist key and download both JSON files.</p></div></div></div>
+      <div class="panel-heading compact"><div><span class="step">03</span><div><h2>Generate Game Data</h2><p>Confirm the maintained artist folder.</p></div></div></div>
       <div class="body">
         <label for="artistKey">Artist key / folder <small>Existing artists use the catalog's established key.</small></label>
         <div class="key-row"><input id="artistKey" placeholder="artist_key"><span id="keySource" class="key-source">Waiting for artist</span></div>
-        <button class="download-button" id="downloadButton" disabled>Download Song JSON Files</button>
-        <div class="destination-note"><strong>Destination</strong><code>song_library/&lt;artistKey&gt;/</code><span>Place the two downloaded JSON files beside the source TXT and album art.</span></div>
+        <button class="download-button" id="downloadButton" disabled>Download Both JSON Files</button>
+        <div class="destination-note"><strong>Destination</strong><code>song_library/&lt;artistKey&gt;/</code><span>The catalog is maintained separately with the local <code>Build_Song_Catalog.command</code> tool.</span></div>
       </div>
     </section>
   </section>
@@ -105,29 +121,15 @@
     </section>
   </section>
 
-  <section class="panel catalog-panel">
-    <div class="panel-heading compact">
-      <div><span class="step">06</span><div><h2>Rebuild Complete Song Catalog</h2><p>After generating one or many songs, scan your local <code>song_library</code> and create a fresh catalog from the files that actually exist.</p></div></div>
-    </div>
-    <div class="body catalog-body">
-      <div class="catalog-instructions"><strong>Recommended workflow</strong><span>Generate all new songs → put their JSON files in the local repository → select the local <code>song_library</code> folder below → build one complete catalog → push everything to GitHub.</span></div>
-      <label for="libraryInput"><span>Local song library</span><small>Select the entire <code>song_library</code> folder. The generator scans artist folders, TXT files, JSON files, and album-art thumbnails.</small></label>
-      <input id="libraryInput" type="file" webkitdirectory directory multiple>
-      <div class="catalog-actions"><button id="buildCatalogButton">Build Catalog from Local Library</button><div id="catalogStatus" class="status"><span class="status-dot"></span>No local library selected.</div></div>
-      <div id="catalogReport" class="catalog-report" hidden></div>
-      <button class="download-button catalog-download" id="downloadCatalogButton" disabled>Download song_catalog.json</button>
-    </div>
-  </section>
-
   <section class="help-card">
     <div class="help-icon">i</div>
-    <div><strong>Source and catalog rules</strong><p>Every lyric source keeps the order <b>Artist</b>, <b>Song Title</b>, <b>Album</b>, <b>Year</b>, <b>Genre</b>. Album art is currently a 200×200 thumbnail. The catalog is treated as a derived manifest: rebuilding it from the complete local library prevents sequential song generation from dropping earlier additions.</p></div>
+    <div><strong>Song-generation requirements</strong><p>Before generating a song, have both the maintained <code>.txt</code> source and its album-art thumbnail ready. The source must begin with <b>Artist</b>, <b>Song Title</b>, <b>Album</b>, <b>Year</b>, <b>Genre</b>. Album art must currently be <b>200×200 px</b> PNG, JPG, or JPEG. Future larger artwork will use the same base filename with <code>_lg</code>.</p></div>
   </section>
 </main>
 
 <footer>Lyric Solitaire Generator <span id="footerVersion">v—</span> · Maintained song source data belongs in <code>/song_library</code>.</footer>
 
-<script src="js/config/projectVersion.js?v=0.1.4.1"></script>
-<script src="js/generator.js?v=0.1.4.1"></script>
+<script src="js/config/projectVersion.js?v=0.1.4.3"></script>
+<script src="js/generator.js?v=0.1.4.3"></script>
 </body>
 </html>

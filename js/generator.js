@@ -1,141 +1,141 @@
 /*
- * Lyric Generator Controller
+ * Lyric Solitaire — Lyric Generator Controller
  *
  * Responsibility:
- * Converts the project's maintained five-line lyric source into game-ready
- * JSON, validates the required local album-art thumbnail, and rebuilds the
- * complete song catalog from a selected local song_library directory.
- * The catalog is derived from the local library rather than incrementally
- * appended to the catalog after each song, so batches of new songs remain safe.
+ * Converts the maintained five-line lyric source format into game-ready
+ * lyrics JSON and physical word-count JSON. It also validates the required
+ * 200×200 album-art thumbnail. Catalog construction is intentionally handled
+ * by the separate local Build_Song_Catalog.command utility.
  */
-const state={lyrics:null,wordCounts:null,catalog:null,art:null,libraryFiles:[],generatedCatalog:null,sourceText:"",sourceFile:null};
-const $=id=>document.getElementById(id);
+const state = { lyrics: null, wordCounts: null, albumArt: null, sourceText: "", catalog: null };
+const $ = id => document.getElementById(id);
 
-function setStatus(text,kind=""){$("status").innerHTML=`<span class="status-dot"></span>${escapeHtml(text)}`;$('status').className=`status ${kind}`;}
-function setCatalogStatus(text,kind=""){$("catalogStatus").innerHTML=`<span class="status-dot"></span>${escapeHtml(text)}`;$('catalogStatus').className=`status ${kind}`;}
-function escapeHtml(text){return String(text??"").replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-function normalizeWord(word){return String(word||"").normalize("NFKC").replace(/[’‘ʼʻ`´]/g,"'").toLocaleLowerCase();}
-function normalizeName(text){return String(text||"").normalize("NFKC").replace(/[’‘ʼʻ`´]/g,"'").replace(/\s+/g," ").trim().toLocaleLowerCase();}
-function tokenize(text){return String(text||"").match(/[\p{L}\p{M}]+(?:['’][\p{L}\p{M}]*)?/gu)||[];}
-function slugify(text){return String(text||"untitled").toLocaleLowerCase().replace(/[’‘ʼʻ`´']/g,"").replace(/[^a-z0-9]+/g,"_").replace(/^_+|_+$/g,"");}
-function deriveArtistKey(artist){
-  const name=String(artist||"").trim();
-  const normalized=name.toLocaleLowerCase().replace(/&/g," and ").replace(/[^a-z0-9\s-]/g," ").replace(/\s+/g," ").trim();
-  const words=normalized.split(/[-\s]+/).filter(Boolean);
-  if(words.length>=2)return `${words[words.length-1]}_${words.slice(0,-1).join("_")}`;
-  return slugify(normalized)||"artist";
+function setStatus(text, kind = "") {
+  $("status").textContent = text;
+  $("status").className = `status ${kind}`;
 }
-async function loadCatalog(){
-  try{const response=await fetch(`song_library/song_catalog.json?v=${window.LyricSolitaireProject.generatorVersion}`,{cache:"no-store"});if(!response.ok)throw new Error(`HTTP ${response.status}`);state.catalog=await response.json();}
-  catch(error){console.warn("Song catalog could not be loaded; artist keys will be derived.",error);state.catalog=null;}
+function normalizeWord(word) { return String(word || "").normalize("NFKC").replace(/[’‘ʼʻ`´]/g, "'").toLocaleLowerCase(); }
+function tokenize(text) { return String(text || "").match(/[\p{L}\p{M}]+(?:['’][\p{L}\p{M}]*)?/gu) || []; }
+function slugify(text) { return String(text || "untitled").toLocaleLowerCase().replace(/['’]/g, "").replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, ""); }
+function deriveArtistKey(artist) {
+  const name = String(artist || "").trim();
+  const normalized = name.toLocaleLowerCase().replace(/&/g, " and ").replace(/[^a-z0-9\s-]/g, " ").replace(/\s+/g, " ").trim();
+  const words = normalized.split(/[-\s]+/).filter(Boolean);
+  if (words.length >= 2) return `${words[words.length - 1]}_${words.slice(0, -1).join("_")}`;
+  return slugify(normalized) || "artist";
 }
-function artistKeyFor(artist){
-  const exact=(state.catalog?.artists||[]).find(a=>normalizeName(a.name)===normalizeName(artist));
-  if(exact)return {key:exact.key,source:"Existing catalog key"};
-  const related=(state.catalog?.artists||[]).find(a=>normalizeName(artist).startsWith(`${normalizeName(a.name)} `));
-  if(related)return {key:related.key,source:"Existing catalog key (featured artist)"};
-  return {key:deriveArtistKey(artist),source:"Derived from artist name"};
-}
-function parseSource(raw){
-  const lines=String(raw||"").replace(/\r\n?/g,"\n").split("\n");while(lines.length&&!lines[lines.length-1].trim())lines.pop();
-  if(lines.length<5)throw new Error("Source text must contain at least five metadata lines.");
-  // Project convention: Artist, Song Title, Album, Year, Genre.
-  const artist=(lines.shift()||"").trim(),title=(lines.shift()||"").trim(),album=(lines.shift()||"").trim(),yearText=(lines.shift()||"").trim(),genre=(lines.shift()||"").trim();
-  if(!artist||!title)throw new Error("Artist and Song Title are required in the first two lines.");
-  let year=Number.parseInt(yearText,10);if(Number.isNaN(year))year=null;
-  const sections=[];let current=null;
-  for(const rawLine of lines){const line=rawLine.trim();if(!line)continue;const match=line.match(/^\[([^\]]+)\]$/);if(match){current={type:match[1].trim(),lyrics:[]};sections.push(current);continue;}if(!current){current={type:"Verse",lyrics:[]};sections.push(current);}current.lyrics.push(line);}
-  const wordMap=new Map();
-  for(const section of sections)for(const lyricLine of section.lyrics)for(const token of tokenize(lyricLine)){const key=normalizeWord(token);if(!wordMap.has(key))wordMap.set(key,{word:token,count:0});wordMap.get(key).count++;}
-  const words=[...wordMap.values()].sort((a,b)=>a.word.localeCompare(b.word,undefined,{sensitivity:"base"}));
-  return {lyricsData:{title,artist,album,year,genre,sections},wordCountData:{title,artist,album,year,genre,totalWords:words.reduce((sum,w)=>sum+w.count,0),uniqueWords:words.length,words}};
-}
-function render(){
-  const l=state.lyrics,w=state.wordCounts;if(!l||!w)return;
-  $("title").textContent=l.title||"—";$("artist").textContent=l.artist||"—";$("album").textContent=l.album||"—";$("year").textContent=l.year??"—";$("genre").textContent=l.genre||"—";
-  $("total").textContent=w.totalWords;$("unique").textContent=w.uniqueWords;$("sections").textContent=l.sections.length;$("lines").textContent=l.sections.reduce((n,s)=>n+s.lyrics.length,0);
-  const base=slugify(l.title);$("baseName").textContent=base;const key=artistKeyFor(l.artist);$("artistKey").value=key.key;$("keySource").textContent=key.source;
-  $("lyricsPreview").textContent=JSON.stringify(l,null,2);$("wordPreview").textContent=JSON.stringify(w,null,2);
-  $("downloadButton").disabled=!(state.lyrics&&state.wordCounts&&state.art);
-}
-async function validateAlbumArt(file){
-  if(!file)throw new Error("Select an album-art thumbnail.");
-  if(!/\.(png|jpe?g)$/i.test(file.name))throw new Error("Album art must be a PNG, JPG, or JPEG file.");
-  if(/_lg\.(png|jpe?g)$/i.test(file.name))throw new Error("Select the standard thumbnail, not the future _lg large-art variant.");
-  const url=URL.createObjectURL(file);
-  try{
-    const image=new Image();
-    await new Promise((resolve,reject)=>{image.onload=resolve;image.onerror=()=>reject(new Error("The selected album-art file could not be read."));image.src=url;});
-    if(image.naturalWidth!==200||image.naturalHeight!==200)throw new Error(`Album art must be exactly 200×200 px. Selected image is ${image.naturalWidth}×${image.naturalHeight} px.`);
-    return {file,name:file.name,width:image.naturalWidth,height:image.naturalHeight,url};
-  }catch(error){URL.revokeObjectURL(url);throw error;}
-}
-async function selectAlbumArt(file){
-  try{if(state.art?.url)URL.revokeObjectURL(state.art.url);const art=await validateAlbumArt(file);state.art=art;$("artStatus").textContent=`✓ ${file.name} · 200×200 px`;$('artStatus').className='file-status ok';$("artPreview").src=art.url;$("artPreview").hidden=false;$("artName").textContent=file.name;$("artDimensions").textContent="200 × 200 pixels";if(state.lyrics)render();setStatus(state.lyrics?"Song and album art are ready to generate.":"Album art validated. Parse the lyric file.",state.lyrics?"ok":"");}
-  catch(error){state.art=null;$("artStatus").textContent=`✕ ${error.message}`;$('artStatus').className='file-status error';$("artPreview").hidden=true;$("downloadButton").disabled=true;setStatus(error.message,"error");}
-}
-function parseCurrentSource(){
-  try{if(!$('fileInput').files[0])throw new Error("Select a lyric TXT file first.");if(!state.art)throw new Error("Select a valid 200×200 album-art thumbnail first.");const parsed=parseSource(state.sourceText);state.lyrics=parsed.lyricsData;state.wordCounts=parsed.wordCountData;render();setStatus("Parsed successfully. Song files are ready to download.","ok");}
-  catch(error){console.error(error);state.lyrics=null;state.wordCounts=null;$("downloadButton").disabled=true;setStatus(error.message,"error");}
-}
-function download(data,filename){const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);}
-
-function pathParts(file){return (file.webkitRelativePath||file.name).split('/').filter(Boolean);}
-function isImage(file){return /\.(png|jpe?g)$/i.test(file.name);}
-function isJson(file){return /\.json$/i.test(file.name);}
-function fileText(file){return file.text();}
-function relativeLibraryPath(file){
-  const parts=pathParts(file);const idx=parts.findIndex(p=>p.toLocaleLowerCase()==='song_library');return idx>=0?parts.slice(idx+1).join('/'):parts.join('/');
-}
-function normalizePath(path){return path.replace(/\\/g,'/').replace(/^\.\//,'');}
-function sourceArtistFolder(file){const rel=relativeLibraryPath(file).split('/');return rel.length>1?rel[0]:null;}
-function imageMatchScore(image,album){
-  const imageBase=image.name.replace(/\.[^.]+$/,'');const a=normalizeName(imageBase),b=normalizeName(album);if(a===b)return 100;if(slugify(imageBase)===slugify(album))return 90;return 0;
-}
-async function parseLibraryFiles(files){
-  const list=[...files];const catalogFile=list.find(f=>relativeLibraryPath(f).toLocaleLowerCase()==='song_catalog.json');let priorCatalog=null;
-  if(catalogFile){try{priorCatalog=JSON.parse(await catalogFile.text());}catch(e){throw new Error("The local song_catalog.json could not be parsed.");}}
-  const txts=list.filter(f=>/\.txt$/i.test(f.name));const jsons=list.filter(isJson).filter(f=>f!==catalogFile);const images=list.filter(isImage);
-  if(!txts.length)throw new Error("No lyric TXT files were found in the selected song_library folder.");
-  const parsedSongs=[];const warnings=[];
-  for(const txt of txts){
-    const rel=relativeLibraryPath(txt);const folder=sourceArtistFolder(txt);if(!folder){warnings.push(`${txt.name}: could not determine artist folder.`);continue;}
-    let source;try{source=parseSource(await fileText(txt));}catch(e){warnings.push(`${rel}: ${e.message}`);continue;}
-    const lyricsCandidates=[];const wcCandidates=[];
-    for(const jf of jsons){if(sourceArtistFolder(jf)!==folder)continue;try{const data=JSON.parse(await jf.text());if(normalizeName(data.title)===normalizeName(source.title)&&normalizeName(data.artist)===normalizeName(source.artist)){if(/_lyrics\.json$/i.test(jf.name))lyricsCandidates.push({file:jf,data});if(/_word_count\.json$/i.test(jf.name))wcCandidates.push({file:jf,data});}}catch(e){warnings.push(`${relativeLibraryPath(jf)}: invalid JSON.`);}}
-    const lyrics=lyricsCandidates[0],wordCount=wcCandidates[0];if(!lyrics)warnings.push(`${rel}: missing _lyrics.json.`);if(!wordCount)warnings.push(`${rel}: missing _word_count.json.`);if(!lyrics||!wordCount)continue;
-    let art=images.filter(i=>sourceArtistFolder(i)===folder).sort((a,b)=>imageMatchScore(b,source.album)-imageMatchScore(a,source.album))[0];
-    if(!art||imageMatchScore(art,source.album)===0){
-      const prior=(priorCatalog?.songs||[]).find(s=>normalizeName(s.artist)===normalizeName(source.artist)&&normalizeName(s.title)===normalizeName(source.title));
-      if(prior?.albumArt){art=images.find(i=>normalizePath(relativeLibraryPath(i))===normalizePath(prior.albumArt.replace(/^song_library\//,'')));}
-    }
-    if(!art)warnings.push(`${rel}: album art could not be matched to album "${source.album}".`);
-    else if(art.name.replace(/\.[^.]+$/,'').toLocaleLowerCase().endsWith('_lg'))warnings.push(`${rel}: matched _lg art; standard thumbnail should be used.`);
-    const keyMatch=(priorCatalog?.artists||[]).find(a=>normalizeName(a.name)===normalizeName(source.artist));const artistKey=keyMatch?.key||folder||deriveArtistKey(source.artist);
-    const id=`${slugify(source.artist)}__${slugify(source.title)}`;
-    parsedSongs.push({id,artist:source.artist,artistKey,title:source.title,year:source.year,genre:source.genre,album:source.album,lyrics:`song_library/${folder}/${lyrics.file.name}`,wordCount:`song_library/${folder}/${wordCount.file.name}`,albumArt:art?`song_library/${folder}/${art.name}`:null,totalWords:wordCount.data.totalWords,uniqueWords:wordCount.data.uniqueWords});
+async function loadCatalog() {
+  try {
+    const response = await fetch(`song_library/song_catalog.json?v=${window.LyricSolitaireProject.generatorVersion}`, { cache: "no-store" });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    state.catalog = await response.json();
+  } catch (error) {
+    console.warn("Song catalog could not be loaded; artist keys will be derived.", error);
+    state.catalog = null;
   }
-  const artistsMap=new Map();for(const song of parsedSongs)if(!artistsMap.has(song.artistKey))artistsMap.set(song.artistKey,{key:song.artistKey,name:song.artist});
-  const songs=parsedSongs.sort((a,b)=>a.artist.localeCompare(b.artist)||a.title.localeCompare(b.title));
-  const artists=[...artistsMap.values()].sort((a,b)=>a.name.localeCompare(b.name));
-  const catalog={version:"1.1",description:"Composite song manifest for Lyric Solitaire.",maintenance:"Generated from the maintained song_library files. Rebuild this manifest after adding or changing songs.",artists,songs};
-  return {catalog,warnings,stats:{artists:artists.length,songs:songs.length,lyrics:songs.length,wordCounts:songs.length,albumArt:songs.filter(s=>s.albumArt).length}};
 }
-function renderCatalogReport(result){
-  const r=result.stats;const missing=r.songs-r.albumArt;let html=`<div class="report-grid"><div><span>Artists</span><strong>${r.artists}</strong></div><div><span>Songs</span><strong>${r.songs}</strong></div><div><span>Lyrics JSON</span><strong>${r.lyrics}</strong></div><div><span>Word Counts</span><strong>${r.wordCounts}</strong></div><div><span>Album Art</span><strong>${r.albumArt}</strong></div></div>`;
-  if(missing)html+=`<div class="report-warning">⚠ ${missing} song(s) have no matched album art and will be flagged in the catalog output.</div>`;
-  if(result.warnings.length)html+=`<details class="report-details"><summary>${result.warnings.length} warning(s)</summary><ul>${result.warnings.map(w=>`<li>${escapeHtml(w)}</li>`).join('')}</ul></details>`;
-  else html+=`<div class="report-success">✓ Library scan completed with no warnings.</div>`;
-  $("catalogReport").innerHTML=html;$("catalogReport").hidden=false;
+function artistKeyFor(artist) {
+  const match = (state.catalog?.artists || []).find(a => String(a.name || "").trim().toLocaleLowerCase() === String(artist || "").trim().toLocaleLowerCase());
+  if (match) return { key: match.key, source: "Existing catalog key" };
+  return { key: deriveArtistKey(artist), source: "Derived from artist name" };
+}
+function parseSource(raw) {
+  const lines = String(raw || "").replace(/\r\n?/g, "\n").split("\n");
+  while (lines.length && !lines[lines.length - 1].trim()) lines.pop();
+  if (lines.length < 5) throw new Error("Source text must contain at least five metadata lines.");
+  const artist = (lines.shift() || "").trim();
+  const title = (lines.shift() || "").trim();
+  const album = (lines.shift() || "").trim();
+  const yearText = (lines.shift() || "").trim();
+  const genre = (lines.shift() || "").trim();
+  if (!artist || !title) throw new Error("Artist and Song Title are required in the first two lines.");
+  let year = Number.parseInt(yearText, 10);
+  if (Number.isNaN(year)) year = null;
+  const sections = []; let current = null;
+  for (const rawLine of lines) {
+    const line = rawLine.trim();
+    if (!line) continue;
+    const match = line.match(/^\[([^\]]+)\]$/);
+    if (match) { current = { type: match[1].trim(), lyrics: [] }; sections.push(current); continue; }
+    if (!current) { current = { type: "Verse", lyrics: [] }; sections.push(current); }
+    current.lyrics.push(line);
+  }
+  const wordMap = new Map();
+  for (const section of sections) for (const lyricLine of section.lyrics) for (const token of tokenize(lyricLine)) {
+    const key = normalizeWord(token);
+    if (!wordMap.has(key)) wordMap.set(key, { word: token, count: 0 });
+    wordMap.get(key).count++;
+  }
+  const words = [...wordMap.values()].sort((a, b) => a.word.localeCompare(b.word, undefined, { sensitivity: "base" }));
+  return {
+    lyricsData: { title, artist, album, year, genre, sections },
+    wordCountData: { title, artist, album, year, genre, totalWords: words.reduce((sum, w) => sum + w.count, 0), uniqueWords: words.length, words }
+  };
+}
+function render() {
+  const l = state.lyrics, w = state.wordCounts;
+  if (!l || !w) return;
+  $("title").textContent = l.title || "—"; $("artist").textContent = l.artist || "—"; $("album").textContent = l.album || "—"; $("year").textContent = l.year ?? "—"; $("genre").textContent = l.genre || "—";
+  $("total").textContent = w.totalWords; $("unique").textContent = w.uniqueWords; $("sections").textContent = l.sections.length; $("lines").textContent = l.sections.reduce((n, s) => n + s.lyrics.length, 0);
+  const base = slugify(l.title); $("baseName").textContent = base;
+  const key = artistKeyFor(l.artist); $("artistKey").value = key.key; $("keySource").textContent = key.source;
+  $("lyricsPreview").textContent = JSON.stringify(l, null, 2); $("wordPreview").textContent = JSON.stringify(w, null, 2);
+  updateGenerateState();
+}
+function updateGenerateState() {
+  $("downloadButton").disabled = !(state.lyrics && state.wordCounts && state.albumArt && state.albumArt.valid);
+}
+function parseCurrentSource() {
+  try {
+    const parsed = parseSource(state.sourceText || $("source").value);
+    state.lyrics = parsed.lyricsData; state.wordCounts = parsed.wordCountData;
+    render(); setStatus("Parsed successfully.", "ok");
+  } catch (error) {
+    console.error(error); state.lyrics = null; state.wordCounts = null; updateGenerateState(); setStatus(error.message, "error");
+  }
+}
+async function loadText(text, label) {
+  state.sourceText = text; $("source").value = text; parseCurrentSource();
+  if (!$('status').classList.contains('error')) setStatus(`Loaded ${label}.`, "ok");
+}
+async function loadUrl() {
+  const url = $("githubUrl").value.trim();
+  if (!url) { setStatus("Enter a Raw GitHub URL first.", "warn"); return; }
+  try {
+    setStatus("Loading Raw GitHub file…"); const response = await fetch(url, { cache: "no-store" });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`); await loadText(await response.text(), "Raw GitHub source");
+  } catch (error) { console.error(error); setStatus(`Could not load URL: ${error.message}`, "error"); }
+}
+function download(data, filename) {
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob); const a = document.createElement("a"); a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+function validateAlbumArt(file) {
+  if (!file) { state.albumArt = null; $("artPreview").removeAttribute("src"); $("artDetails").textContent = "No thumbnail selected."; $("artStatus").textContent = "Album art required before generation."; updateGenerateState(); return; }
+  if (!/^image\/(png|jpe?g)$/i.test(file.type) && !/\.(png|jpe?g)$/i.test(file.name)) {
+    state.albumArt = { valid: false }; $("artStatus").textContent = "Invalid format — use PNG, JPG, or JPEG."; updateGenerateState(); return;
+  }
+  const img = new Image(); const url = URL.createObjectURL(file);
+  img.onload = () => {
+    const valid = img.naturalWidth === 200 && img.naturalHeight === 200;
+    state.albumArt = { valid, name: file.name, width: img.naturalWidth, height: img.naturalHeight };
+    $("artPreview").src = url;
+    $("artDetails").textContent = `${file.name} · ${img.naturalWidth}×${img.naturalHeight} px`;
+    $("artStatus").textContent = valid ? "✓ Valid 200×200 thumbnail" : "⚠ Thumbnail must be exactly 200×200 px.";
+    $("artStatus").className = `key-source ${valid ? "ok" : "error"}`;
+    updateGenerateState();
+    if (!valid) setStatus("Album art must be exactly 200×200 pixels.", "error");
+    URL.revokeObjectURL(url);
+  };
+  img.onerror = () => { state.albumArt = { valid: false }; $("artStatus").textContent = "Could not read the image."; updateGenerateState(); URL.revokeObjectURL(url); };
+  img.src = url;
 }
 
-$("fileInput").addEventListener("change",async e=>{const file=e.target.files[0];if(!file)return;try{state.sourceText=await file.text();state.sourceFile=file;if(state.art)parseCurrentSource();else setStatus(`Loaded ${file.name}. Now select album art.`); }catch(error){setStatus(`Could not read file: ${error.message}`,"error");}});
-$("artInput").addEventListener("change",async e=>{const file=e.target.files[0];if(file)await selectAlbumArt(file);});
-$("parseButton").addEventListener("click",parseCurrentSource);
-$("artistKey").addEventListener("input",()=>$('keySource').textContent="Custom artist key");
-$("downloadButton").addEventListener("click",()=>{if(!state.lyrics||!state.wordCounts)return;const base=slugify(state.lyrics.title);download(state.lyrics,`${base}_lyrics.json`);setTimeout(()=>download(state.wordCounts,`${base}_word_count.json`),350);});
-$("libraryInput").addEventListener("change",e=>{state.libraryFiles=[...e.target.files];setCatalogStatus(`${state.libraryFiles.length} local files selected. Ready to scan.`);$("downloadCatalogButton").disabled=true;$("catalogReport").hidden=true;});
-$("buildCatalogButton").addEventListener("click",async()=>{if(!state.libraryFiles.length){setCatalogStatus("Select the local song_library folder first.","warn");return;}try{setCatalogStatus("Scanning local song library…");const result=await parseLibraryFiles(state.libraryFiles);state.generatedCatalog=result.catalog;renderCatalogReport(result);$("downloadCatalogButton").disabled=false;setCatalogStatus(`Catalog built: ${result.stats.songs} songs across ${result.stats.artists} artists.`,result.warnings.length?"warn":"ok");}catch(error){console.error(error);state.generatedCatalog=null;$("downloadCatalogButton").disabled=true;setCatalogStatus(error.message,"error");$("catalogReport").hidden=true;}});
-$("downloadCatalogButton").addEventListener("click",()=>{if(state.generatedCatalog)download(state.generatedCatalog,"song_catalog.json");});
-$("artPreview").hidden=true;
-(async()=>{await loadCatalog();$("version").textContent=`v${window.LyricSolitaireProject.generatorVersion}`;$("footerVersion").textContent=`v${window.LyricSolitaireProject.generatorVersion}`;})();
+$("fileInput").addEventListener("change", async e => { const file = e.target.files[0]; if (!file) return; try { await loadText(await file.text(), file.name); } catch (error) { setStatus(`Could not read file: ${error.message}`, "error"); } });
+$("artInput").addEventListener("change", e => validateAlbumArt(e.target.files[0]));
+$("loadUrlButton").addEventListener("click", loadUrl);
+$("githubUrl").addEventListener("keydown", e => { if (e.key === "Enter") loadUrl(); });
+$("parseButton").addEventListener("click", parseCurrentSource);
+$("downloadButton").addEventListener("click", () => { if (!state.lyrics || !state.wordCounts || !state.albumArt?.valid) return; const base = slugify(state.lyrics.title); download(state.lyrics, `${base}_lyrics.json`); setTimeout(() => download(state.wordCounts, `${base}_word_count.json`), 350); });
+$("artistKey").addEventListener("input", () => $("keySource").textContent = "Custom artist key");
+(async () => { await loadCatalog(); $("version").textContent = `v${window.LyricSolitaireProject.generatorVersion}`; $("footerVersion").textContent = `v${window.LyricSolitaireProject.generatorVersion}`; })();

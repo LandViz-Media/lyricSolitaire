@@ -1,0 +1,307 @@
+{
+  "title": "Learning to Fly",
+  "artist": "Tom Petty and the Heartbreakers",
+  "album": "Into the Great Wide Open",
+  "year": 1991,
+  "genre": "Pop Rock",
+  "totalWords": 202,
+  "uniqueWords": 74,
+  "words": [
+    {
+      "word": "a",
+      "count": 1
+    },
+    {
+      "word": "ain't",
+      "count": 3
+    },
+    {
+      "word": "all",
+      "count": 1
+    },
+    {
+      "word": "alone",
+      "count": 1
+    },
+    {
+      "word": "And",
+      "count": 4
+    },
+    {
+      "word": "around",
+      "count": 2
+    },
+    {
+      "word": "as",
+      "count": 1
+    },
+    {
+      "word": "beat",
+      "count": 1
+    },
+    {
+      "word": "Break",
+      "count": 1
+    },
+    {
+      "word": "burn",
+      "count": 1
+    },
+    {
+      "word": "but",
+      "count": 5
+    },
+    {
+      "word": "clouds",
+      "count": 2
+    },
+    {
+      "word": "come",
+      "count": 2
+    },
+    {
+      "word": "Coming",
+      "count": 3
+    },
+    {
+      "word": "crossed",
+      "count": 1
+    },
+    {
+      "word": "crown",
+      "count": 1
+    },
+    {
+      "word": "days",
+      "count": 1
+    },
+    {
+      "word": "dirty",
+      "count": 1
+    },
+    {
+      "word": "down",
+      "count": 8
+    },
+    {
+      "word": "fly",
+      "count": 21
+    },
+    {
+      "word": "for",
+      "count": 1
+    },
+    {
+      "word": "get",
+      "count": 1
+    },
+    {
+      "word": "God",
+      "count": 1
+    },
+    {
+      "word": "goes",
+      "count": 2
+    },
+    {
+      "word": "good",
+      "count": 1
+    },
+    {
+      "word": "got",
+      "count": 4
+    },
+    {
+      "word": "guess",
+      "count": 1
+    },
+    {
+      "word": "hardest",
+      "count": 3
+    },
+    {
+      "word": "heart",
+      "count": 1
+    },
+    {
+      "word": "hill",
+      "count": 1
+    },
+    {
+      "word": "I",
+      "count": 7
+    },
+    {
+      "word": "I'll",
+      "count": 1
+    },
+    {
+      "word": "I'm",
+      "count": 7
+    },
+    {
+      "word": "I've",
+      "count": 1
+    },
+    {
+      "word": "is",
+      "count": 3
+    },
+    {
+      "word": "know",
+      "count": 1
+    },
+    {
+      "word": "knows",
+      "count": 1
+    },
+    {
+      "word": "learning",
+      "count": 21
+    },
+    {
+      "word": "life",
+      "count": 1
+    },
+    {
+      "word": "lit",
+      "count": 1
+    },
+    {
+      "word": "may",
+      "count": 2
+    },
+    {
+      "word": "melt",
+      "count": 1
+    },
+    {
+      "word": "might",
+      "count": 1
+    },
+    {
+      "word": "Must",
+      "count": 2
+    },
+    {
+      "word": "not",
+      "count": 1
+    },
+    {
+      "word": "old",
+      "count": 1
+    },
+    {
+      "word": "out",
+      "count": 3
+    },
+    {
+      "word": "return",
+      "count": 1
+    },
+    {
+      "word": "road",
+      "count": 1
+    },
+    {
+      "word": "rocks",
+      "count": 1
+    },
+    {
+      "word": "say",
+      "count": 1
+    },
+    {
+      "word": "sea",
+      "count": 1
+    },
+    {
+      "word": "So",
+      "count": 1
+    },
+    {
+      "word": "some",
+      "count": 1
+    },
+    {
+      "word": "started",
+      "count": 3
+    },
+    {
+      "word": "steal",
+      "count": 1
+    },
+    {
+      "word": "still",
+      "count": 1
+    },
+    {
+      "word": "sun",
+      "count": 1
+    },
+    {
+      "word": "the",
+      "count": 12
+    },
+    {
+      "word": "there",
+      "count": 1
+    },
+    {
+      "word": "thing",
+      "count": 3
+    },
+    {
+      "word": "to",
+      "count": 21
+    },
+    {
+      "word": "town",
+      "count": 1
+    },
+    {
+      "word": "up",
+      "count": 3
+    },
+    {
+      "word": "Well",
+      "count": 3
+    },
+    {
+      "word": "went",
+      "count": 1
+    },
+    {
+      "word": "what",
+      "count": 2
+    },
+    {
+      "word": "when",
+      "count": 1
+    },
+    {
+      "word": "where",
+      "count": 1
+    },
+    {
+      "word": "will",
+      "count": 1
+    },
+    {
+      "word": "wings",
+      "count": 3
+    },
+    {
+      "word": "world",
+      "count": 1
+    },
+    {
+      "word": "you",
+      "count": 1
+    },
+    {
+      "word": "your",
+      "count": 2
+    }
+  ]
+}

@@ -102,3 +102,19 @@ New songs discovered or added to `/song_library` may be recorded here.
 - Local TXT selection now stores the selected source text in generator state and parsing uses that state directly.
 - Moved generator controller JavaScript out of `generator.html` into `js/generator.js` for maintainability.
 - Kept the v0.1.4 album-art validation and complete local-library catalog rebuild workflow unchanged.
+
+## [0.1.4.3] — 2026-09-03
+
+### Changed
+- Simplified the lyric generator so it generates only the two song JSON files; catalog construction is now handled by a separate local Mac command utility.
+- Moved generator JavaScript into `js/generator.js`.
+
+### Added
+- Required album-art selection before song generation.
+- PNG, JPG, and JPEG album-art validation with an exact 200×200 pixel requirement.
+- Album-art preview and validation status in the generator.
+- Documented `_lg` as the reserved suffix for future larger artwork versions.
+- Added `Build_Song_Catalog.command`, a local-only catalog builder for `song_library/`.
+
+### Fixed
+- Removed the browser-based local-library catalog scan, avoiding the need to grant the generator access to the entire `song_library`.
