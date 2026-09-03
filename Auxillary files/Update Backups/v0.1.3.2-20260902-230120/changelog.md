@@ -59,18 +59,3 @@ navigation work.
 ## Data Changelog
 
 New songs discovered or added to `/song_library` may be recorded here.
-## [0.1.3.2] — 2026-09-02
-
-### Changed
-- Rebuilt the Lyric Generator interface with a clearer five-step workflow and a visual design consistent with the Simulator and Results tools.
-- Added Raw GitHub URL loading alongside local `.txt` file browsing and pasted lyric text.
-- Updated the generator to use the maintained source format: **Artist, Song Title, Album, Year, Genre**.
-- Added automatic artist-key detection using the existing `song_catalog.json` when an artist is already registered, with derived keys for new artists.
-- Added an explicit `generatorVersion` to the shared project version configuration.
-
-### Fixed
-- Corrected the generator's metadata parsing bug that treated the first line as the song title and the second line as the artist.
-- Updated the source-format instructions and placeholder text to match the established `song_library` convention.
-
-### Notes
-- No song-library data was changed in this release. New or changed songs should continue to be verified against `song_library/` before catalog updates.

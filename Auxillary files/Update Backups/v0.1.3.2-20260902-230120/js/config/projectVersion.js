@@ -3,7 +3,7 @@
  *
  * Responsibility:
  * Stores application/tool versions and named simulator personas used by
- * the simulator UI, generator UI, and exported experiment records.
+ * the simulator UI and exported experiment records.
  */
 window.LyricSolitaireProject = {
     gameVersion: "0.1.0",
