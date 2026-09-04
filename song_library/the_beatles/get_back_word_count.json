@@ -1,0 +1,319 @@
+{
+  "title": "Get Back",
+  "artist": "The Beatles",
+  "album": "Let It Be",
+  "year": 1970,
+  "genre": "Blues Rock, Rock and Roll, Pop Rock",
+  "totalWords": 210,
+  "uniqueWords": 77,
+  "words": [
+    {
+      "word": "a",
+      "count": 5
+    },
+    {
+      "word": "All",
+      "count": 1
+    },
+    {
+      "word": "and",
+      "count": 2
+    },
+    {
+      "word": "another",
+      "count": 1
+    },
+    {
+      "word": "Arizona",
+      "count": 1
+    },
+    {
+      "word": "around",
+      "count": 1
+    },
+    {
+      "word": "audition",
+      "count": 1
+    },
+    {
+      "word": "back",
+      "count": 26
+    },
+    {
+      "word": "behalf",
+      "count": 1
+    },
+    {
+      "word": "belonged",
+      "count": 8
+    },
+    {
+      "word": "burning",
+      "count": 1
+    },
+    {
+      "word": "But",
+      "count": 4
+    },
+    {
+      "word": "California",
+      "count": 1
+    },
+    {
+      "word": "can",
+      "count": 1
+    },
+    {
+      "word": "cleaner",
+      "count": 1
+    },
+    {
+      "word": "coming",
+      "count": 1
+    },
+    {
+      "word": "couldn't",
+      "count": 1
+    },
+    {
+      "word": "Fart",
+      "count": 1
+    },
+    {
+      "word": "fingers",
+      "count": 1
+    },
+    {
+      "word": "For",
+      "count": 1
+    },
+    {
+      "word": "frying",
+      "count": 1
+    },
+    {
+      "word": "Get",
+      "count": 26
+    },
+    {
+      "word": "gets",
+      "count": 1
+    },
+    {
+      "word": "girls",
+      "count": 1
+    },
+    {
+      "word": "got",
+      "count": 1
+    },
+    {
+      "word": "grass",
+      "count": 1
+    },
+    {
+      "word": "group",
+      "count": 1
+    },
+    {
+      "word": "he",
+      "count": 2
+    },
+    {
+      "word": "her",
+      "count": 1
+    },
+    {
+      "word": "his",
+      "count": 1
+    },
+    {
+      "word": "home",
+      "count": 1
+    },
+    {
+      "word": "hope",
+      "count": 1
+    },
+    {
+      "word": "I",
+      "count": 1
+    },
+    {
+      "word": "I'd",
+      "count": 1
+    },
+    {
+      "word": "in",
+      "count": 1
+    },
+    {
+      "word": "it",
+      "count": 3
+    },
+    {
+      "word": "Jo",
+      "count": 6
+    },
+    {
+      "word": "knew",
+      "count": 1
+    },
+    {
+      "word": "last",
+      "count": 1
+    },
+    {
+      "word": "left",
+      "count": 1
+    },
+    {
+      "word": "like",
+      "count": 1
+    },
+    {
+      "word": "loner",
+      "count": 1
+    },
+    {
+      "word": "Loretta",
+      "count": 2
+    },
+    {
+      "word": "man",
+      "count": 2
+    },
+    {
+      "word": "Martin",
+      "count": 2
+    },
+    {
+      "word": "Mo",
+      "count": 1
+    },
+    {
+      "word": "of",
+      "count": 1
+    },
+    {
+      "word": "Oh",
+      "count": 2
+    },
+    {
+      "word": "Okay",
+      "count": 1
+    },
+    {
+      "word": "on",
+      "count": 1
+    },
+    {
+      "word": "once",
+      "count": 8
+    },
+    {
+      "word": "Ooh",
+      "count": 2
+    },
+    {
+      "word": "ourselves",
+      "count": 1
+    },
+    {
+      "word": "pan",
+      "count": 1
+    },
+    {
+      "word": "passed",
+      "count": 1
+    },
+    {
+      "word": "picker",
+      "count": 2
+    },
+    {
+      "word": "picture",
+      "count": 1
+    },
+    {
+      "word": "Rosetta",
+      "count": 3
+    },
+    {
+      "word": "say",
+      "count": 2
+    },
+    {
+      "word": "she",
+      "count": 7
+    },
+    {
+      "word": "she's",
+      "count": 1
+    },
+    {
+      "word": "some",
+      "count": 1
+    },
+    {
+      "word": "Sweet",
+      "count": 3
+    },
+    {
+      "word": "thank",
+      "count": 1
+    },
+    {
+      "word": "Thanks",
+      "count": 1
+    },
+    {
+      "word": "The",
+      "count": 6
+    },
+    {
+      "word": "thought",
+      "count": 3
+    },
+    {
+      "word": "to",
+      "count": 9
+    },
+    {
+      "word": "Tucson",
+      "count": 1
+    },
+    {
+      "word": "was",
+      "count": 6
+    },
+    {
+      "word": "we",
+      "count": 1
+    },
+    {
+      "word": "where",
+      "count": 8
+    },
+    {
+      "word": "while",
+      "count": 1
+    },
+    {
+      "word": "who",
+      "count": 1
+    },
+    {
+      "word": "woman",
+      "count": 1
+    },
+    {
+      "word": "yeah",
+      "count": 2
+    },
+    {
+      "word": "you",
+      "count": 9
+    }
+  ]
+}

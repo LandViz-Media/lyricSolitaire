@@ -1,0 +1,76 @@
+{
+  "title": "Get Back",
+  "artist": "The Beatles",
+  "album": "Let It Be",
+  "year": 1970,
+  "genre": "Blues Rock, Rock and Roll, Pop Rock",
+  "sections": [
+    {
+      "type": "Intro",
+      "lyrics": [
+        "Rosetta...",
+        "Sweet Loretta Fart she thought she was a cleaner",
+        "But she was a frying pan",
+        "Sweet Rosetta Martin... Rosetta",
+        "The picker, the picker, picture the fingers burning",
+        "Ooh",
+        "Okay"
+      ]
+    },
+    {
+      "type": "Verse",
+      "lyrics": [
+        "Jo Jo was a man who thought he was a loner",
+        "But he knew it couldn't last",
+        "Jo Jo left his home in Tucson, Arizona",
+        "For some California grass"
+      ]
+    },
+    {
+      "type": "Chorus",
+      "lyrics": [
+        "Get back, get back",
+        "Get back to where you once belonged",
+        "Get back, get back",
+        "Get back to where you once belonged",
+        "Get back, get back",
+        "Get back to where you once belonged",
+        "Get back, get back",
+        "Get back to where you once belonged",
+        "Get back, Jo Jo"
+      ]
+    },
+    {
+      "type": "Verse",
+      "lyrics": [
+        "Sweet Loretta Martin thought she was a woman",
+        "But she was another man",
+        "All the girls around her say she's got it coming",
+        "But she gets it while she can"
+      ]
+    },
+    {
+      "type": "Chorus",
+      "lyrics": [
+        "Oh, get back, get back",
+        "Get back to where you once belonged",
+        "Get back, get back",
+        "Get back to where you once belonged",
+        "Oh, get back, yeah, get back",
+        "Get back to where you once belonged",
+        "Yeah, get back, get back",
+        "Get back to where you once belonged"
+      ]
+    },
+    {
+      "type": "Outro",
+      "lyrics": [
+        "Get back",
+        "Ooh",
+        "Thanks, Mo",
+        "I'd like to say thank you on behalf of the group and ourselves",
+        "And I hope we passed the audition"
+      ]
+    }
+  ]
+}
