@@ -138,4 +138,4 @@ $("githubUrl").addEventListener("keydown", e => { if (e.key === "Enter") loadUrl
 $("parseButton").addEventListener("click", parseCurrentSource);
 $("downloadButton").addEventListener("click", () => { if (!state.lyrics || !state.wordCounts || !state.albumArt?.valid) return; const base = slugify(state.lyrics.title); download(state.lyrics, `${base}_lyrics.json`); setTimeout(() => download(state.wordCounts, `${base}_word_count.json`), 350); });
 $("artistKey").addEventListener("input", () => $("keySource").textContent = "Custom artist key");
-(async () => { await loadCatalog(); $("version").textContent = `v${window.LyricSolitaireProject.generatorVersion}`; })();
+(async () => { await loadCatalog(); $("version").textContent = `v${window.LyricSolitaireProject.generatorVersion}`; $("footerVersion").textContent = `v${window.LyricSolitaireProject.generatorVersion}`; })();

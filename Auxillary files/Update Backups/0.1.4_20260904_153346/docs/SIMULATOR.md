@@ -1,6 +1,6 @@
 # Simulator Lab
 
-**Simulator version: 0.1.4**
+**Simulator version: 0.1.3.1**
 
 ## First named persona
 
@@ -14,15 +14,6 @@ Dolly represents the current simulator decision-making strategy:
 
 The persona is recorded at the experiment and individual-trial levels so
 alternate strategies can later be compared directly.
-
-## Experiment filtering
-
-Experiment Setup now filters in this order:
-1. Genre(s)
-2. Artist(s)
-3. Song(s)
-
-Genre choices are derived from the current song catalog. Selecting one or more genres narrows the available artists; selecting artists then narrows the song list. The Song(s) selector displays titles only because artist context is already established by the preceding Artist(s) selection.
 
 ## Session workflow
 

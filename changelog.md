@@ -1,26 +1,27 @@
 # Changelog
 
-## [0.1.4] — 2026-09-03
+## [0.1.4] — 2026-09-04
 
-### Added
-- Reworked the Lyric Generator song workflow so a song is generated from two required local source assets: the maintained lyric `.txt` file and its album-art thumbnail.
-- Added album-art selection and validation for PNG/JPG/JPEG files. The current standard is exactly 200×200 pixels; `_lg` artwork is reserved for a future larger-art convention.
-- Added a complete local-library catalog builder that scans the selected `song_library` directory and generates a fresh `song_catalog.json` from the files actually present.
-- Added catalog validation/reporting for artist count, song count, generated JSON coverage, album-art coverage, missing files, and nonstandard album-art dimensions.
+### Simulator
+- Added Genre(s) as the first Experiment Setup filter, before Artist(s).
+- Genre choices are derived from the current song catalog; selecting genre(s) filters the available artists and songs.
+- Song selector now displays song titles only; artist context remains available through the separate Artist(s) selector.
+- Updated simulator header treatment to use the shared Lyric Solitaire tool-header artwork and corrected the header alignment/left-edge spacing.
+- Preserved the existing simulation engine, persona system, session logging, and result schema.
 
-### Changed
-- The catalog is now treated as a derived manifest rather than an incrementally edited file. This supports generating multiple new artists/songs locally before publishing everything together without losing earlier additions.
-- Existing artist keys are preserved when rebuilding the catalog, including featured-artist cases such as Taylor Swift feat. Bon Iver.
-- Album-art matching first uses the album name within the song's artist folder and falls back to the existing catalog mapping when needed.
-- Generator instructions now recommend: generate all songs locally → place JSON files in `song_library` → rebuild one complete catalog → push the complete library to GitHub.
+### Results Viewer
+- Updated the Results Viewer header to match the visual language of the Simulator, using the shared tool-header artwork derived from the Lyric Solitaire cover graphic.
+- Added the simulator version badge to the Results Viewer header.
 
-### Fixed
-- Removed the generator's previous instruction to manually update `song_catalog.json` after each song.
+### Generator
+- Updated the Generator header to match the shared Simulator/Results visual design while retaining its existing v0.1.4.4 generation behavior.
 
-### Testing Notes
-- The current repository library contains 6 artists and 10 lyric source files.
-- The current library scan identifies album-art files for all 10 songs, but two existing thumbnails are not yet at the 200×200 standard and will be reported by the new validator: Cyndi Lauper artwork is 250×250 and Dolly Parton artwork is 344×344.
+### Project Memory
+- Added `PROJECT_DISCUSSION_LOG.md` as the durable record of project discussions, decisions, rationale, issues, and deferred ideas.
 
+### Data
+- The user reports that `Get Back` by The Beatles has been added to `song_library` and the catalog has been updated on GitHub.
+- No song-library data is modified by this release.
 
 ## [0.1.3.2] — 2026-09-02
 
@@ -96,33 +97,3 @@ New songs discovered or added to `/song_library` may be recorded here.
 
 ### Notes
 - No song-library data was changed in this release. New or changed songs should continue to be verified against `song_library/` before catalog updates.
-
-## v0.1.4.1 — Generator parse-error fix and JavaScript split
-- Fixed the Parse Selected Song error caused by the new generator controller still referencing the removed `#source` textarea.
-- Local TXT selection now stores the selected source text in generator state and parsing uses that state directly.
-- Moved generator controller JavaScript out of `generator.html` into `js/generator.js` for maintainability.
-- Kept the v0.1.4 album-art validation and complete local-library catalog rebuild workflow unchanged.
-
-## [0.1.4.3] — 2026-09-03
-
-### Changed
-- Simplified the lyric generator so it generates only the two song JSON files; catalog construction is now handled by a separate local Mac command utility.
-- Moved generator JavaScript into `js/generator.js`.
-
-### Added
-- Required album-art selection before song generation.
-- PNG, JPG, and JPEG album-art validation with an exact 200×200 pixel requirement.
-- Album-art preview and validation status in the generator.
-- Documented `_lg` as the reserved suffix for future larger artwork versions.
-- Added `Build_Song_Catalog.command`, a local-only catalog builder for `song_library/`.
-
-### Fixed
-- Removed the browser-based local-library catalog scan, avoiding the need to grant the generator access to the entire `song_library`.
-## [0.1.4.4] — 2026-09-03
-
-### Changed
-- Simplified the generator page by removing the redundant song-generation requirements/help panel and footer beneath the JSON output previews.
-- Kept catalog construction as a separate local Mac command utility.
-
-### Fixed
-- Reduced the amount of non-essential content below the generated JSON output so the page ends cleanly after the two output previews.
