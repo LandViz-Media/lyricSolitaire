@@ -24,10 +24,6 @@
       "name": "Taylor Swift feat. Bon Iver"
     },
     {
-      "key": "the_beatles",
-      "name": "The Beatles"
-    },
-    {
       "key": "petty_tom",
       "name": "Tom Petty and the Heartbreakers"
     },
@@ -96,18 +92,6 @@
       "lyrics": "song_library/swift_taylor/exile_lyrics.json",
       "wordCount": "song_library/swift_taylor/exile_word_count.json",
       "albumArt": "song_library/swift_taylor/Folklore.png"
-    },
-    {
-      "id": "the_beatles__get_back",
-      "artist": "The Beatles",
-      "artistKey": "the_beatles",
-      "title": "Get Back",
-      "year": 1970,
-      "genre": "Blues Rock, Rock and Roll, Pop Rock",
-      "album": "Let It Be",
-      "lyrics": "song_library/the_beatles/get_back_lyrics.json",
-      "wordCount": "song_library/the_beatles/get_back_word_count.json",
-      "albumArt": "song_library/the_beatles/Let It Be.jpg"
     },
     {
       "id": "tom_petty_and_the_heartbreakers__learning_to_fly",
