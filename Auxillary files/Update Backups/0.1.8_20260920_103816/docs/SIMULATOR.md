@@ -98,20 +98,3 @@ New-line selection includes limited look-ahead. The simulator rewards a candidat
 ## Experiment naming
 
 Experiment Name is automatically generated from the current song selection, persona, mode, trial count, and random seed, for example: `Everlong — Dolly — Standard — 10 trials — Seed 32451`. The field remains editable. A manually edited name is captured for that experiment; after the experiment is run, subsequent parameter changes generate a fresh name for the next experiment.
-
-## Diagnostic Reference Persona — Garth
-
-**Garth — Heuristic Reference Player** is a permanent diagnostic persona. Garth is not intended to represent a typical human playing style. Instead, he uses the simulator's full knowledge of the current lyric lines and hand to evaluate legal moves and look for promising short-term cascades.
-
-Garth's heuristic gives strong priority to: 
-
-1. completing a lyric line immediately;
-2. maximizing additional words in the current hand that can use the resulting line;
-3. advancing a line toward completion; and
-4. avoiding unnecessary new-line openings when otherwise comparable moves exist.
-
-Garth evaluates the current legal move set repeatedly after each play. This makes him useful as a reference point when comparing the human-style personas, but **Garth is not a mathematical proof of solvability**. A Garth loss does not prove that a deal is unsolvable.
-
-### Future Guaranteed Persona — Hank
-
-The project reserves **Hank** as the name for a future mathematically guaranteed solver. Hank should only be introduced after the solver can be defined precisely and validated as an exhaustive/complete search under the simulator's actual rules. Until then, Garth remains the upper-reference diagnostic.

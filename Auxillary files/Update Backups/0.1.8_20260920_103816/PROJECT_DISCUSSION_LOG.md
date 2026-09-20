@@ -330,17 +330,3 @@ The simulator should distinguish three things: a tile that can be placed immedia
 
 ### Deferred question
 The current foresight model is deliberately limited. It does not yet perform deep multi-step search across several possible line openings. Future analysis can determine whether stronger lyric knowledge should be modeled as a deeper look-ahead or whether the current lightweight advantage is sufficient.
-
-
-## 2026-09-20 — Garth and Future Hank Reference Personas
-
-### Decision
-The Simulator will permanently include a diagnostic persona named **Garth — Heuristic Reference Player**. Garth is the renamed successor to the temporary Oracle/heuristic experiment used during the Everlong investigation.
-
-Garth is explicitly a heuristic reference, not a mathematically guaranteed solver. He evaluates legal active-line moves plus a bounded set of promising new-line moves using immediate completion, near-term hand coverage, progress, and a small new-line cost. The intent is to provide a stronger reference point than the human-style personas without claiming exhaustive optimality.
-
-### Future persona
-The project also reserves **Hank** as the name for a future mathematically guaranteed persona. Hank should only be implemented after the search method is defined and validated as complete under the actual simulator rules. A future Hank loss could then be used as evidence of unsolvability for that modeled deal; Garth cannot make that claim.
-
-### Implementation boundary
-0.1.8 changes the simulator persona system and versioning/documentation only. Existing Dolly, Johnny, Kenny, draw rules, final-round rules, and song-library data are not intentionally changed.

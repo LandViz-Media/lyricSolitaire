@@ -1,19 +1,5 @@
 # Changelog
 
-## [0.1.8] — 2026-09-20
-
-### Simulator
-- Added **Garth — Heuristic Reference Player** as a permanent diagnostic persona.
-- Garth evaluates legal moves across the current hand and lyric board rather than following a human-style row-opening rule.
-- Garth rewards immediate line completion, then near-term hand coverage/progress, with a small penalty for opening a new line.
-- Garth remains deterministic under the simulator's seeded trial streams.
-- Clearly documented Garth as a heuristic reference rather than a guaranteed solver.
-- Kept the existing Dolly, Johnny, Kenny, and final-round rules unchanged.
-
-### Future / Deferred
-- Reserved the name **Hank — Guaranteed Solver** for a future mathematically guaranteed search/solver persona.
-- Hank is intentionally not implemented in 0.1.8; the next design step is to determine whether an exhaustive or provably complete search is computationally practical across the simulator's song sizes and modes.
-
 ## [0.1.7] — 2026-09-20
 
 ### Changed

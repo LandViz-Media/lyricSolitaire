@@ -23,13 +23,6 @@
  *     builds a very broad board (9 or 10 lines when possible), while still
  *     always using a word on an existing active line before opening a new one.
  *
- *   Garth — Heuristic Reference Player
- *     A diagnostic player with broad knowledge of the lyric state. Garth
- *     evaluates legal active-line moves and a bounded set of promising
- *     new-line moves using completion, progress, and short look-ahead. Garth
- *     is intentionally a
- *     heuristic, not a mathematically guaranteed solver.
- *
  * MODE CONFIGURATION:
  *   Easy / Open : 12 rows, 50-tile hand, 12 rounds
  *   Standard    : 10 rows, 40-tile hand, 10 rounds
@@ -62,16 +55,11 @@
             name: "Kenny — The Gambler",
             description: "A risk-taking player who is willing to build a very wide board early. He looks for opportunity everywhere, but still uses a word on an existing line before gambling on a new line.",
             strategy: "Prefer existing active-line matches first; when no active line can use the word, open a new line whenever a row is available; in Round 1 deliberately target 9 or 10 active lines when the mode permits, then continue taking substantially more opening risk than Dolly or Johnny."
-        },
-        heuristic_reference: {
-            name: "Garth — Heuristic Reference Player",
-            description: "A diagnostic reference player that uses broader information about the current lyric state and hand than the human-style personas. Garth searches legal moves for promising immediate completions and near-term cascades.",
-            strategy: "Evaluate every legal hand tile against every usable active or newly opened lyric line; favor completing lines, then maximizing near-term hand playability and progress. Garth is a heuristic reference, not a mathematically guaranteed solver."
         }
     };
 
     const CONFIG = {
-        version: "0.1.8",
+        version: "0.1.7",
         initialDraw: 12,
         defaultMode: "easy",
         modes: MODE_CONFIG,
@@ -344,139 +332,6 @@
         return cloneLine(best[Math.floor(random() * best.length)]);
     }
 
-    /*
-     * Garth move scoring: evaluate a legal move by the state it creates.
-     * This is deliberately local/heuristic. It does not search the complete
-     * future game tree, so it must never be described as a guaranteed solver.
-     */
-    function countLineHandCoverage(line, hand, ignoredIndex) {
-        const handCounts = new Map();
-        hand.forEach(function (tile, index) {
-            if (index === ignoredIndex) return;
-            handCounts.set(tile.key, (handCounts.get(tile.key) || 0) + 1);
-        });
-        let coverage = 0;
-        line.remaining.forEach(function (count, key) {
-            coverage += Math.min(count, handCounts.get(key) || 0);
-        });
-        return coverage;
-    }
-
-    function countPotentialLineCompletions(line, hand, ignoredIndex) {
-        const remaining = new Map(line.remaining);
-        if (ignoredIndex >= 0 && hand[ignoredIndex]) {
-            const key = hand[ignoredIndex].key;
-            const count = remaining.get(key) || 0;
-            if (count <= 1) remaining.delete(key);
-            else remaining.set(key, count - 1);
-        }
-        let missing = 0;
-        remaining.forEach(count => { missing += count; });
-        return missing;
-    }
-
-    function chooseGarthMove(hand, activeLines, allLines, completedIds, gameConfig, random) {
-        const moves = [];
-        const activeIds = new Set(activeLines.map(line => line.id));
-        const canOpen = activeLines.length < gameConfig.maxRows;
-
-        hand.forEach(function (tile, handIndex) {
-            activeLines.forEach(function (line) {
-                if (!lineCanUseWord(line, tile.key)) return;
-                const missingAfter = countPotentialLineCompletions(line, hand, handIndex);
-                const coverage = countLineHandCoverage(line, hand, handIndex);
-                const completion = missingAfter === 0 ? 1 : 0;
-                const progress = line.wordCount - missingAfter;
-                const score =
-                    completion * 100000 +
-                    coverage * 1000 +
-                    progress * 25 -
-                    missingAfter * 3;
-                moves.push({ score, handIndex, target: line, opens: false });
-            });
-
-            if (canOpen) {
-                const candidates = allLines.filter(function (line) {
-                    return !activeIds.has(line.id) && !completedIds.has(line.id) && lineCanUseWord(line, tile.key);
-                });
-
-                // Limit the expensive look-ahead to the most promising new-line
-                // candidates. This keeps Garth practical for large trial counts
-                // while retaining a broad heuristic search rather than reducing
-                // the persona to the human-style shortest-line rule.
-                candidates.sort(function (a, b) {
-                    const aCoverage = countLineHandCoverage(a, hand, handIndex);
-                    const bCoverage = countLineHandCoverage(b, hand, handIndex);
-                    return bCoverage - aCoverage || a.wordCount - b.wordCount;
-                });
-                candidates.slice(0, 12).forEach(function (line) {
-                    const candidate = cloneLine(line);
-                    const missingAfter = countPotentialLineCompletions(candidate, hand, handIndex);
-                    const coverage = countLineHandCoverage(candidate, hand, handIndex);
-                    const completion = missingAfter === 0 ? 1 : 0;
-                    const progress = candidate.wordCount - missingAfter;
-                    const score =
-                        completion * 100000 +
-                        coverage * 1000 +
-                        progress * 25 -
-                        missingAfter * 3 -
-                        50;
-                    moves.push({ score, handIndex, target: candidate, opens: true });
-                });
-            }
-        });
-
-        if (!moves.length) return null;
-        let bestScore = Math.max(...moves.map(move => move.score));
-        const best = moves.filter(move => move.score === bestScore);
-        return best[Math.floor(random() * best.length)];
-    }
-
-    function playGarthHand(
-        hand, activeLines, allLines, completedIds, completedLines,
-        random, gameConfig
-    ) {
-        let playedThisTurn = 0;
-        let playedOnExistingLines = 0;
-        let playedByOpeningNewLine = 0;
-        let openedThisRound = 0;
-
-        while (true) {
-            const move = chooseGarthMove(hand, activeLines, allLines, completedIds, gameConfig, random);
-            if (!move) break;
-
-            if (move.opens) {
-                activeLines.push(move.target);
-                openedThisRound += 1;
-            }
-
-            if (!playWordIntoLine(move.target, hand[move.handIndex].key)) break;
-            hand.splice(move.handIndex, 1);
-            playedThisTurn += 1;
-            if (move.opens) playedByOpeningNewLine += 1;
-            else playedOnExistingLines += 1;
-
-            const compacted = compactCompletedLines(activeLines, completedIds, completedLines);
-            activeLines.length = 0;
-            compacted.forEach(line => activeLines.push(line));
-        }
-
-        const endingPlayability = countPlayableTiles(
-            hand, activeLines, allLines, completedIds,
-            activeLines.length < gameConfig.maxRows
-        );
-
-        return {
-            playedThisTurn,
-            playedOnExistingLines,
-            playedByOpeningNewLine,
-            openedThisRound,
-            startingPlayableOnExistingLines: 0,
-            startingPlayableByOpeningNewLine: 0,
-            playableTilesRemainingUnplayed: endingPlayability.total
-        };
-    }
-
     function playHand(
         hand, activeLines, allLines, completedIds, completedLines,
         random, gameConfig, persona, round
@@ -486,13 +341,6 @@
         let playedByOpeningNewLine = 0;
         let openedThisRound = 0;
         let changed = true;
-
-        if (persona === "heuristic_reference") {
-            return playGarthHand(
-                hand, activeLines, allLines, completedIds, completedLines,
-                random, gameConfig
-            );
-        }
 
         // Snapshot the hand at the start of the play phase. These counts are
         // deliberately tile counts, so duplicate words are counted as separate

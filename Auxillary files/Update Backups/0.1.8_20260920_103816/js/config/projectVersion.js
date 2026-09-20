@@ -7,7 +7,7 @@
  */
 window.LyricSolitaireProject = {
     gameVersion: "0.1.0",
-    simulatorVersion: "0.1.8",
+    simulatorVersion: "0.1.7",
     generatorVersion: "0.1.4.4",
     dataSchemaVersion: "1.3.3",
 
@@ -29,12 +29,6 @@ window.LyricSolitaireProject = {
             name: "Kenny — The Gambler",
             description: "A risk-taking player who is willing to build a very wide board early. He looks for opportunity everywhere, but still uses a word on an existing line before gambling on a new line.",
             strategy: "Prefer existing active-line matches first; when no active line can use the word, open a new line whenever a row is available; in Round 1 deliberately target 9 or 10 active lines when the mode permits, then continue taking substantially more opening risk."
-        }
-,        {
-            id: "heuristic_reference",
-            name: "Garth — Heuristic Reference Player",
-            description: "A diagnostic reference player that uses broader information about the current lyric state and hand than the human-style personas. Garth searches legal moves for promising immediate completions and near-term cascades.",
-            strategy: "Evaluate every legal hand tile against every usable active or newly opened lyric line; favor completing lines, then maximizing near-term hand playability and progress. Garth is a heuristic reference, not a mathematically guaranteed solver."
         }
     ],
 
