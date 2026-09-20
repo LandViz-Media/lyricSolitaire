@@ -271,27 +271,3 @@ Established artist keys should be retained, including examples such as:
 - When should `_lg` album artwork be introduced, and what UI/data fields will reference it?
 
 > **Maintenance note:** Add new dated entries rather than rewriting historical decisions. When a decision changes, record the new decision and explain what it supersedes.
-
----
-
-## 2026-09-07 — Simulator 0.1.5 / Persona Model
-
-### Decisions
-1. The simulator must use a deterministic random stream derived from the user-entered seed and trial index. Re-running the same experiment with the same song selection, mode, persona, trial count, and seed should reproduce the same trial collection.
-2. The physical hand-cap rule is intentional: if a player begins a round with 39 tiles and the requested draw is 10 under a 50-tile hand limit, only one tile can be drawn. The requested draw is an upper bound; available hand capacity is an independent constraint.
-3. The simulator must continue to support multiple selected songs. A combined experiment uses one combined physical word pool and distinct line occurrences from each selected song.
-4. Experiment exports need an optional human-readable name. The name is stored in the experiment record and contributes to the downloaded filename.
-5. Export filenames must include a timestamp so multiple exports on the same calendar day do not intentionally reuse the same filename.
-6. Dolly remains the aggressive row-filler persona, but she gains adaptive restraint as the hand becomes crowded and as the game progresses.
-7. Johnny — Walks the Line is a conservative comparison persona: maximize playable words but open at most one new lyric line per round.
-8. Kenny — The Gambler is the high-risk comparison persona: existing active-line matches always win first, but otherwise he opens new lines aggressively and targets nine or ten active lines in Round 1 when possible.
-9. Persona documentation should be maintained as separate files. Each persona file starts with a general description of the player, followed by technical engine terminology and implementation rules.
-
-### Persona research purpose
-The three personas are intentionally behaviorally distinct rather than merely different labels for the same engine. This allows experiments to ask whether observed lockups are caused primarily by song structure, board-opening behavior, hand saturation, or the interaction between those factors.
-
-### Important draw-rule clarification
-The requested draw is calculated from the round number and previous-round play. The actual draw is then capped by remaining pool size and available hand capacity. A player beginning a round with 39 tiles in a 40-tile Standard hand can draw only one tile, regardless of a larger requested draw. This is not a second hidden penalty; it is simply the inventory cap being enforced.
-
-### Deferred analysis
-The next research step remains a deterministic, word-by-word trace of representative trials. The persona comparison should be used to determine whether Dolly's lockup behavior is reduced by adaptive row management and how Johnny and Kenny differ under the same song, mode, and seed.

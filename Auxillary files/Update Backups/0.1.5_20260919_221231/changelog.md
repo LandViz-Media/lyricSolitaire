@@ -1,29 +1,6 @@
 # Changelog
 
-## [0.1.5] — 2026-09-07
-
-### Simulator
-- Made seeded trial creation explicitly deterministic: trial `i` receives a reproducible random stream derived from the entered base seed and trial index.
-- Added three named simulator personas: **Dolly — Aggressive Row Filler**, **Johnny — Walks the Line**, and **Kenny — The Gambler**.
-- Reworked persona execution so existing active-line matches always receive priority before a new lyric line can be opened.
-- Added Dolly's adaptive new-line target and hand-pressure behavior to reduce unnecessary board saturation as a game progresses.
-- Added Johnny's one-new-line-per-round constraint.
-- Added Kenny's high-risk opening behavior, including a Round 1 target of nine or ten active lines when the selected mode permits it.
-- Added `openedNewLines` to each round trace for persona analysis.
-
-### Experiment Exports
-- Added an optional **Experiment Name** field.
-- Experiment names are retained in exported experiment records.
-- Export filenames now include a descriptive slug and timestamp, preventing same-day filename collisions.
-- Preserved complete session/trial export behavior.
-
-### Documentation
-- Added detailed persona files under `docs/personas/`. Each begins with a plain-language description followed by engine implementation terminology.
-- Updated Simulator documentation and project discussion log with the new persona model and deterministic-testing decision.
-
 ## [0.1.4] — 2026-09-04
-
-
 
 ### Simulator
 - Added Genre(s) as the first Experiment Setup filter, before Artist(s).

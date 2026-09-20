@@ -1,44 +1,59 @@
 # Simulator Lab
 
-**Simulator version: 0.1.4**
+**Simulator version: 0.1.5**
 
-## First named persona
+## Purpose
 
-**Dolly — Aggressive Row Filler**
+The Simulator Lab is a research and balance-testing tool. It uses the maintained lyric JSON and word-count JSON data and retains complete individual trials so results can be examined later without rerunning an experiment.
 
-Dolly represents the current simulator decision-making strategy:
-- prefer active lyric lines closest to completion
-- play every usable word
-- open a new candidate line when an available row permits it
-- favor shorter candidate lines when opening a row
+## Personas
 
-The persona is recorded at the experiment and individual-trial levels so
-alternate strategies can later be compared directly.
+The simulator now contains three deliberately different decision-making models:
 
-## Experiment filtering
+- **Dolly — Aggressive Row Filler:** aggressively completes active lines, but adapts new-line opening as the game advances and the hand becomes crowded.
+- **Johnny — Walks the Line:** plays as many words as possible but opens no more than one new lyric line per round.
+- **Kenny — The Gambler:** favors existing active lines first, then takes substantially more new-line risk; in Round 1 he targets nine or ten active lines when the mode permits it.
 
-Experiment Setup now filters in this order:
+The detailed implementation logic is documented separately in `docs/personas/`.
+
+## Experiment setup
+
+Experiment Setup filters in this order:
 1. Genre(s)
 2. Artist(s)
 3. Song(s)
+4. Persona
+5. Difficulty / Mode
+6. Experiment Name (optional)
+7. Trials
+8. Random Seed
 
-Genre choices are derived from the current song catalog. Selecting one or more genres narrows the available artists; selecting artists then narrows the song list. The Song(s) selector displays titles only because artist context is already established by the preceding Artist(s) selection.
+Song selection supports multiple songs. When more than one song is selected, their physical word pools and distinct lyric-line occurrences are combined into one simulation bundle.
 
-## Session workflow
+## Deterministic seeds
 
-Run as many experiments as desired during one browser session. The simulator
-keeps complete experiment data in memory rather than localStorage.
+The entered Random Seed is a **base seed**. Trial `i` receives a deterministic random stream derived from that seed and the trial index. Therefore, the same experiment inputs should reproduce the same trial collection.
 
-Use the single **Export Results (JSON)** button when the session is ready.
-The resulting JSON contains every experiment from that session and every
-individual trial in each experiment.
+Changing any of these can change results:
+- selected song(s)
+- persona
+- difficulty/mode
+- trial count
+- random seed
+- simulation engine version
 
-Refresh the browser to begin a new session.
+## Draw and hand capacity
 
-## Reset
+The requested draw is:
 
-Reset only clears the page display. It does not need to be pressed between
-experiments.
+- Round 1: 12
+- Later rounds: `(13 - Round) + previous round words played`
+
+The requested draw is then capped by:
+- remaining physical word-pool size
+- available hand capacity
+
+For example, with a 40-tile Standard hand, a player holding 39 tiles at the start of a round can draw only one additional tile even if the calculated requested draw is 10.
 
 ## Modes
 
@@ -48,19 +63,18 @@ experiments.
 | Standard | 10 | 40 | 10 |
 | Hard | 8 | 30 | 8 |
 
-## Results
+## Round trace
 
-Every experiment records aggregate values plus:
-- complete individual trial collection
-- `allWordsUsedTrials`
-- `allWordsUsedRate`
-- `everAllWordsUsed`
-- simulator version
-- persona and persona description
-- mode and rule parameters
+Each trial records requested draw, actual draw, hand size before and after play, words played, completed lines, active lines, pool remaining, and the number of new lines opened during the round.
 
-## Cache Busting
+## Export
 
-Simulator JavaScript references include the simulator version in their query
-string so browser/GitHub Pages caches are less likely to serve an older
-JavaScript file after an update.
+Use the **Export Results (JSON)** button to export the complete browser session. The optional Experiment Name is retained in the JSON record and contributes to the downloaded filename.
+
+Filenames include a timestamp, so multiple exports on the same calendar day receive distinct names.
+
+The export retains every experiment and every individual trial. This is intentional: later analysis should not require rerunning an experiment.
+
+## Reset
+
+Reset clears the page display but does not erase completed experiments from the browser session.
