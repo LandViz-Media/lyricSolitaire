@@ -36,7 +36,7 @@ window.LyricSolitaireTestLogger = {
         const wins = trials.filter(trial => trial.won === true).length;
 
         return {
-            schemaVersion: "1.3.3",
+            schemaVersion: "1.3.2",
             experimentId,
             experimentName: experimentName || "",
             sessionId,
@@ -85,7 +85,7 @@ window.LyricSolitaireTestLogger = {
         }
 
         const output = {
-            schemaVersion: "1.3.3",
+            schemaVersion: "1.3.2",
             sessionId: this.session[0].sessionId,
             exportedAt: new Date().toISOString(),
             simulatorVersion,

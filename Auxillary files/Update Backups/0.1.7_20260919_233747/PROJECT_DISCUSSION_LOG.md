@@ -314,19 +314,3 @@ The first two metrics are start-of-round opportunity counts; the `played...` met
 
 ### Deferred Persona Rule Question
 The second-to-last and final-round behavior remains a separate design question. These diagnostics should be examined first so that future persona changes are based on observed playability rather than assumptions about why tiles remain in hand.
-
-
-## 2026-09-20 — Simulator 0.1.7 / Endgame, Foresight, and Duplicate-Tile Diagnostics
-
-### Decisions
-1. Persona differences apply primarily before the endgame. The second-to-last round is a transition round in which personas become somewhat more willing to open new lines.
-2. The final round is a universal maximum-play round. All personas play every legal opportunity they can find; persona-specific restrictions on opening new lines are suspended when a row is available.
-3. New-line selection includes limited lyric foresight. A candidate line is more attractive when opening it would make several additional words already in the hand playable. This models the advantage of a human who knows the song and can anticipate what a line will unlock.
-4. The v0.1.6 playability metric could overcount duplicate physical tiles: if three copies of a word were in the hand but an active line had only one remaining slot for that word, all three copies were previously counted as playable. The diagnostic now caps existing-line playability by actual remaining word demand.
-5. Experiment names are now generated from the current parameters and update when those parameters change. Manual edits are retained for the current experiment, then automatic naming resumes for the next experiment after the run.
-
-### Research question
-The simulator should distinguish three things: a tile that can be placed immediately on an existing line; a tile that becomes useful by opening a new line; and a tile that is technically compatible with a candidate line but is competing with duplicate copies or limited line capacity. These distinctions are important when interpreting persona behavior.
-
-### Deferred question
-The current foresight model is deliberately limited. It does not yet perform deep multi-step search across several possible line openings. Future analysis can determine whether stronger lyric knowledge should be modeled as a deeper look-ahead or whether the current lightweight advantage is sufficient.

@@ -59,7 +59,7 @@
     };
 
     const CONFIG = {
-        version: "0.1.7",
+        version: "0.1.6",
         initialDraw: 12,
         defaultMode: "easy",
         modes: MODE_CONFIG,
@@ -211,125 +211,48 @@
     function mayOpenNewLine(persona, context) {
         const { round, handLength, gameConfig, activeLines, openedThisRound } = context;
         const activeCount = activeLines.length;
-        const finalRound = round === gameConfig.maxRounds;
-        const secondToLastRound = round === gameConfig.maxRounds - 1;
 
         if (activeCount >= gameConfig.maxRows) return false;
 
-        // Endgame rule: in the final round all personas use every legal opening
-        // opportunity. Personality differences are intentionally suspended.
-        if (finalRound) return true;
-
         if (persona === "walks_the_line") {
-            // Johnny remains conservative, but recognizes that the second-to-last
-            // round is the last meaningful setup opportunity before the final push.
-            return secondToLastRound ? openedThisRound < 2 : openedThisRound < 1;
+            return openedThisRound < 1;
         }
 
         if (persona === "gambler") {
             if (round === 1) return activeCount < Math.min(gameConfig.maxRows, 10);
+            // Kenny remains willing to use every available row after the opening round.
             return true;
         }
 
-        // Dolly: early aggression, followed by a dynamic safety margin. In the
-        // second-to-last round she relaxes that safety margin by one row.
+        // Dolly: early aggression, followed by a dynamic safety margin.
         let targetRows;
         if (round === 1) targetRows = gameConfig.maxRows;
         else if (round <= 3) targetRows = Math.max(1, gameConfig.maxRows - 1);
         else targetRows = Math.max(1, gameConfig.maxRows - 2);
 
-        if (secondToLastRound) targetRows = Math.min(gameConfig.maxRows, targetRows + 1);
-
         const handPressure = handLength / gameConfig.maxHand;
-        if (handPressure >= 0.85 && !secondToLastRound) targetRows = Math.max(1, targetRows - 2);
-        else if (handPressure >= 0.70 && !secondToLastRound) targetRows = Math.max(1, targetRows - 1);
+        if (handPressure >= 0.85) targetRows = Math.max(1, targetRows - 2);
+        else if (handPressure >= 0.70) targetRows = Math.max(1, targetRows - 1);
 
         return activeCount < targetRows;
     }
 
-    function countHandWords(hand) {
-        const counts = new Map();
-        hand.forEach(tile => counts.set(tile.key, (counts.get(tile.key) || 0) + 1));
-        return counts;
-    }
-
-    /*
-     * Count physical tiles by available line capacity, not merely by word-key
-     * compatibility. This prevents duplicate copies of a word from inflating
-     * the diagnostic when only one matching slot remains on the board.
-     */
     function countPlayableTiles(hand, activeLines, allLines, completedIds, allowNewLine) {
-        const handCounts = countHandWords(hand);
-        const existingDemand = new Map();
-
-        activeLines.forEach(line => {
-            line.remaining.forEach((count, key) => {
-                existingDemand.set(key, (existingDemand.get(key) || 0) + count);
-            });
-        });
-
         let existingLine = 0;
-        handCounts.forEach((count, key) => {
-            existingLine += Math.min(count, existingDemand.get(key) || 0);
-        });
-
         let newLine = 0;
-        if (allowNewLine) {
-            const activeIds = new Set(activeLines.map(line => line.id));
-            const candidateDemand = new Map();
-            allLines.forEach(line => {
-                if (activeIds.has(line.id) || completedIds.has(line.id)) return;
-                line.remaining.forEach((count, key) => {
-                    candidateDemand.set(key, (candidateDemand.get(key) || 0) + count);
-                });
-            });
 
-            handCounts.forEach((count, key) => {
-                // Only count copies that are not already satisfiable by an active
-                // line. This is a physical-tile opportunity count, not a promise
-                // that all candidate lines will actually be opened.
-                const remainingCopies = Math.max(0, count - Math.min(count, existingDemand.get(key) || 0));
-                newLine += Math.min(remainingCopies, candidateDemand.get(key) || 0);
-            });
-        }
+        hand.forEach(function (tile) {
+            if (chooseActiveLine(activeLines, tile.key, function () { return 0; })) {
+                existingLine += 1;
+                return;
+            }
+
+            if (allowNewLine && chooseNewLine(allLines, activeLines, completedIds, tile.key, function () { return 0; })) {
+                newLine += 1;
+            }
+        });
 
         return { existingLine, newLine, total: existingLine + newLine };
-    }
-
-    /*
-     * Choose a new line using limited lyric foresight. A human who knows the
-     * song can recognize that one opening word may unlock several other words
-     * already in hand. The base strategy still favors short lines, while a
-     * modest look-ahead score rewards candidate lines that match additional
-     * hand tiles after the opening word.
-     */
-    function chooseNewLineWithForesight(allLines, activeLines, completedIds, wordKey, hand, random, foresightWeight) {
-        const activeIds = new Set(activeLines.map(line => line.id));
-        const candidates = allLines.filter(line =>
-            !activeIds.has(line.id) && !completedIds.has(line.id) && lineCanUseWord(line, wordKey)
-        );
-        if (!candidates.length) return null;
-
-        const handCounts = countHandWords(hand);
-        let bestScore = -Infinity;
-        let best = [];
-
-        candidates.forEach(line => {
-            let unlock = 0;
-            line.remaining.forEach((count, key) => {
-                const copies = handCounts.get(key) || 0;
-                unlock += Math.min(count, copies);
-            });
-            // The opening word itself is already accounted for by the candidate
-            // test. Reward additional words that become usable after opening it.
-            const additionalUnlock = Math.max(0, unlock - 1);
-            const shortLineBonus = 1 / Math.max(1, line.wordCount);
-            const score = additionalUnlock * foresightWeight + shortLineBonus;
-            if (score > bestScore) { bestScore = score; best = [line]; }
-            else if (score === bestScore) best.push(line);
-        });
-
-        return cloneLine(best[Math.floor(random() * best.length)]);
     }
 
     function playHand(
@@ -371,7 +294,7 @@
                 }
                 if (openingIndex >= 0) {
                     const tile = hand[openingIndex];
-                    const target = chooseNewLineWithForesight(allLines, activeLines, completedIds, tile.key, hand, random, 1.5);
+                    const target = chooseNewLine(allLines, activeLines, completedIds, tile.key, random);
                     if (target && playWordIntoLine(target, tile.key)) {
                         activeLines.push(target);
                         openedThisRound += 1;
@@ -398,7 +321,7 @@
                 if (!target && mayOpenNewLine(persona, {
                     round, handLength: hand.length, gameConfig, activeLines, openedThisRound
                 })) {
-                    target = chooseNewLineWithForesight(allLines, activeLines, completedIds, wordKey, hand, random, persona === "gambler" ? 2.0 : persona === "aggressive_row_filler" ? 1.5 : 1.0);
+                    target = chooseNewLine(allLines, activeLines, completedIds, wordKey, random);
                     if (target) {
                         activeLines.push(target);
                         openedThisRound += 1;

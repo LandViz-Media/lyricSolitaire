@@ -1,20 +1,5 @@
 # Changelog
 
-## [0.1.7] — 2026-09-20
-
-### Changed
-- Added automatic Experiment Name generation from current song selection, persona, mode, trial count, and random seed.
-- Kept Experiment Name editable; a manually edited name is captured for that experiment, while the next experiment returns to automatic naming after the run.
-- Added a second-to-last-round endgame adjustment for all personas.
-- Added a universal final-round maximum-play rule that suspends persona-specific new-line restrictions.
-- Added limited lyric foresight when selecting new lines: candidate lines that unlock multiple words already in the hand receive additional weight. This models the advantage of knowing the song.
-- Corrected playability diagnostics so duplicate physical copies of a word are not all counted as playable when fewer matching slots exist on the board.
-- Bumped the simulator to 0.1.7 and export schema to 1.3.3.
-
-### Diagnostics
-- Per-round playability metrics now distinguish physical tile capacity from simple word-key compatibility.
-
-
 ## [0.1.6] — 2026-09-19
 
 ### Simulator Diagnostics

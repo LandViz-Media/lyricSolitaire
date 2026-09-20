@@ -51,7 +51,7 @@ pre{margin:0;background:#172026;color:#edf1f2;padding:12px;max-height:560px;over
 <option value="hard">Hard — 8 rows / 30 tiles / 8 rounds</option>
 </select>
 </label>
-<label>Experiment Name <span style="font-weight:400;color:#66727a">(auto-generated; editable)</span><input id="experimentName" type="text" maxlength="120"></label>
+<label>Experiment Name <span style="font-weight:400;color:#66727a">(optional)</span><input id="experimentName" type="text" maxlength="80" placeholder="e.g. Everlong Standard — Dolly"></label>
 <label>Trials<input id="trials" type="number" min="1" max="10000" value="1000"></label>
 <label>Random Seed<input id="seed" type="number" value="12345"></label>
 <div class="buttons"><button id="runButton">Run Simulation</button><button class="secondary" id="resetButton">Reset</button></div>
@@ -97,10 +97,10 @@ pre{margin:0;background:#172026;color:#edf1f2;padding:12px;max-height:560px;over
 
 <footer>Lyric Solitaire Simulator <span id="footerVersion">v—</span> — Experimental results may change as the game model evolves.</footer>
 
-<script src="js/config/projectVersion.js?v=0.1.7"></script>
-<script src="js/data/songCatalog.js?v=0.1.7"></script>
-<script src="js/utilities/simulator.js?v=0.1.7"></script>
-<script src="js/utilities/testResultLogger.js?v=0.1.7"></script>
+<script src="js/config/projectVersion.js?v=0.1.6"></script>
+<script src="js/data/songCatalog.js?v=0.1.6"></script>
+<script src="js/utilities/simulator.js?v=0.1.6"></script>
+<script src="js/utilities/testResultLogger.js?v=0.1.6"></script>
 <script>
 /*
  * Simulator Lab Controller
@@ -119,29 +119,6 @@ function selectedSongs(){const ids=new Set([...$("songSelect").selectedOptions].
 function selectedPersona(){
   return window.LyricSolitaireProject.personas.find(p=>p.id===$("personaSelect").value)
     || window.LyricSolitaireProject.personas[0];
-}
-function personaShortName(persona){
-  return String(persona.name||"").split(" — ")[0] || String(persona.name||"");
-}
-function generatedExperimentName(){
-  const songs=selectedSongs();
-  const songName=songs.length?songs.map(s=>s.title).join(" + "):"No Song";
-  const persona=selectedPersona();
-  const modeLabel=$("difficulty").selectedOptions[0]?.textContent.split(" — ")[0] || $("difficulty").value;
-  const trials=Math.max(1,Math.min(10000,Number($("trials").value)||1));
-  const seedInput=Number($("seed").value);
-  const seed=Number.isFinite(seedInput)?Math.trunc(seedInput):12345;
-  return `${songName} — ${personaShortName(persona)} — ${modeLabel} — ${trials} trials — Seed ${seed}`;
-}
-let experimentNameManuallyEdited=false;
-let lastGeneratedExperimentName="";
-function refreshExperimentName(force=false){
-  const generated=generatedExperimentName();
-  if(force || !experimentNameManuallyEdited || $("experimentName").value.trim()===lastGeneratedExperimentName){
-    $("experimentName").value=generated;
-    experimentNameManuallyEdited=false;
-  }
-  lastGeneratedExperimentName=generated;
 }
 function songGenres(song){return String(song.genre||"").split(/[,;/]/).map(g=>g.trim()).filter(Boolean)}
 function selectedGenres(){return [...$("genreSelect").selectedOptions].map(o=>o.value)}
@@ -260,11 +237,6 @@ async function run(){
     window.LyricSolitaireTestLogger.addExperiment(record);
     state.lastRecord=record;
 
-    // The just-completed record keeps its captured name. The next parameter
-    // change should generate a fresh name for the next experiment.
-    experimentNameManuallyEdited=false;
-    lastGeneratedExperimentName=generatedExperimentName();
-
     $("experimentId").textContent=experimentId;
     $("experimentVersion").textContent=`v${window.LyricSolitaireProject.simulatorVersion}`;
     $("sessionCount").textContent=
@@ -308,21 +280,15 @@ async function init(){
 
     $("personaSelect").value=window.LyricSolitaireProject.defaultPersonaId;
 
-    $("personaInfo").textContent=selectedPersona().description;
-
-    $("genreSelect").addEventListener("change",()=>{updateArtistOptions();refreshExperimentName();});
-    $("artistSelect").addEventListener("change",()=>{updateSongOptions();refreshExperimentName();});
-    $("songSelect").addEventListener("change",()=>{updateSongInfo();refreshExperimentName();});
     $("personaSelect").addEventListener("change",()=>{
       $("personaInfo").textContent=selectedPersona().description;
-      refreshExperimentName();
     });
-    $("difficulty").addEventListener("change",()=>refreshExperimentName());
-    $("trials").addEventListener("input",()=>refreshExperimentName());
-    $("seed").addEventListener("input",()=>refreshExperimentName());
-    $("experimentName").addEventListener("input",()=>{
-      experimentNameManuallyEdited=true;
-    });
+
+    $("personaInfo").textContent=selectedPersona().description;
+
+    $("genreSelect").addEventListener("change",updateArtistOptions);
+    $("artistSelect").addEventListener("change",updateSongOptions);
+    $("songSelect").addEventListener("change",updateSongInfo);
     $("runButton").addEventListener("click",run);
 
     $("resetButton").addEventListener("click",()=>{
@@ -330,7 +296,6 @@ async function init(){
       $("log").innerHTML='<div class="ok">Waiting for experiment.</div>';
       $("sessionCount").textContent=
         window.LyricSolitaireTestLogger.session.length;
-      refreshExperimentName(true);
       setStatus("Ready.");
     });
 
@@ -343,7 +308,6 @@ async function init(){
     });
 
     updateSongOptions();
-    refreshExperimentName(true);
 
     setStatus(
       `Catalog loaded: ${state.catalog.artists.length} artists, `
