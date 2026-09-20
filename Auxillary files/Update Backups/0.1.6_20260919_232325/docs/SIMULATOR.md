@@ -1,6 +1,6 @@
 # Simulator Lab
 
-**Simulator version: 0.1.6**
+**Simulator version: 0.1.5**
 
 ## Purpose
 
@@ -65,15 +65,7 @@ For example, with a 40-tile Standard hand, a player holding 39 tiles at the star
 
 ## Round trace
 
-Each trial records requested draw, actual draw, hand size before and after play, words played, completed lines, active lines, pool remaining, and the number of new lines opened during the round. It also records per-round playability diagnostics. These metrics count physical tiles, so duplicate words count as separate tiles:
-
-- `playableOnExistingLines`: tiles in the hand at the start of the play phase that can be placed on an already-active line.
-- `playableByOpeningNewLine`: tiles in the hand at the start of the play phase that cannot use an existing line but can be placed by opening another line, when a row is available.
-- `playedOnExistingLines`: tiles actually played onto lines that were already active.
-- `playedByOpeningNewLine`: tiles actually played by opening a new line.
-- `playableTilesRemainingUnplayed`: tiles still in the hand after the play phase that could legally be played either on an active line or by opening a new line, ignoring persona-specific reluctance to open a row.
-
-The final metric is especially useful for determining whether a persona is actually holding back playable tiles. The first two metrics are a start-of-round snapshot; the two `played...` metrics record what actually happened during the play phase.
+Each trial records requested draw, actual draw, hand size before and after play, words played, completed lines, active lines, pool remaining, and the number of new lines opened during the round.
 
 ## Export
 

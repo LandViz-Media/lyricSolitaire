@@ -1,20 +1,5 @@
 # Changelog
 
-## [0.1.6] — 2026-09-19
-
-### Simulator Diagnostics
-- Added per-round playability metrics to every simulated trial.
-- Recorded how many physical tiles were playable on existing active lines at the start of the play phase.
-- Recorded how many tiles required opening a new line to become playable at the start of the play phase.
-- Recorded how many tiles were actually played on existing lines versus by opening a new line.
-- Recorded how many playable tiles remained unplayed after the play phase, using a persona-independent definition of legal playability.
-- Kept duplicate word occurrences as separate physical tiles in all diagnostic counts.
-- Bumped the simulator version to 0.1.6 and the exported experiment schema to 1.3.2.
-
-### Research Purpose
-- These diagnostics are intended to distinguish genuine persona restraint from simple lack of legal plays, especially when investigating whether a persona is holding playable tiles before the final rounds.
-
-
 ## [0.1.5] — 2026-09-07
 
 ### Simulator

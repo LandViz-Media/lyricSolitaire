@@ -59,7 +59,7 @@
     };
 
     const CONFIG = {
-        version: "0.1.6",
+        version: "0.1.5",
         initialDraw: 12,
         defaultMode: "easy",
         modes: MODE_CONFIG,
@@ -237,42 +237,13 @@
         return activeCount < targetRows;
     }
 
-    function countPlayableTiles(hand, activeLines, allLines, completedIds, allowNewLine) {
-        let existingLine = 0;
-        let newLine = 0;
-
-        hand.forEach(function (tile) {
-            if (chooseActiveLine(activeLines, tile.key, function () { return 0; })) {
-                existingLine += 1;
-                return;
-            }
-
-            if (allowNewLine && chooseNewLine(allLines, activeLines, completedIds, tile.key, function () { return 0; })) {
-                newLine += 1;
-            }
-        });
-
-        return { existingLine, newLine, total: existingLine + newLine };
-    }
-
     function playHand(
         hand, activeLines, allLines, completedIds, completedLines,
         random, gameConfig, persona, round
     ) {
         let playedThisTurn = 0;
-        let playedOnExistingLines = 0;
-        let playedByOpeningNewLine = 0;
         let openedThisRound = 0;
         let changed = true;
-
-        // Snapshot the hand at the start of the play phase. These counts are
-        // deliberately tile counts, so duplicate words are counted as separate
-        // physical tiles. The metrics are used to distinguish actual play from
-        // persona restrictions on opening new lines.
-        const startingPlayability = countPlayableTiles(
-            hand, activeLines, allLines, completedIds,
-            activeLines.length < gameConfig.maxRows
-        );
 
         while (changed) {
             changed = false;
@@ -300,7 +271,6 @@
                         openedThisRound += 1;
                         hand.splice(openingIndex, 1);
                         playedThisTurn += 1;
-                        playedByOpeningNewLine += 1;
                         changed = true;
                         const compacted = compactCompletedLines(activeLines, completedIds, completedLines);
                         activeLines.length = 0;
@@ -316,7 +286,6 @@
 
                 // Every persona gives existing active lines first priority.
                 let target = chooseActiveLine(activeLines, wordKey, random);
-                let openedNewLineForPlay = false;
 
                 if (!target && mayOpenNewLine(persona, {
                     round, handLength: hand.length, gameConfig, activeLines, openedThisRound
@@ -325,7 +294,6 @@
                     if (target) {
                         activeLines.push(target);
                         openedThisRound += 1;
-                        openedNewLineForPlay = true;
                     }
                 }
 
@@ -334,8 +302,6 @@
                 hand.splice(handIndex, 1);
                 handIndex -= 1;
                 playedThisTurn += 1;
-                if (openedNewLineForPlay) playedByOpeningNewLine += 1;
-                else playedOnExistingLines += 1;
                 changed = true;
 
                 const compacted = compactCompletedLines(activeLines, completedIds, completedLines);
@@ -344,20 +310,7 @@
             }
         }
 
-        const endingPlayability = countPlayableTiles(
-            hand, activeLines, allLines, completedIds,
-            activeLines.length < gameConfig.maxRows
-        );
-
-        return {
-            playedThisTurn,
-            playedOnExistingLines,
-            playedByOpeningNewLine,
-            openedThisRound,
-            startingPlayableOnExistingLines: startingPlayability.existingLine,
-            startingPlayableByOpeningNewLine: startingPlayability.newLine,
-            playableTilesRemainingUnplayed: endingPlayability.total
-        };
+        return { playedThisTurn, openedThisRound };
     }
 
     function simulateGame(songBundle, options) {
@@ -395,12 +348,7 @@
                 handAfterPlay: hand.length, played: playedThisRound,
                 completed: completedLines.length - completedBeforeRound,
                 activeLines: activeLines.length, poolRemaining: pool.length,
-                openedNewLines: playResult.openedThisRound,
-                playableOnExistingLines: playResult.startingPlayableOnExistingLines,
-                playableByOpeningNewLine: playResult.startingPlayableByOpeningNewLine,
-                playedOnExistingLines: playResult.playedOnExistingLines,
-                playedByOpeningNewLine: playResult.playedByOpeningNewLine,
-                playableTilesRemainingUnplayed: playResult.playableTilesRemainingUnplayed
+                openedNewLines: playResult.openedThisRound
             });
 
             if (pool.length === 0) break;

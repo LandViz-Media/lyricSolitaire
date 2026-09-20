@@ -295,22 +295,3 @@ The requested draw is calculated from the round number and previous-round play. 
 
 ### Deferred analysis
 The next research step remains a deterministic, word-by-word trace of representative trials. The persona comparison should be used to determine whether Dolly's lockup behavior is reduced by adaptive row management and how Johnny and Kenny differ under the same song, mode, and seed.
-
-
-## 2026-09-19 — Simulator 0.1.6 / Per-Round Playability Diagnostics
-
-### Decision
-Add explicit per-round playability metrics before changing persona behavior further. The purpose is to determine whether personas are actually holding tiles that could be played on existing lines, versus simply holding tiles that cannot currently be played without opening another line.
-
-### Metrics
-- `playableOnExistingLines`: physical tiles playable on an existing active line at the start of the play phase.
-- `playableByOpeningNewLine`: physical tiles that cannot use an existing line but can be played by opening a new line, when a row is available.
-- `playedOnExistingLines`: physical tiles actually played onto already-active lines.
-- `playedByOpeningNewLine`: physical tiles actually played by opening a new line.
-- `playableTilesRemainingUnplayed`: physical tiles still playable after the persona finishes its play phase, using a persona-independent legal-play definition.
-
-### Interpretation
-The first two metrics are start-of-round opportunity counts; the `played...` metrics describe actual decisions. The remaining-playable count is the key diagnostic for identifying whether a persona is holding back tiles that it could legally play. Duplicate words are counted as separate physical tiles.
-
-### Deferred Persona Rule Question
-The second-to-last and final-round behavior remains a separate design question. These diagnostics should be examined first so that future persona changes are based on observed playability rather than assumptions about why tiles remain in hand.
