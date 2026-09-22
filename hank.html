@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lyric Solitaire — Hank Solver</title>
+<style>
+:root{--paper:#f5f0e4;--white:#fffdf7;--ink:#17232b;--muted:#66727a;--navy:#102936;--gold:#d59a1a;--line:#d3c5a8;--blue:#315f7a;--teal:#23766d}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{background:var(--navy);border-bottom:5px solid var(--gold);position:relative}.hero{width:100%;height:190px;display:block;object-fit:cover;object-position:center}.hero-title{margin:0;padding:9px 18px;background:var(--navy);color:#f5e3b4;font-size:22px;font-weight:900;letter-spacing:.04em}.version-badge{position:absolute;top:16px;right:16px;background:#102936ee;color:#f5e3b5;border:1px solid var(--gold);border-radius:9px;padding:8px 12px;text-align:center}.version-badge small{display:block;font-size:10px}.version-badge strong{font-size:18px}.tool-nav{display:flex;gap:7px;padding:8px 18px;background:#0a1d26;border-top:1px solid #8d650f}.tool-nav a{color:#f3e4bd;text-decoration:none;border:1px solid #80651f;border-radius:6px;padding:6px 12px;font-size:12px;font-weight:800}.tool-nav a.active,.tool-nav a:hover{background:#d59a1a;color:#102936}
+main{width:min(1400px,calc(100% - 32px));margin:18px auto 45px;display:grid;gap:16px}.panel{background:var(--white);border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:0 3px 12px rgba(35,28,16,.06)}.panel h2{margin:0;padding:11px 14px;background:var(--navy);color:#f6e5b5;font-size:16px}.body{padding:14px}label{display:grid;gap:5px;font-size:13px;font-weight:700;margin-bottom:11px}select,input,button{font:inherit;border:1px solid #b6ab96;border-radius:7px;padding:8px;background:#fff}button{cursor:pointer;font-weight:800;background:var(--gold);border-color:#8d650f;color:#fff}button.secondary{background:#fff;color:var(--ink)}button:disabled{opacity:.5;cursor:not-allowed}.setup{display:grid;grid-template-columns:1fr 1fr;gap:16px}.status{padding:10px;border-radius:8px;background:#eee8da;color:var(--muted);font-size:13px}.status.ok{color:var(--teal)}.status.warn{color:#876014}.status.error{color:#8b403c}.metrics{display:grid;grid-template-columns:repeat(5,1fr);gap:9px}.metric{padding:12px;border:1px solid var(--line);border-radius:9px;background:#fffcf5;text-align:center}.metric span{display:block;font-size:11px;color:var(--muted);text-transform:uppercase}.metric strong{display:block;font-size:22px;margin-top:4px}.result{font-size:28px;font-weight:900;letter-spacing:.02em;padding:14px;border:2px solid var(--line);border-radius:10px;background:#fffaf0}.result.win{border-color:var(--teal)}.result.loss{border-color:#876014}.result.incomplete{border-color:var(--blue)}pre{margin:0;background:#172026;color:#edf1f2;padding:12px;max-height:560px;overflow:auto;font-size:12px;line-height:1.45}.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}.buttons{display:flex;gap:8px;flex-wrap:wrap}.small{font-size:12px;color:var(--muted)}table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:7px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{background:#f4eee1}.move{padding:7px 9px;border-bottom:1px solid var(--line);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px}.move b{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.notice{padding:10px;border-left:4px solid var(--gold);background:#faf5e8;font-size:13px}footer{text-align:center;color:var(--muted);font-size:12px;padding:15px}@media(max-width:900px){.setup,.two{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(2,1fr)}.hero{height:170px}}
+</style>
+</head>
+<body>
+<header>
+<img class="hero" src="images/lyric-solitaire-tool-header-wide.png" alt="Lyric Solitaire">
+<div class="hero-title">Hank Solver — Exhaustive Game Analysis</div>
+<div class="version-badge"><small>HANK</small><strong id="headerVersion">v—</strong></div>
+<nav class="tool-nav" aria-label="Lyric Solitaire tools">
+<a href="index.html">Home</a><a href="simulator.html">Simulator</a><a class="active" href="hank.html">Hank Solver</a><a href="generator.html">Generator</a><a href="results.html">Results</a>
+</nav>
+</header>
+<main>
+<section class="panel"><h2>Exact Game</h2><div class="body">
+<div class="setup">
+<div><div id="gameSummary" class="notice">Loading game definition…</div></div>
+<div>
+<label>Maximum States<input id="maxStates" type="number" min="1000" step="1000" value="1000000"></label>
+<label>Maximum Search Time (milliseconds)<input id="maxMilliseconds" type="number" min="1000" step="1000" value="30000"></label>
+<div class="buttons"><button id="analyzeButton">Analyze Game</button><button class="secondary" id="exportButton" disabled>Export Proof JSON</button></div>
+</div></div>
+<div id="status" class="status" style="margin-top:12px">Hank independently reconstructs the seeded game; the Simulator is not used to perform the search.</div>
+</div></section>
+<section class="panel"><h2>Analysis</h2><div class="body">
+<div id="result" class="result">No analysis run.</div>
+<div class="metrics" style="margin-top:12px"><div class="metric"><span>States Visited</span><strong id="states">—</strong></div><div class="metric"><span>Memo Hits</span><strong id="memo">—</strong></div><div class="metric"><span>Pruned</span><strong id="pruned">—</strong></div><div class="metric"><span>Max Depth</span><strong id="depth">—</strong></div><div class="metric"><span>Time</span><strong id="time">—</strong></div></div>
+</div></section>
+<section class="two"><section class="panel"><h2>Solution</h2><div class="body" id="solution"><div class="small">No solution trace is available.</div></div></section><section class="panel"><h2>Initial State</h2><div class="body"><pre id="initialState">No analysis run.</pre></div></section></section>
+<section class="panel"><h2>Solver Record</h2><div class="body"><pre id="rawResult">No analysis run.</pre></div></section>
+</main>
+<footer>Lyric Solitaire Hank Solver — exhaustive search is complete only when the configured resource limits are not reached.</footer>
+<script src="js/config/projectVersion.js?v=0.1.9"></script>
+<script src="js/data/songCatalog.js?v=0.1.9"></script>
+<script src="js/utilities/hankState.js?v=0.1.9"></script>
+<script src="js/utilities/hankRules.js?v=0.1.9"></script>
+<script src="js/utilities/hankSearch.js?v=0.1.9"></script>
+<script src="js/utilities/hankSolver.js?v=0.1.9"></script>
+<script>
+/*
+ * Hank Solver Controller
+ *
+ * Responsibility:
+ * Reconstruct the selected seeded game from the catalog and present Hank's
+ * independent exhaustive-search result. It never invokes simulator.js.
+ */
+const $=id=>document.getElementById(id);let state={catalog:null,gameDefinition:null,lastResult:null};
+function setStatus(text,kind=""){$("status").textContent=text;$('status').className=`status ${kind}`}
+function selectedIds(){return new URLSearchParams(location.search).getAll("song")}
+function modeConfig(id){const map={easy:{id:"easy",label:"Easy / Open",maxRows:12,maxHand:50,maxRounds:12},standard:{id:"standard",label:"Standard",maxRows:10,maxHand:40,maxRounds:10},hard:{id:"hard",label:"Hard",maxRows:8,maxHand:30,maxRounds:8}};return map[id]||map.easy}
+async function loadSong(song){const l=window.LyricSolitaireSongCatalog.resolveDataPath(song.lyrics),w=window.LyricSolitaireSongCatalog.resolveDataPath(song.wordCount);const [lr,wr]=await Promise.all([fetch(l,{cache:"no-store"}),fetch(w,{cache:"no-store"})]);if(!lr.ok||!wr.ok)throw new Error(`Could not load song data for ${song.title}`);return {...song,lyricsData:await lr.json(),wordCountData:await wr.json()}}
+function buildBundle(song){return{...song,lines:window.LyricSolitaireHankRules.buildSourceLines(song.lyricsData),pool:window.LyricSolitaireHankRules.buildPhysicalPool(song.wordCountData)}}
+function renderSummary(songs,mode,seed){$('gameSummary').innerHTML=`<strong>${songs.map(s=>s.title).join(" + ")}</strong><br>${songs.map(s=>s.artist).join(" + ")}<br><span class="small">Mode: ${mode.label} • Seed: ${seed} • Rules: 1.3.3</span>`}
+function renderSolution(solution){if(!solution.length){$('solution').innerHTML='<div class="small">No winning trace was found.</div>';return}$('solution').innerHTML=solution.map((m,i)=>{if(m.kind==='ROUND_END')return `<div class="move"><b>Round ${m.round} complete</b> — draw next round</div>`;return `<div class="move">${i+1}. <b>Round ${m.round}</b> ${m.type} → line ${m.lineId} → <strong>${m.word}</strong></div>`}).join('')}
+async function initialize(){try{const catalog=await fetch('song_library/song_catalog.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error('Could not load song catalog.');return r.json()});state.catalog=catalog;const ids=selectedIds();if(!ids.length)throw new Error('Hank was opened without a selected song. Return to Simulator and use “Solve This Game with Hank.”');const songs=catalog.songs.filter(s=>ids.includes(s.id));if(songs.length!==ids.length)throw new Error('One or more selected songs are not present in the current song catalog.');const mode=modeConfig(new URLSearchParams(location.search).get('mode'));const seedInput=Number(new URLSearchParams(location.search).get('seed'));const seed=Number.isFinite(seedInput)?Math.trunc(seedInput):12345;const loaded=await Promise.all(songs.map(loadSong));const bundles=loaded.map(buildBundle);state.gameDefinition=window.LyricSolitaireHankRules.makeGameDefinition(bundles,mode,'1.3.3');renderSummary(songs,mode,seed);$('analyzeButton').onclick=()=>analyze(seed);setStatus('Ready. Hank will independently reconstruct the exact seeded game.','ok')}catch(error){setStatus(error.message,'error');$('gameSummary').textContent=error.message;$('analyzeButton').disabled=true}}
+function analyze(seed){const limits={maxStates:Math.max(1000,Number($('maxStates').value)||1000000),maxMilliseconds:Math.max(1000,Number($('maxMilliseconds').value)||30000)};$('analyzeButton').disabled=true;$('exportButton').disabled=true;setStatus('Hank is searching the reachable game-state space…');const result=window.LyricSolitaireHankSolver.solveWithHank({gameDefinition:state.gameDefinition,seed,limits});state.lastResult=result;$('states').textContent=result.stats.statesVisited.toLocaleString();$('memo').textContent=result.stats.memoHits.toLocaleString();$('pruned').textContent=result.stats.prunedStates.toLocaleString();$('depth').textContent=result.stats.maxDepth.toLocaleString();$('time').textContent=`${result.stats.elapsedMilliseconds.toLocaleString()} ms`;$('result').textContent=result.proofStatus;$('result').className=`result ${result.proofStatus==='PROVEN_SOLVABLE'?'win':result.proofStatus==='PROVEN_UNSOLVABLE'?'loss':'incomplete'}`;$('initialState').textContent=JSON.stringify(result.initialState,null,2);$('rawResult').textContent=JSON.stringify(result,null,2);renderSolution(result.solution);$('exportButton').disabled=false;$('analyzeButton').disabled=false;setStatus(result.searchComplete?'Search completed exhaustively within the configured limits.':'Search stopped before the reachable state space was exhausted.','ok')}
+$('exportButton').onclick=()=>{if(!state.lastResult)return;const blob=new Blob([JSON.stringify(state.lastResult,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`lyric-solitaire-hank-${Date.now()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)};
+window.LyricSolitaireProject&&( $('headerVersion').textContent=`v${window.LyricSolitaireProject.simulatorVersion}` );initialize();
+</script>
+</body></html>

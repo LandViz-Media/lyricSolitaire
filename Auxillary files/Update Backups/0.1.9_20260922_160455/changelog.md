@@ -164,24 +164,3 @@ New songs discovered or added to `/song_library` may be recorded here.
 
 ### Notes
 - No song-library data was changed in this release. New or changed songs should continue to be verified against `song_library/` before catalog updates.
-
-## [0.1.9] — 2026-09-22
-
-### Hank Solver
-- Added **Hank — Exhaustive Game Analysis** as a separate solver UI and engine rather than a fifth Simulator persona.
-- Added `hank.html`, launched from Simulator Lab with **Solve This Game with Hank ↗**.
-- The Simulator passes only selected song IDs, mode, and seed; Hank independently loads the song data and reconstructs the exact seeded game.
-- Recreated the Simulator's seeded 32-bit random generator, Fisher-Yates shuffle, and random-index physical-tile draws as explicit Hank state transitions.
-- Added canonical game-state representation, legal move generation, state transitions, memoization, and conservative exhaustive depth-first search.
-- Added explicit proof statuses: `PROVEN_SOLVABLE`, `PROVEN_UNSOLVABLE`, and `SEARCH_INCOMPLETE`.
-- Added configurable maximum-state and maximum-time limits so incomplete searches are never mislabeled as unsolvable.
-- Added solution-trace and initial-state export information.
-- Hank does not use Dolly, Johnny, Kenny, or Garth strategy restrictions.
-
-### Architecture
-- Kept Simulator Lab focused on batch simulation and persona comparison.
-- Kept Hank as an independent exact-analysis instrument.
-- Added `docs/HANK.md` documenting the solver contract and Simulator handoff.
-
-### Data
-- Inspected the available `song_library` before the update. No song-library files are modified by this release.

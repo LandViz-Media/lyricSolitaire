@@ -344,35 +344,3 @@ The project also reserves **Hank** as the name for a future mathematically guara
 
 ### Implementation boundary
 0.1.8 changes the simulator persona system and versioning/documentation only. Existing Dolly, Johnny, Kenny, draw rules, final-round rules, and song-library data are not intentionally changed.
-
----
-
-## 2026-09-22 — Hank Solver Handoff Architecture
-
-### Decision
-Hank will be a separate analysis tool, not a fifth Simulator persona. Simulator Lab remains the batch simulation environment for Dolly, Johnny, Kenny, and Garth.
-
-### User workflow
-From Simulator Lab, the user selects song(s), mode, and seed and clicks **Solve This Game with Hank ↗**. The browser opens `hank.html` in a new tab. The URL carries the selected song IDs, mode, and seed.
-
-Hank then independently loads the song catalog and source data and reconstructs the exact seeded game. It does not consume or depend on the Simulator's current trial state.
-
-### Rationale
-This creates a clean separation between heuristic/batch simulation and exact analysis. It also means a Hank result can be treated as an independent check on a Simulator experiment rather than another behavior implemented inside the Simulator.
-
-### Hank v0.1.9 implementation
-Added:
-- `js/utilities/hankState.js`
-- `js/utilities/hankRules.js`
-- `js/utilities/hankSearch.js`
-- `js/utilities/hankSolver.js`
-- `hank.html`
-- `docs/HANK.md`
-
-Hank uses explicit seeded RNG state, the production shuffle/draw model, exhaustive legal move generation, memoization, and conservative proof statuses.
-
-### Important correctness distinction
-Hank returns `PROVEN_UNSOLVABLE` only after its reachable state search has completed. If a state or time limit interrupts the search, the result is `SEARCH_INCOMPLETE`.
-
-### Deferred validation
-The first implementation establishes the architecture and correctness-oriented search contract. Additional validation should include independent tiny-game brute-force comparisons, seeded golden states, solution replay validation, and regression checks before Hank is treated as a fully validated mathematical oracle for large song pools.

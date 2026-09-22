@@ -29,7 +29,6 @@ pre{margin:0;background:#172026;color:#edf1f2;padding:12px;max-height:560px;over
 <nav class="tool-nav" aria-label="Lyric Solitaire tools">
   <a href="index.html">Home</a>
   <a class="active" href="simulator.html">Simulator</a>
-  <a href="hank.html">Hank Solver</a>
   <a href="generator.html">Generator</a>
   <a href="results.html">Results</a>
 </nav>
@@ -56,7 +55,6 @@ pre{margin:0;background:#172026;color:#edf1f2;padding:12px;max-height:560px;over
 <label>Trials<input id="trials" type="number" min="1" max="10000" value="1000"></label>
 <label>Random Seed<input id="seed" type="number" value="12345"></label>
 <div class="buttons"><button id="runButton">Run Simulation</button><button class="secondary" id="resetButton">Reset</button></div>
-<button id="hankButton" class="secondary" style="width:100%;margin-top:8px" title="Open Hank in a separate tab and solve this exact seeded game">Solve This Game with Hank ↗</button>
 <p id="resetHelp" style="font-size:12px;color:#66727a;margin:8px 0 0">Reset is optional between tests. Run Simulation starts a fresh experiment.</p>
 <div id="status" class="status">Loading song catalog…</div>
 </div></aside>
@@ -99,8 +97,8 @@ pre{margin:0;background:#172026;color:#edf1f2;padding:12px;max-height:560px;over
 
 <footer>Lyric Solitaire Simulator <span id="footerVersion">v—</span> — Experimental results may change as the game model evolves.</footer>
 
-<script src="js/config/projectVersion.js?v=0.1.9"></script>
-<script src="js/data/songCatalog.js?v=0.1.9"></script>
+<script src="js/config/projectVersion.js?v=0.1.8"></script>
+<script src="js/data/songCatalog.js?v=0.1.8"></script>
 <script src="js/utilities/simulator.js?v=0.1.8"></script>
 <script src="js/utilities/testResultLogger.js?v=0.1.8"></script>
 <script>
@@ -155,22 +153,6 @@ async function loadSongs(songs){return Promise.all(songs.map(async s=>{const l=w
 function wordStats(data){const words=data.flatMap(s=>s.wordCountData.words||[]);return{total:words.reduce((n,w)=>n+(Number(w.count)||0),0),unique:new Set(words.map(w=>String(w.word).normalize("NFKC").toLocaleLowerCase())).size}}
 function updateSongInfo(){const songs=selectedSongs();$("selectedSongs").innerHTML=songs.length?songs.map(s=>`<span>${esc(s.title)}</span>`).join(""):"No songs selected.";$("songData").innerHTML=songs.length?`<table><thead><tr><th>Song</th><th>Artist</th><th>Album</th><th>Year</th><th>Genre</th></tr></thead><tbody>${songs.map(s=>`<tr><td>${esc(s.title)}</td><td>${esc(s.artist)}</td><td>${esc(s.album)}</td><td>${s.year??"—"}</td><td>${esc(s.genre??"—")}</td></tr>`).join("")}</tbody></table>`:"Select one or more songs."}
 function clearResults(){["mTrials","mWins","mWinRate","mRounds","mWords","mAllWords","totalWords","uniqueWords","poolWords","mLines"].forEach(id=>$(id).textContent="—");$("trace").textContent="No simulation has been run.";$("rawResult").textContent="No result.";$("exportSessionButton").disabled=true;$("experimentId").textContent="—"}
-function updateHankButton(){
-  const hasSongs=selectedSongs().length>0;
-  $("hankButton").disabled=!hasSongs;
-}
-function openHankSolver(){
-  const songs=selectedSongs();
-  if(!songs.length){setStatus("Select at least one song before opening Hank.","warn");return}
-  const seedInput=Number($("seed").value);
-  const seed=Number.isFinite(seedInput)?Math.trunc(seedInput):12345;
-  const params=new URLSearchParams();
-  songs.forEach(song=>params.append("song",song.id));
-  params.set("mode",$("difficulty").value);
-  params.set("seed",String(seed));
-  window.open(`hank.html?${params.toString()}`,"_blank","noopener");
-}
-
 async function run(){
   const songs=selectedSongs();
   if(!songs.length){setStatus("Select at least one song.","warn");return}
@@ -328,21 +310,20 @@ async function init(){
 
     $("personaInfo").textContent=selectedPersona().description;
 
-    $("genreSelect").addEventListener("change",()=>{updateArtistOptions();refreshExperimentName();updateHankButton();});
-    $("artistSelect").addEventListener("change",()=>{updateSongOptions();refreshExperimentName();updateHankButton();});
-    $("songSelect").addEventListener("change",()=>{updateSongInfo();refreshExperimentName();updateHankButton();});
+    $("genreSelect").addEventListener("change",()=>{updateArtistOptions();refreshExperimentName();});
+    $("artistSelect").addEventListener("change",()=>{updateSongOptions();refreshExperimentName();});
+    $("songSelect").addEventListener("change",()=>{updateSongInfo();refreshExperimentName();});
     $("personaSelect").addEventListener("change",()=>{
       $("personaInfo").textContent=selectedPersona().description;
       refreshExperimentName();
     });
-    $("difficulty").addEventListener("change",()=>{refreshExperimentName();updateHankButton();});
+    $("difficulty").addEventListener("change",()=>refreshExperimentName());
     $("trials").addEventListener("input",()=>refreshExperimentName());
-    $("seed").addEventListener("input",()=>{refreshExperimentName();updateHankButton();});
+    $("seed").addEventListener("input",()=>refreshExperimentName());
     $("experimentName").addEventListener("input",()=>{
       experimentNameManuallyEdited=true;
     });
     $("runButton").addEventListener("click",run);
-    $("hankButton").addEventListener("click",openHankSolver);
 
     $("resetButton").addEventListener("click",()=>{
       clearResults();
@@ -363,7 +344,6 @@ async function init(){
 
     updateSongOptions();
     refreshExperimentName(true);
-    updateHankButton();
 
     setStatus(
       `Catalog loaded: ${state.catalog.artists.length} artists, `

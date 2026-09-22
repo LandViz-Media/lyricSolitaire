@@ -115,11 +115,3 @@ Garth evaluates the current legal move set repeatedly after each play. This make
 ### Future Guaranteed Persona — Hank
 
 The project reserves **Hank** as the name for a future mathematically guaranteed solver. Hank should only be introduced after the solver can be defined precisely and validated as an exhaustive/complete search under the simulator's actual rules. Until then, Garth remains the upper-reference diagnostic.
-
-## Simulator → Hank Solver
-
-The Simulator is the launching point for exact analysis, but Hank is intentionally a separate tool rather than a fifth persona.
-
-After selecting the song(s), mode, and random seed, **Solve This Game with Hank ↗** opens `hank.html` in a new browser tab. The URL carries the game-defining song IDs, mode, and seed. Hank loads the song data itself and reconstructs the exact seeded game independently.
-
-This separation is important for correctness: the Simulator does not execute Hank's search, and Hank does not depend on the Simulator's current trial state. See `docs/HANK.md` for the solver contract and proof-status definitions.
