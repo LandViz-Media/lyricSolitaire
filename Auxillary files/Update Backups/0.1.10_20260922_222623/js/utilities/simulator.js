@@ -40,10 +40,6 @@
  *   Standard    : 10 rows, 40-tile hand, 10 rounds
  *   Hard        :  8 rows, 30-tile hand,  8 rounds
  *
- * RNG MODEL (v0.1.10):
- *   Tile draws and player/persona decisions use separate deterministic streams.
- *   This prevents decision tie-breaks from changing future tile draws for a seeded trial.
- *
  * Scoring is not modeled yet.
  * ============================================================
  */
@@ -80,7 +76,7 @@
     };
 
     const CONFIG = {
-        version: "0.1.10",
+        version: "0.1.8",
         initialDraw: 12,
         defaultMode: "easy",
         modes: MODE_CONFIG,
@@ -599,28 +595,46 @@
     }
 
     function simulateGame(songBundle, options) {
-        /*
-         * RNG STREAMS:
-         * Tile draws use tileRandom exclusively. Player/persona decisions use
-         * decisionRandom exclusively. This preserves the existing game rules
-         * while preventing the number of decision tie-breaks from changing
-         * future tile draws for the same seeded trial.
-         *
-         * Backward compatibility: callers that provide only `random` continue
-         * to use one shared stream, preserving the prior API behavior.
-         */
-        const tileRandom = options.tileRandom || options.random;
-        const decisionRandom = options.decisionRandom || options.random;
-        if (typeof tileRandom !== "function" || typeof decisionRandom !== "function") {
-            throw new Error("simulateGame requires tileRandom and decisionRandom RNG functions.");
-        }
-
+        const random = options.random;
         const mode = options.mode || CONFIG.defaultMode;
+
+        /*
+         * TEMPORARY RNG DIAGNOSTIC:
+         * Record the seeded random stream without changing simulator behavior.
+         * This lets us determine how shuffle, draws, and persona decisions
+         * consume the same RNG stream.
+         */
+        const rngDiagnostic = {
+            seed: options.diagnosticSeed ?? null,
+            totalCalls: 0,
+            calls: [],
+            shuffle: null,
+            rounds: []
+        };
+
+        const diagnosticRandom = function (label) {
+            const value = random();
+            rngDiagnostic.totalCalls += 1;
+            rngDiagnostic.calls.push({
+                call: rngDiagnostic.totalCalls,
+                label: label || "random",
+                value
+            });
+            return value;
+        };
         const gameConfig = getModeConfig(mode);
         const persona = options.persona || CONFIG.defaultPersona;
         const allLines = songBundle.lines;
         const pool = songBundle.pool.slice();
-        shuffle(pool, tileRandom);
+
+        const shuffleCallsBefore = rngDiagnostic.totalCalls;
+        shuffle(pool, diagnosticRandom);
+        rngDiagnostic.shuffle = {
+            callsBefore: shuffleCallsBefore,
+            callsAfter: rngDiagnostic.totalCalls,
+            callsUsed: rngDiagnostic.totalCalls - shuffleCallsBefore,
+            poolFirst20: pool.slice(0, 20).map(tile => tile.word)
+        };
 
         const hand = [], activeLines = [], completedLines = [], completedIds = new Set();
         let previousPlayed = 0, totalDrawn = 0, totalPlayed = 0;
@@ -630,14 +644,37 @@
             if (pool.length === 0) break;
             const requestedDraw = calculateDraw(round, previousPlayed);
             const handBeforeDraw = hand.length;
-            const drawn = drawTiles(pool, hand, requestedDraw, tileRandom, gameConfig);
+
+            const rngCallsBeforeDraw = rngDiagnostic.totalCalls;
+            const drawn = drawTiles(
+                pool, hand, requestedDraw, diagnosticRandom, gameConfig
+            );
+            const rngCallsAfterDraw = rngDiagnostic.totalCalls;
+
             drawn.forEach(tile => hand.push(tile));
             totalDrawn += drawn.length;
 
+            const rngCallsBeforePlay = rngDiagnostic.totalCalls;
             const playResult = playHand(
                 hand, activeLines, allLines, completedIds, completedLines,
-                decisionRandom, gameConfig, persona, round
+                diagnosticRandom, gameConfig, persona, round
             );
+            const rngCallsAfterPlay = rngDiagnostic.totalCalls;
+
+            if (round <= 2) {
+                rngDiagnostic.rounds.push({
+                    round,
+                    requestedDraw,
+                    actualDraw: drawn.length,
+                    rngCallsBeforeDraw,
+                    rngCallsAfterDraw,
+                    drawRandomCalls: rngCallsAfterDraw - rngCallsBeforeDraw,
+                    rngCallsBeforePlay,
+                    rngCallsAfterPlay,
+                    decisionRandomCalls: rngCallsAfterPlay - rngCallsBeforePlay,
+                    drawn: drawn.map(tile => tile.word)
+                });
+            }
             const playedThisRound = playResult.playedThisTurn;
             totalPlayed += playedThisRound;
             previousPlayed = playedThisRound;
@@ -667,13 +704,13 @@
             simulatorVersion: CONFIG.version,
             persona,
             personaLabel: getPersonaConfig(persona).name,
-            rngModel: "separate_tile_and_decision_streams",
             won, mode, modeLabel: gameConfig.label,
             maxRows: gameConfig.maxRows, maxHand: gameConfig.maxHand, maxRounds: gameConfig.maxRounds,
             roundsPlayed: rounds.length, totalSourceWords: totalWordsInSource,
             totalDrawn, totalPlayed, held: hand.length,
             completedLines: completedLines.length, activeLines: activeLines.length,
-            poolRemaining: pool.length, rounds
+            poolRemaining: pool.length, rounds,
+            diagnostic: rngDiagnostic
         };
     }
 
@@ -713,22 +750,16 @@
         const trials = [];
         const mode = options?.mode || CONFIG.defaultMode;
         const persona = options?.persona || CONFIG.defaultPersona;
-
         for (let i = 0; i < trialCount; i += 1) {
-            const randomSource = randomFactory(i);
-            const streams = typeof randomSource === "function"
-                ? { tileRandom: randomSource, decisionRandom: randomSource }
-                : randomSource;
-
             trials.push(simulateGame(songBundle, {
-                tileRandom: streams?.tileRandom,
-                decisionRandom: streams?.decisionRandom,
-                random: typeof randomSource === "function" ? randomSource : undefined,
+                random: randomFactory(i),
                 mode,
-                persona
+                persona,
+                diagnosticSeed: options?.seed != null
+                    ? Number(options.seed) + i
+                    : null
             }));
         }
-
         const average = field => trials.reduce((sum, result) => sum + result[field], 0) / Math.max(1, trials.length);
         const wins = trials.filter(result => result.won).length;
         const allWordsUsedTrials = trials.filter(trial => Number(trial.totalPlayed) === Number(trial.totalSourceWords)).length;

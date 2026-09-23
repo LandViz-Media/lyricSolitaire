@@ -123,18 +123,3 @@ The Simulator is the launching point for exact analysis, but Hank is intentional
 After selecting the song(s), mode, and random seed, **Solve This Game with Hank ↗** opens `hank.html` in a new browser tab. The URL carries the game-defining song IDs, mode, and seed. Hank loads the song data itself and reconstructs the exact seeded game independently.
 
 This separation is important for correctness: the Simulator does not execute Hank's search, and Hank does not depend on the Simulator's current trial state. See `docs/HANK.md` for the solver contract and proof-status definitions.
-
-
-## 0.1.10 — Separate RNG Streams
-
-The Simulator now uses two deterministic random streams within each seeded trial. The **tile-draw
-stream** controls the initial physical-pool shuffle and every random-index tile draw. The
-**player-decision stream** controls persona tie-breaks and other random choices made while playing.
-
-The tile stream uses the same per-trial seed that the Simulator previously used, while the decision
-stream is derived independently from that seed. Consequently, additional decision RNG calls no longer
-advance the tile-draw RNG. The underlying game mechanics are unchanged.
-
-For compatibility, the simulation engine still accepts callers that provide a single RNG function;
-in that case the old shared-stream behavior remains available. The Simulator UI uses the new
-separated streams.

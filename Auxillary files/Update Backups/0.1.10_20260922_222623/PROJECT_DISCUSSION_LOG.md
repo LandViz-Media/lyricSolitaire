@@ -377,34 +377,24 @@ Hank returns `PROVEN_UNSOLVABLE` only after its reachable state search has compl
 ### Deferred validation
 The first implementation establishes the architecture and correctness-oriented search contract. Additional validation should include independent tiny-game brute-force comparisons, seeded golden states, solution replay validation, and regression checks before Hank is treated as a fully validated mathematical oracle for large song pools.
 
-
-## 2026-09-23 — Simulator 0.1.10 / Separate Tile and Decision RNG Streams
-
-### Evidence
-The temporary RNG diagnostic showed that the production Simulator was using one RNG stream for
-both physical tile selection and persona decision tie-breaks. In the Everlong / Dolly / Easy / Open
-seed 32451 experiment, the diagnostic recorded 567 random calls in the first trial, with decision
-calls occurring between draw phases. Because later tile draws use the same RNG object, the number of
-decision calls can change which random values are used for subsequent tile draws.
+## 2026-09-23 — Lyric Data Audit 0.1.0
 
 ### Decision
-Separate the RNG stream used for physical tile selection from the RNG stream used for player/persona
-decisions. The tile stream remains seeded from the existing per-trial seed so the physical tile
-sequence is not advanced by decision calls. The decision stream is independently derived from the same
-trial seed.
+A dedicated read-only data audit was added before making further Hank/search changes. The purpose is to determine whether unexpectedly high simulator failure rates are caused by source-data inconsistencies rather than game strategy or solver behavior.
 
-### Mechanics Preservation
-This is an RNG architecture change, not a game-rule change. The following remain unchanged: draw
-formula, hand-cap rule, physical random-index tile removal, row limits, persona rules, final-round
-all-out behavior, line completion behavior, and win determination. The only intentional behavioral
-difference is that persona tie-breaks now draw randomness from a separate stream.
+### Audit scope
+The audit compares maintained TXT lyric sources, generated lyrics JSON, generated word-count JSON, physical tile inventories, and `song_library/song_catalog.json`. It checks metadata, line-by-line conservation, per-word physical counts, Unicode/tokenization conditions, catalog references, and orphan files.
 
-### Compatibility
-`runTrials()` continues to accept a legacy single RNG function. New Simulator UI runs provide an
-object containing `tileRandom` and `decisionRandom`, while the engine accepts either form.
+### Safety
+The audit does not regenerate or modify song-library data. Reports are written separately under `Auxillary files/Lyric Data Audit/`.
 
-### Validation
-The next validation experiment should repeat **Everlong — Dolly — Easy / Open — 1000 trials —
-Seed 32451** and inspect the exported trial records. The important check is that decision RNG usage
-can vary without advancing the tile RNG stream. Existing persona and draw-rule regression tests
-should remain unchanged apart from the expected decision-stream effects.
+## 2026-09-23 — Lyric Data Audit 0.1.0
+
+### Decision
+A dedicated read-only data audit was added before making further Hank/search changes. The purpose is to determine whether unexpectedly high simulator failure rates are caused by source-data inconsistencies rather than game strategy or solver behavior.
+
+### Audit scope
+The audit compares maintained TXT lyric sources, generated lyrics JSON, generated word-count JSON, physical tile inventories, and `song_library/song_catalog.json`. It checks metadata, line-by-line conservation, per-word physical counts, Unicode/tokenization conditions, catalog references, and orphan files.
+
+### Safety
+The audit does not regenerate or modify song-library data. Reports are written separately under `Auxillary files/Lyric Data Audit/`.

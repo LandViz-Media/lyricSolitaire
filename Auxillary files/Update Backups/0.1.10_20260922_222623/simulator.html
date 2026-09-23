@@ -101,8 +101,8 @@ pre{margin:0;background:#172026;color:#edf1f2;padding:12px;max-height:560px;over
 
 <script src="js/config/projectVersion.js?v=0.1.9"></script>
 <script src="js/data/songCatalog.js?v=0.1.9"></script>
-<script src="js/utilities/simulator.js?v=0.1.10"></script>
-<script src="js/utilities/testResultLogger.js?v=0.1.10"></script>
+<script src="js/utilities/simulator.js?v=0.1.8"></script>
+<script src="js/utilities/testResultLogger.js?v=0.1.8"></script>
 <script>
 /*
  * Simulator Lab Controller
@@ -117,20 +117,6 @@ function esc(v){return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt
 function setStatus(text,kind=""){$("status").textContent=text;$("status").className=`status ${kind}`}
 function addLog(text){const d=document.createElement("div");d.className="ok";d.textContent=text;$("log").appendChild(d)}
 function seededRandom(seed){let t=(Number(seed)>>>0)||1;return function(){t+=0x6D2B79F5;let x=t;x=Math.imul(x^x>>>15,x|1);x^=x+Math.imul(x^x>>>7,x|61);return((x^x>>>14)>>>0)/4294967296}}
-/*
- * Create two deterministic RNG streams for each trial.
- * The tile stream keeps the exact prior trial seed so tile generation remains
- * reproducible from the same seed. The decision stream is derived independently
- * so persona tie-breaks cannot advance the tile-draw stream.
- */
-function createTrialRandomStreams(trialSeed){
-  const normalizedSeed=Number(trialSeed)>>>0;
-  const decisionSeed=(normalizedSeed^0x9E3779B9)>>>0;
-  return {
-    tileRandom:seededRandom(normalizedSeed),
-    decisionRandom:seededRandom(decisionSeed)
-  };
-}
 function selectedSongs(){const ids=new Set([...$("songSelect").selectedOptions].map(o=>o.value));return state.catalog.songs.filter(s=>ids.has(s.id))}
 function selectedPersona(){
   return window.LyricSolitaireProject.personas.find(p=>p.id===$("personaSelect").value)
@@ -234,8 +220,8 @@ async function run(){
     const result=engine.runTrials(
       bundle,
       trials,
-      (trialIndex)=>createTrialRandomStreams(seed + trialIndex),
-      {mode,persona:persona.id,seed}
+      (trialIndex)=>seededRandom(seed + trialIndex),
+      {mode,persona:persona.id}
     );
 
     $("mTrials").textContent=result.trialCount;

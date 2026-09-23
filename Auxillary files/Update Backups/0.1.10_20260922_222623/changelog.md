@@ -1,25 +1,5 @@
 # Changelog
 
-## [0.1.10] — 2026-09-23
-
-### Changed
-- Separated the Simulator random-number generation into two deterministic streams:
-  - **Tile-draw RNG** controls the physical-pool shuffle and all tile draws.
-  - **Player-decision RNG** controls persona tie-breaking and other player-choice randomness.
-- Preserved the existing game rules, draw formula, hand limits, row limits, persona restrictions,
-  final-round behavior, and physical tile-selection mechanics.
-- Kept the tile stream seeded from the same per-trial seed used previously, so the tile RNG is
-  no longer advanced by player-decision calls.
-- Retained backward compatibility in `runTrials()` for callers that provide a single RNG function.
-
-### Diagnostics / Research Purpose
-- This change directly addresses the RNG diagnostic finding that decision tie-breaks were consuming
-  the same random stream used for future tile draws.
-- The separation makes a seeded trial's tile-draw stream independent of how many random player
-  decisions occur during earlier rounds.
-- No song-library files are modified by this release.
-
-
 ## [0.1.8] — 2026-09-20
 
 ### Simulator
@@ -205,3 +185,31 @@ New songs discovered or added to `/song_library` may be recorded here.
 
 ### Data
 - Inspected the available `song_library` before the update. No song-library files are modified by this release.
+
+## [Lyric Data Audit 0.1.0] — 2026-09-23
+
+### Added
+- Added a read-only **Lyric Data Audit** for validating the song source-to-tile pipeline.
+- Added Finder folder selection through `Audit_Lyric_Data.command`.
+- Added per-song source/JSON/physical-tile conservation checks.
+- Added per-word frequency mismatch reporting and line-by-line lyric comparison.
+- Added Unicode normalization, apostrophe, zero-width character, whitespace, dash, digit, and confusable-character diagnostics.
+- Added `song_catalog.json` file/reference and metadata validation.
+- Added JSON and HTML audit reports under `Auxillary files/Lyric Data Audit/`.
+
+### Safety
+- The audit never regenerates, edits, renames, moves, or deletes files in `song_library`.
+
+## [Lyric Data Audit 0.1.0] — 2026-09-23
+
+### Added
+- Added a read-only **Lyric Data Audit** for validating the song source-to-tile pipeline.
+- Added Finder folder selection through `Audit_Lyric_Data.command`.
+- Added per-song source/JSON/physical-tile conservation checks.
+- Added per-word frequency mismatch reporting and line-by-line lyric comparison.
+- Added Unicode normalization, apostrophe, zero-width character, whitespace, dash, digit, and confusable-character diagnostics.
+- Added `song_catalog.json` file/reference and metadata validation.
+- Added JSON and HTML audit reports under `Auxillary files/Lyric Data Audit/`.
+
+### Safety
+- The audit never regenerates, edits, renames, moves, or deletes files in `song_library`.
