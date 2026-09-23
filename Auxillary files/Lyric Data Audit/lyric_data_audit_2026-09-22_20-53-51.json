@@ -1,0 +1,1265 @@
+{
+  "auditVersion": "0.1.0",
+  "generatedAt": "2026-09-22T20:53:51-05:00",
+  "projectRoot": "/Users/cjseeger_1/Sites/lyricSolitaire",
+  "readOnly": true,
+  "catalog": {
+    "status": "PASS",
+    "errors": [],
+    "warnings": []
+  },
+  "songs": [
+    {
+      "source": "song_library/bryan_zach/appetite.txt",
+      "lyricsJson": "song_library/bryan_zach/appetite_lyrics.json",
+      "wordCountJson": "song_library/bryan_zach/appetite_word_count.json",
+      "status": "WARN",
+      "errors": [],
+      "warnings": [
+        "Unicode normalization changes the source text before tokenization.",
+        "Apostrophe variants detected; generator normalization converts them to ASCII apostrophe.",
+        "Digit characters are present in source text; digits are not word tiles under the generator tokenizer."
+      ],
+      "mismatches": {
+        "metadata": [],
+        "words": [],
+        "lines": []
+      },
+      "unicode": {
+        "nonAsciiCodepoints": {
+          "U+2019": 2
+        },
+        "unicodeCategories": {
+          "Lu": 56,
+          "Ll": 988,
+          "Zs": 224,
+          "Cc": 42,
+          "Nd": 4,
+          "Ps": 7,
+          "Pe": 7,
+          "Po": 31,
+          "Pf": 2,
+          "Pd": 2
+        },
+        "apostropheVariants": [
+          {
+            "position": 80,
+            "character": "’",
+            "codepoint": "U+2019",
+            "name": "RIGHT SINGLE QUOTATION MARK"
+          },
+          {
+            "position": 523,
+            "character": "’",
+            "codepoint": "U+2019",
+            "name": "RIGHT SINGLE QUOTATION MARK"
+          }
+        ],
+        "zeroWidthCharacters": [],
+        "nonStandardSpaces": [],
+        "dashVariants": [],
+        "digitCharacters": [
+          {
+            "position": 39,
+            "character": "2",
+            "codepoint": "U+0032",
+            "name": "DIGIT TWO"
+          },
+          {
+            "position": 40,
+            "character": "0",
+            "codepoint": "U+0030",
+            "name": "DIGIT ZERO"
+          },
+          {
+            "position": 41,
+            "character": "2",
+            "codepoint": "U+0032",
+            "name": "DIGIT TWO"
+          },
+          {
+            "position": 42,
+            "character": "6",
+            "codepoint": "U+0036",
+            "name": "DIGIT SIX"
+          }
+        ],
+        "confusableCyrillicE": [],
+        "normalizationChangedSource": true
+      },
+      "summary": {
+        "sourceLineCount": 23,
+        "lyricsJsonLineCount": 23,
+        "sourceWordCount": 243,
+        "lyricsJsonWordCount": 243,
+        "wordCountJsonPhysicalTiles": 243,
+        "sourceUniqueWords": 105,
+        "lyricsJsonUniqueWords": 105,
+        "wordCountJsonUniqueWords": 105,
+        "sectionsSource": 4,
+        "sectionsJson": 7
+      }
+    },
+    {
+      "source": "song_library/bryan_zach/overtime.txt",
+      "lyricsJson": "song_library/bryan_zach/overtime_lyrics.json",
+      "wordCountJson": "song_library/bryan_zach/overtime_word_count.json",
+      "status": "WARN",
+      "errors": [],
+      "warnings": [
+        "Cyrillic e/E confusable characters detected and normalized by the generator.",
+        "Unicode normalization changes the source text before tokenization.",
+        "Digit characters are present in source text; digits are not word tiles under the generator tokenizer."
+      ],
+      "mismatches": {
+        "metadata": [],
+        "words": [],
+        "lines": []
+      },
+      "unicode": {
+        "nonAsciiCodepoints": {
+          "U+0435": 2
+        },
+        "unicodeCategories": {
+          "Lu": 60,
+          "Ll": 998,
+          "Zs": 220,
+          "Cc": 48,
+          "Nd": 4,
+          "Ps": 7,
+          "Pe": 7,
+          "Po": 47,
+          "Pd": 3
+        },
+        "apostropheVariants": [],
+        "zeroWidthCharacters": [],
+        "nonStandardSpaces": [],
+        "dashVariants": [],
+        "digitCharacters": [
+          {
+            "position": 31,
+            "character": "2",
+            "codepoint": "U+0032",
+            "name": "DIGIT TWO"
+          },
+          {
+            "position": 32,
+            "character": "0",
+            "codepoint": "U+0030",
+            "name": "DIGIT ZERO"
+          },
+          {
+            "position": 33,
+            "character": "2",
+            "codepoint": "U+0032",
+            "name": "DIGIT TWO"
+          },
+          {
+            "position": 34,
+            "character": "3",
+            "codepoint": "U+0033",
+            "name": "DIGIT THREE"
+          }
+        ],
+        "confusableCyrillicE": [
+          {
+            "position": 630,
+            "character": "е",
+            "codepoint": "U+0435",
+            "name": "CYRILLIC SMALL LETTER IE"
+          },
+          {
+            "position": 682,
+            "character": "е",
+            "codepoint": "U+0435",
+            "name": "CYRILLIC SMALL LETTER IE"
+          }
+        ],
+        "normalizationChangedSource": true
+      },
+      "summary": {
+        "sourceLineCount": 29,
+        "lyricsJsonLineCount": 29,
+        "sourceWordCount": 248,
+        "lyricsJsonWordCount": 248,
+        "wordCountJsonPhysicalTiles": 248,
+        "sourceUniqueWords": 141,
+        "lyricsJsonUniqueWords": 141,
+        "wordCountJsonUniqueWords": 141,
+        "sectionsSource": 4,
+        "sectionsJson": 7
+      }
+    },
+    {
+      "source": "song_library/bryan_zach/pink_skies.txt",
+      "lyricsJson": "song_library/bryan_zach/pink_skies_lyrics.json",
+      "wordCountJson": "song_library/bryan_zach/pink_skies_word_count.json",
+      "status": "WARN",
+      "errors": [],
+      "warnings": [
+        "Cyrillic e/E confusable characters detected and normalized by the generator.",
+        "Unicode normalization changes the source text before tokenization.",
+        "Digit characters are present in source text; digits are not word tiles under the generator tokenizer."
+      ],
+      "mismatches": {
+        "metadata": [],
+        "words": [],
+        "lines": []
+      },
+      "unicode": {
+        "nonAsciiCodepoints": {
+          "U+0435": 2
+        },
+        "unicodeCategories": {
+          "Lu": 49,
+          "Ll": 936,
+          "Zs": 217,
+          "Cc": 47,
+          "Nd": 8,
+          "Ps": 7,
+          "Pe": 7,
+          "Po": 34
+        },
+        "apostropheVariants": [],
+        "zeroWidthCharacters": [],
+        "nonStandardSpaces": [],
+        "dashVariants": [],
+        "digitCharacters": [
+          {
+            "position": 51,
+            "character": "2",
+            "codepoint": "U+0032",
+            "name": "DIGIT TWO"
+          },
+          {
+            "position": 52,
+            "character": "0",
+            "codepoint": "U+0030",
+            "name": "DIGIT ZERO"
+          },
+          {
+            "position": 53,
+            "character": "2",
+            "codepoint": "U+0032",
+            "name": "DIGIT TWO"
+          },
+          {
+            "position": 54,
+            "character": "4",
+            "codepoint": "U+0034",
+            "name": "DIGIT FOUR"
+          },
+          {
+            "position": 473,
+            "character": "4",
+            "codepoint": "U+0034",
+            "name": "DIGIT FOUR"
+          },
+          {
+            "position": 475,
+            "character": "1",
+            "codepoint": "U+0031",
+            "name": "DIGIT ONE"
+          },
+          {
+            "position": 487,
+            "character": "0",
+            "codepoint": "U+0030",
+            "name": "DIGIT ZERO"
+          },
+          {
+            "position": 488,
+            "character": "8",
+            "codepoint": "U+0038",
+            "name": "DIGIT EIGHT"
+          }
+        ],
+        "confusableCyrillicE": [
+          {
+            "position": 569,
+            "character": "е",
+            "codepoint": "U+0435",
+            "name": "CYRILLIC SMALL LETTER IE"
+          },
+          {
+            "position": 610,
+            "character": "е",
+            "codepoint": "U+0435",
+            "name": "CYRILLIC SMALL LETTER IE"
+          }
+        ],
+        "normalizationChangedSource": true
+      },
+      "summary": {
+        "sourceLineCount": 28,
+        "lyricsJsonLineCount": 28,
+        "sourceWordCount": 237,
+        "lyricsJsonWordCount": 237,
+        "wordCountJsonPhysicalTiles": 237,
+        "sourceUniqueWords": 100,
+        "lyricsJsonUniqueWords": 100,
+        "wordCountJsonUniqueWords": 100,
+        "sectionsSource": 3,
+        "sectionsJson": 7
+      }
+    },
+    {
+      "source": "song_library/bryan_zach/quittin_time.txt",
+      "lyricsJson": "song_library/bryan_zach/quittin_time_lyrics.json",
+      "wordCountJson": "song_library/bryan_zach/quittin_time_word_count.json",
+      "status": "WARN",
+      "errors": [],
+      "warnings": [
+        "Cyrillic e/E confusable characters detected and normalized by the generator.",
+        "Unicode normalization changes the source text before tokenization.",
+        "Digit characters are present in source text; digits are not word tiles under the generator tokenizer."
+      ],
+      "mismatches": {
+        "metadata": [],
+        "words": [],
+        "lines": []
+      },
+      "unicode": {
+        "nonAsciiCodepoints": {
+          "U+0435": 2
+        },
+        "unicodeCategories": {
+          "Lu": 56,
+          "Ll": 907,
+          "Zs": 216,
+          "Cc": 43,
+          "Po": 45,
+          "Nd": 4,
+          "Ps": 5,
+          "Pe": 5
+        },
+        "apostropheVariants": [],
+        "zeroWidthCharacters": [],
+        "nonStandardSpaces": [],
+        "dashVariants": [],
+        "digitCharacters": [
+          {
+            "position": 42,
+            "character": "2",
+            "codepoint": "U+0032",
+            "name": "DIGIT TWO"
+          },
+          {
+            "position": 43,
+            "character": "0",
+            "codepoint": "U+0030",
+            "name": "DIGIT ZERO"
+          },
+          {
+            "position": 44,
+            "character": "2",
+            "codepoint": "U+0032",
+            "name": "DIGIT TWO"
+          },
+          {
+            "position": 45,
+            "character": "2",
+            "codepoint": "U+0032",
+            "name": "DIGIT TWO"
+          }
+        ],
+        "confusableCyrillicE": [
+          {
+            "position": 734,
+            "character": "е",
+            "codepoint": "U+0435",
+            "name": "CYRILLIC SMALL LETTER IE"
+          },
+          {
+            "position": 776,
+            "character": "е",
+            "codepoint": "U+0435",
+            "name": "CYRILLIC SMALL LETTER IE"
+          }
+        ],
+        "normalizationChangedSource": true
+      },
+      "summary": {
+        "sourceLineCount": 28,
+        "lyricsJsonLineCount": 28,
+        "sourceWordCount": 241,
+        "lyricsJsonWordCount": 241,
+        "wordCountJsonPhysicalTiles": 241,
+        "sourceUniqueWords": 108,
+        "lyricsJsonUniqueWords": 108,
+        "wordCountJsonUniqueWords": 108,
+        "sectionsSource": 2,
+        "sectionsJson": 5
+      }
+    },
+    {
+      "source": "song_library/bryan_zach/tourniquet.txt",
+      "lyricsJson": "song_library/bryan_zach/tourniquet_lyrics.json",
+      "wordCountJson": "song_library/bryan_zach/tourniquet_word_count.json",
+      "status": "WARN",
+      "errors": [],
+      "warnings": [
+        "Digit characters are present in source text; digits are not word tiles under the generator tokenizer."
+      ],
+      "mismatches": {
+        "metadata": [],
+        "words": [],
+        "lines": []
+      },
+      "unicode": {
+        "nonAsciiCodepoints": {},
+        "unicodeCategories": {
+          "Lu": 56,
+          "Ll": 1328,
+          "Zs": 298,
+          "Cc": 49,
+          "Nd": 4,
+          "Po": 38,
+          "Ps": 6,
+          "Pe": 6
+        },
+        "apostropheVariants": [],
+        "zeroWidthCharacters": [],
+        "nonStandardSpaces": [],
+        "dashVariants": [],
+        "digitCharacters": [
+          {
+            "position": 33,
+            "character": "2",
+            "codepoint": "U+0032",
+            "name": "DIGIT TWO"
+          },
+          {
+            "position": 34,
+            "character": "0",
+            "codepoint": "U+0030",
+            "name": "DIGIT ZERO"
+          },
+          {
+            "position": 35,
+            "character": "2",
+            "codepoint": "U+0032",
+            "name": "DIGIT TWO"
+          },
+          {
+            "position": 36,
+            "character": "3",
+            "codepoint": "U+0033",
+            "name": "DIGIT THREE"
+          }
+        ],
+        "confusableCyrillicE": [],
+        "normalizationChangedSource": false
+      },
+      "summary": {
+        "sourceLineCount": 32,
+        "lyricsJsonLineCount": 32,
+        "sourceWordCount": 325,
+        "lyricsJsonWordCount": 325,
+        "wordCountJsonPhysicalTiles": 325,
+        "sourceUniqueWords": 122,
+        "lyricsJsonUniqueWords": 122,
+        "wordCountJsonUniqueWords": 122,
+        "sectionsSource": 3,
+        "sectionsJson": 6
+      }
+    },
+    {
+      "source": "song_library/foo_fighters/everlong.txt",
+      "lyricsJson": "song_library/foo_fighters/everlong_lyrics.json",
+      "wordCountJson": "song_library/foo_fighters/everlong_word_count.json",
+      "status": "WARN",
+      "errors": [],
+      "warnings": [
+        "Digit characters are present in source text; digits are not word tiles under the generator tokenizer."
+      ],
+      "mismatches": {
+        "metadata": [],
+        "words": [],
+        "lines": []
+      },
+      "unicode": {
+        "nonAsciiCodepoints": {},
+        "unicodeCategories": {
+          "Lu": 92,
+          "Ll": 1257,
+          "Zs": 245,
+          "Cc": 74,
+          "Nd": 4,
+          "Po": 41,
+          "Pd": 52,
+          "Ps": 12,
+          "Pe": 12
+        },
+        "apostropheVariants": [],
+        "zeroWidthCharacters": [],
+        "nonStandardSpaces": [],
+        "dashVariants": [],
+        "digitCharacters": [
+          {
+            "position": 47,
+            "character": "1",
+            "codepoint": "U+0031",
+            "name": "DIGIT ONE"
+          },
+          {
+            "position": 48,
+            "character": "9",
+            "codepoint": "U+0039",
+            "name": "DIGIT NINE"
+          },
+          {
+            "position": 49,
+            "character": "9",
+            "codepoint": "U+0039",
+            "name": "DIGIT NINE"
+          },
+          {
+            "position": 50,
+            "character": "7",
+            "codepoint": "U+0037",
+            "name": "DIGIT SEVEN"
+          }
+        ],
+        "confusableCyrillicE": [],
+        "normalizationChangedSource": false
+      },
+      "summary": {
+        "sourceLineCount": 45,
+        "lyricsJsonLineCount": 45,
+        "sourceWordCount": 329,
+        "lyricsJsonWordCount": 329,
+        "wordCountJsonPhysicalTiles": 329,
+        "sourceUniqueWords": 109,
+        "lyricsJsonUniqueWords": 109,
+        "wordCountJsonUniqueWords": 109,
+        "sectionsSource": 5,
+        "sectionsJson": 12
+      }
+    },
+    {
+      "source": "song_library/green_day/21 Guns.txt",
+      "lyricsJson": "song_library/green_day/21_guns_lyrics.json",
+      "wordCountJson": "song_library/green_day/21_guns_word_count.json",
+      "status": "WARN",
+      "errors": [],
+      "warnings": [
+        "Digit characters are present in source text; digits are not word tiles under the generator tokenizer."
+      ],
+      "mismatches": {
+        "metadata": [],
+        "words": [],
+        "lines": []
+      },
+      "unicode": {
+        "nonAsciiCodepoints": {},
+        "unicodeCategories": {
+          "Lu": 63,
+          "Ll": 1016,
+          "Zs": 212,
+          "Cc": 62,
+          "Nd": 8,
+          "Po": 34,
+          "Pd": 9,
+          "Ps": 7,
+          "Pe": 7
+        },
+        "apostropheVariants": [],
+        "zeroWidthCharacters": [],
+        "nonStandardSpaces": [],
+        "dashVariants": [],
+        "digitCharacters": [
+          {
+            "position": 10,
+            "character": "2",
+            "codepoint": "U+0032",
+            "name": "DIGIT TWO"
+          },
+          {
+            "position": 11,
+            "character": "1",
+            "codepoint": "U+0031",
+            "name": "DIGIT ONE"
+          },
+          {
+            "position": 18,
+            "character": "2",
+            "codepoint": "U+0032",
+            "name": "DIGIT TWO"
+          },
+          {
+            "position": 19,
+            "character": "1",
+            "codepoint": "U+0031",
+            "name": "DIGIT ONE"
+          },
+          {
+            "position": 41,
+            "character": "2",
+            "codepoint": "U+0032",
+            "name": "DIGIT TWO"
+          },
+          {
+            "position": 42,
+            "character": "0",
+            "codepoint": "U+0030",
+            "name": "DIGIT ZERO"
+          },
+          {
+            "position": 43,
+            "character": "0",
+            "codepoint": "U+0030",
+            "name": "DIGIT ZERO"
+          },
+          {
+            "position": 44,
+            "character": "9",
+            "codepoint": "U+0039",
+            "name": "DIGIT NINE"
+          }
+        ],
+        "confusableCyrillicE": [],
+        "normalizationChangedSource": false
+      },
+      "summary": {
+        "sourceLineCount": 43,
+        "lyricsJsonLineCount": 43,
+        "sourceWordCount": 255,
+        "lyricsJsonWordCount": 255,
+        "wordCountJsonPhysicalTiles": 255,
+        "sourceUniqueWords": 107,
+        "lyricsJsonUniqueWords": 107,
+        "wordCountJsonUniqueWords": 107,
+        "sectionsSource": 3,
+        "sectionsJson": 7
+      }
+    },
+    {
+      "source": "song_library/lauper_cyndi/Girls Just Want To Have Fun.txt",
+      "lyricsJson": "song_library/lauper_cyndi/girls_just_want_to_have_fun_lyrics.json",
+      "wordCountJson": "song_library/lauper_cyndi/girls_just_want_to_have_fun_word_count.json",
+      "status": "ERROR",
+      "errors": [
+        "Source metadata does not match lyrics JSON metadata."
+      ],
+      "warnings": [
+        "Unicode normalization changes the source text before tokenization.",
+        "Apostrophe variants detected; generator normalization converts them to ASCII apostrophe.",
+        "Digit characters are present in source text; digits are not word tiles under the generator tokenizer."
+      ],
+      "mismatches": {
+        "metadata": [
+          {
+            "field": "album",
+            "source": "She's So Unusual",
+            "lyricsJson": "She’s So Unusual"
+          }
+        ],
+        "words": [],
+        "lines": []
+      },
+      "unicode": {
+        "nonAsciiCodepoints": {
+          "U+2019": 1
+        },
+        "unicodeCategories": {
+          "Lu": 91,
+          "Ll": 1475,
+          "Zs": 321,
+          "Cc": 78,
+          "Pf": 1,
+          "Nd": 7,
+          "Po": 76,
+          "Ps": 24,
+          "Pe": 24,
+          "Pd": 2
+        },
+        "apostropheVariants": [
+          {
+            "position": 44,
+            "character": "’",
+            "codepoint": "U+2019",
+            "name": "RIGHT SINGLE QUOTATION MARK"
+          }
+        ],
+        "zeroWidthCharacters": [],
+        "nonStandardSpaces": [],
+        "dashVariants": [],
+        "digitCharacters": [
+          {
+            "position": 59,
+            "character": "1",
+            "codepoint": "U+0031",
+            "name": "DIGIT ONE"
+          },
+          {
+            "position": 60,
+            "character": "9",
+            "codepoint": "U+0039",
+            "name": "DIGIT NINE"
+          },
+          {
+            "position": 61,
+            "character": "8",
+            "codepoint": "U+0038",
+            "name": "DIGIT EIGHT"
+          },
+          {
+            "position": 62,
+            "character": "3",
+            "codepoint": "U+0033",
+            "name": "DIGIT THREE"
+          },
+          {
+            "position": 86,
+            "character": "1",
+            "codepoint": "U+0031",
+            "name": "DIGIT ONE"
+          },
+          {
+            "position": 321,
+            "character": "2",
+            "codepoint": "U+0032",
+            "name": "DIGIT TWO"
+          },
+          {
+            "position": 749,
+            "character": "3",
+            "codepoint": "U+0033",
+            "name": "DIGIT THREE"
+          }
+        ],
+        "confusableCyrillicE": [],
+        "normalizationChangedSource": true
+      },
+      "summary": {
+        "sourceLineCount": 50,
+        "lyricsJsonLineCount": 50,
+        "sourceWordCount": 357,
+        "lyricsJsonWordCount": 357,
+        "wordCountJsonPhysicalTiles": 357,
+        "sourceUniqueWords": 79,
+        "lyricsJsonUniqueWords": 79,
+        "wordCountJsonUniqueWords": 79,
+        "sectionsSource": 8,
+        "sectionsJson": 12
+      }
+    },
+    {
+      "source": "song_library/parton_dolly/9_to_5.txt",
+      "lyricsJson": "song_library/parton_dolly/9_to_5_lyrics.json",
+      "wordCountJson": "song_library/parton_dolly/9_to_5_word_count.json",
+      "status": "WARN",
+      "errors": [],
+      "warnings": [
+        "Digit characters are present in source text; digits are not word tiles under the generator tokenizer."
+      ],
+      "mismatches": {
+        "metadata": [],
+        "words": [],
+        "lines": []
+      },
+      "unicode": {
+        "nonAsciiCodepoints": {},
+        "unicodeCategories": {
+          "Lu": 46,
+          "Ll": 1301,
+          "Zs": 335,
+          "Cc": 49,
+          "Nd": 24,
+          "Po": 66,
+          "Ps": 4,
+          "Pe": 4
+        },
+        "apostropheVariants": [],
+        "zeroWidthCharacters": [],
+        "nonStandardSpaces": [],
+        "dashVariants": [],
+        "digitCharacters": [
+          {
+            "position": 13,
+            "character": "9",
+            "codepoint": "U+0039",
+            "name": "DIGIT NINE"
+          },
+          {
+            "position": 18,
+            "character": "5",
+            "codepoint": "U+0035",
+            "name": "DIGIT FIVE"
+          },
+          {
+            "position": 20,
+            "character": "9",
+            "codepoint": "U+0039",
+            "name": "DIGIT NINE"
+          },
+          {
+            "position": 25,
+            "character": "5",
+            "codepoint": "U+0035",
+            "name": "DIGIT FIVE"
+          },
+          {
+            "position": 40,
+            "character": "1",
+            "codepoint": "U+0031",
+            "name": "DIGIT ONE"
+          },
+          {
+            "position": 41,
+            "character": "9",
+            "codepoint": "U+0039",
+            "name": "DIGIT NINE"
+          },
+          {
+            "position": 42,
+            "character": "8",
+            "codepoint": "U+0038",
+            "name": "DIGIT EIGHT"
+          },
+          {
+            "position": 43,
+            "character": "0",
+            "codepoint": "U+0030",
+            "name": "DIGIT ZERO"
+          },
+          {
+            "position": 332,
+            "character": "9",
+            "codepoint": "U+0039",
+            "name": "DIGIT NINE"
+          },
+          {
+            "position": 337,
+            "character": "5",
+            "codepoint": "U+0035",
+            "name": "DIGIT FIVE"
+          },
+          {
+            "position": 357,
+            "character": "9",
+            "codepoint": "U+0039",
+            "name": "DIGIT NINE"
+          },
+          {
+            "position": 362,
+            "character": "5",
+            "codepoint": "U+0035",
+            "name": "DIGIT FIVE"
+          },
+          {
+            "position": 542,
+            "character": "9",
+            "codepoint": "U+0039",
+            "name": "DIGIT NINE"
+          },
+          {
+            "position": 547,
+            "character": "5",
+            "codepoint": "U+0035",
+            "name": "DIGIT FIVE"
+          },
+          {
+            "position": 1034,
+            "character": "9",
+            "codepoint": "U+0039",
+            "name": "DIGIT NINE"
+          },
+          {
+            "position": 1039,
+            "character": "5",
+            "codepoint": "U+0035",
+            "name": "DIGIT FIVE"
+          },
+          {
+            "position": 1217,
+            "character": "9",
+            "codepoint": "U+0039",
+            "name": "DIGIT NINE"
+          },
+          {
+            "position": 1222,
+            "character": "5",
+            "codepoint": "U+0035",
+            "name": "DIGIT FIVE"
+          },
+          {
+            "position": 1424,
+            "character": "9",
+            "codepoint": "U+0039",
+            "name": "DIGIT NINE"
+          },
+          {
+            "position": 1429,
+            "character": "5",
+            "codepoint": "U+0035",
+            "name": "DIGIT FIVE"
+          },
+          {
+            "position": 1613,
+            "character": "9",
+            "codepoint": "U+0039",
+            "name": "DIGIT NINE"
+          },
+          {
+            "position": 1618,
+            "character": "5",
+            "codepoint": "U+0035",
+            "name": "DIGIT FIVE"
+          },
+          {
+            "position": 1820,
+            "character": "9",
+            "codepoint": "U+0039",
+            "name": "DIGIT NINE"
+          },
+          {
+            "position": 1825,
+            "character": "5",
+            "codepoint": "U+0035",
+            "name": "DIGIT FIVE"
+          }
+        ],
+        "confusableCyrillicE": [],
+        "normalizationChangedSource": false
+      },
+      "summary": {
+        "sourceLineCount": 37,
+        "lyricsJsonLineCount": 37,
+        "sourceWordCount": 345,
+        "lyricsJsonWordCount": 345,
+        "wordCountJsonPhysicalTiles": 345,
+        "sourceUniqueWords": 128,
+        "lyricsJsonUniqueWords": 128,
+        "wordCountJsonUniqueWords": 128,
+        "sectionsSource": 2,
+        "sectionsJson": 4
+      }
+    },
+    {
+      "source": "song_library/petty_tom/learning to fly.txt",
+      "lyricsJson": "song_library/petty_tom/learning_to_fly_lyrics.json",
+      "wordCountJson": "song_library/petty_tom/learning_to_fly_word_count.json",
+      "status": "WARN",
+      "errors": [],
+      "warnings": [
+        "Digit characters are present in source text; digits are not word tiles under the generator tokenizer."
+      ],
+      "mismatches": {
+        "metadata": [],
+        "words": [],
+        "lines": []
+      },
+      "unicode": {
+        "nonAsciiCodepoints": {},
+        "unicodeCategories": {
+          "Lu": 66,
+          "Ll": 828,
+          "Zs": 188,
+          "Cc": 48,
+          "Nd": 7,
+          "Ps": 18,
+          "Pe": 18,
+          "Po": 22
+        },
+        "apostropheVariants": [],
+        "zeroWidthCharacters": [],
+        "nonStandardSpaces": [],
+        "dashVariants": [],
+        "digitCharacters": [
+          {
+            "position": 74,
+            "character": "1",
+            "codepoint": "U+0031",
+            "name": "DIGIT ONE"
+          },
+          {
+            "position": 75,
+            "character": "9",
+            "codepoint": "U+0039",
+            "name": "DIGIT NINE"
+          },
+          {
+            "position": 76,
+            "character": "9",
+            "codepoint": "U+0039",
+            "name": "DIGIT NINE"
+          },
+          {
+            "position": 77,
+            "character": "1",
+            "codepoint": "U+0031",
+            "name": "DIGIT ONE"
+          },
+          {
+            "position": 96,
+            "character": "1",
+            "codepoint": "U+0031",
+            "name": "DIGIT ONE"
+          },
+          {
+            "position": 338,
+            "character": "2",
+            "codepoint": "U+0032",
+            "name": "DIGIT TWO"
+          },
+          {
+            "position": 592,
+            "character": "3",
+            "codepoint": "U+0033",
+            "name": "DIGIT THREE"
+          }
+        ],
+        "confusableCyrillicE": [],
+        "normalizationChangedSource": false
+      },
+      "summary": {
+        "sourceLineCount": 29,
+        "lyricsJsonLineCount": 29,
+        "sourceWordCount": 202,
+        "lyricsJsonWordCount": 202,
+        "wordCountJsonPhysicalTiles": 202,
+        "sourceUniqueWords": 74,
+        "lyricsJsonUniqueWords": 74,
+        "wordCountJsonUniqueWords": 74,
+        "sectionsSource": 5,
+        "sectionsJson": 7
+      }
+    },
+    {
+      "source": "song_library/swift_taylor/lyric_exile.txt",
+      "lyricsJson": "song_library/swift_taylor/exile_lyrics.json",
+      "wordCountJson": "song_library/swift_taylor/exile_word_count.json",
+      "status": "ERROR",
+      "errors": [
+        "Source TXT and lyrics JSON have line-by-line mismatches."
+      ],
+      "warnings": [
+        "Unicode normalization changes the source text before tokenization.",
+        "Digit characters are present in source text; digits are not word tiles under the generator tokenizer."
+      ],
+      "mismatches": {
+        "metadata": [],
+        "words": [],
+        "lines": [
+          {
+            "lineNumber": 3,
+            "source": "Laughin', but the joke's not funny at all",
+            "lyricsJson": "Laughin', but the joke's not funny at all",
+            "sourceTokens": [
+              "Laughin'",
+              "but",
+              "the",
+              "joke's",
+              "not",
+              "funny",
+              "at",
+              "all"
+            ],
+            "jsonTokens": [
+              "Laughin'",
+              "but",
+              "the",
+              "joke's",
+              "not",
+              "funny",
+              "at",
+              "all"
+            ]
+          },
+          {
+            "lineNumber": 4,
+            "source": "And it took you five whole minutes",
+            "lyricsJson": "And it took you five whole minutes",
+            "sourceTokens": [
+              "And",
+              "it",
+              "took",
+              "you",
+              "five",
+              "whole",
+              "minutes"
+            ],
+            "jsonTokens": [
+              "And",
+              "it",
+              "took",
+              "you",
+              "five",
+              "whole",
+              "minutes"
+            ]
+          },
+          {
+            "lineNumber": 5,
+            "source": "To pack us up and leave me with it",
+            "lyricsJson": "To pack us up and leave me with it",
+            "sourceTokens": [
+              "To",
+              "pack",
+              "us",
+              "up",
+              "and",
+              "leave",
+              "me",
+              "with",
+              "it"
+            ],
+            "jsonTokens": [
+              "To",
+              "pack",
+              "us",
+              "up",
+              "and",
+              "leave",
+              "me",
+              "with",
+              "it"
+            ]
+          }
+        ]
+      },
+      "unicode": {
+        "nonAsciiCodepoints": {
+          "U+2005": 4
+        },
+        "unicodeCategories": {
+          "Lu": 131,
+          "Ll": 2114,
+          "Zs": 486,
+          "Po": 66,
+          "Cc": 100,
+          "Nd": 4,
+          "Ps": 30,
+          "Pe": 30,
+          "Pd": 1
+        },
+        "apostropheVariants": [],
+        "zeroWidthCharacters": [],
+        "nonStandardSpaces": [],
+        "dashVariants": [],
+        "digitCharacters": [
+          {
+            "position": 43,
+            "character": "2",
+            "codepoint": "U+0032",
+            "name": "DIGIT TWO"
+          },
+          {
+            "position": 44,
+            "character": "0",
+            "codepoint": "U+0030",
+            "name": "DIGIT ZERO"
+          },
+          {
+            "position": 45,
+            "character": "2",
+            "codepoint": "U+0032",
+            "name": "DIGIT TWO"
+          },
+          {
+            "position": 46,
+            "character": "0",
+            "codepoint": "U+0030",
+            "name": "DIGIT ZERO"
+          }
+        ],
+        "confusableCyrillicE": [],
+        "normalizationChangedSource": true
+      },
+      "summary": {
+        "sourceLineCount": 75,
+        "lyricsJsonLineCount": 75,
+        "sourceWordCount": 556,
+        "lyricsJsonWordCount": 556,
+        "wordCountJsonPhysicalTiles": 556,
+        "sourceUniqueWords": 126,
+        "lyricsJsonUniqueWords": 126,
+        "wordCountJsonUniqueWords": 126,
+        "sectionsSource": 5,
+        "sectionsJson": 10
+      }
+    },
+    {
+      "source": "song_library/the_beatles/get_back.txt",
+      "lyricsJson": "song_library/the_beatles/get_back_lyrics.json",
+      "wordCountJson": "song_library/the_beatles/get_back_word_count.json",
+      "status": "WARN",
+      "errors": [],
+      "warnings": [
+        "Digit characters are present in source text; digits are not word tiles under the generator tokenizer."
+      ],
+      "mismatches": {
+        "metadata": [],
+        "words": [],
+        "lines": []
+      },
+      "unicode": {
+        "nonAsciiCodepoints": {},
+        "unicodeCategories": {
+          "Lu": 72,
+          "Ll": 835,
+          "Zs": 183,
+          "Cc": 53,
+          "Nd": 4,
+          "Po": 28,
+          "Ps": 6,
+          "Pe": 6
+        },
+        "apostropheVariants": [],
+        "zeroWidthCharacters": [],
+        "nonStandardSpaces": [],
+        "dashVariants": [],
+        "digitCharacters": [
+          {
+            "position": 31,
+            "character": "1",
+            "codepoint": "U+0031",
+            "name": "DIGIT ONE"
+          },
+          {
+            "position": 32,
+            "character": "9",
+            "codepoint": "U+0039",
+            "name": "DIGIT NINE"
+          },
+          {
+            "position": 33,
+            "character": "7",
+            "codepoint": "U+0037",
+            "name": "DIGIT SEVEN"
+          },
+          {
+            "position": 34,
+            "character": "0",
+            "codepoint": "U+0030",
+            "name": "DIGIT ZERO"
+          }
+        ],
+        "confusableCyrillicE": [],
+        "normalizationChangedSource": false
+      },
+      "summary": {
+        "sourceLineCount": 37,
+        "lyricsJsonLineCount": 37,
+        "sourceWordCount": 210,
+        "lyricsJsonWordCount": 210,
+        "wordCountJsonPhysicalTiles": 210,
+        "sourceUniqueWords": 77,
+        "lyricsJsonUniqueWords": 77,
+        "wordCountJsonUniqueWords": 77,
+        "sectionsSource": 4,
+        "sectionsJson": 6
+      }
+    }
+  ],
+  "orphanSources": [],
+  "orphanLyricsJson": [],
+  "orphanWordCountJson": [],
+  "catalogValidation": {
+    "missingFiles": [],
+    "invalidReferences": [],
+    "duplicateIds": []
+  }
+}

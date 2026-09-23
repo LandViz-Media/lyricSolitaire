@@ -1,0 +1,827 @@
+<!doctype html><html><head><meta charset='utf-8'><title>Lyric Data Audit</title><style>
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;margin:32px;line-height:1.45;color:#222} h1{margin-bottom:4px} .meta{color:#666} table{border-collapse:collapse;width:100%;margin:12px 0 24px} th,td{border:1px solid #ccc;padding:6px 8px;text-align:left;vertical-align:top} th{background:#eee} details{margin:16px 0;padding:8px;border:1px solid #ccc;border-radius:6px} pre{white-space:pre-wrap;background:#f6f6f6;padding:12px;overflow:auto} .pass{color:#176b35} .warn{color:#8a5a00} .error{color:#9b1c1c}
+</style></head><body><h1>Lyric Solitaire — Lyric Data Audit</h1><div class='meta'>Audit v0.1.0 · 2026-09-22T20:53:51-05:00<br>Project: /Users/cjseeger_1/Sites/lyricSolitaire<br><strong>Read-only source scan:</strong> no song-library files were modified.</div>
+<h2>Summary</h2><p>Songs: 12 · <span class='pass'>PASS 0</span> · <span class='warn'>WARN 10</span> · <span class='error'>ERROR 2</span></p>
+<table><tr><th>Song source</th><th>Status</th><th>Source words</th><th>Physical tiles</th><th>Lines</th><th>Word mismatches</th><th>Line mismatches</th><th>Warnings</th></tr><tr><td>appetite.txt</td><td>WARN</td><td>243</td><td>243</td><td>23</td><td>0</td><td>0</td><td>3</td></tr><tr><td>overtime.txt</td><td>WARN</td><td>248</td><td>248</td><td>29</td><td>0</td><td>0</td><td>3</td></tr><tr><td>pink_skies.txt</td><td>WARN</td><td>237</td><td>237</td><td>28</td><td>0</td><td>0</td><td>3</td></tr><tr><td>quittin_time.txt</td><td>WARN</td><td>241</td><td>241</td><td>28</td><td>0</td><td>0</td><td>3</td></tr><tr><td>tourniquet.txt</td><td>WARN</td><td>325</td><td>325</td><td>32</td><td>0</td><td>0</td><td>1</td></tr><tr><td>everlong.txt</td><td>WARN</td><td>329</td><td>329</td><td>45</td><td>0</td><td>0</td><td>1</td></tr><tr><td>21 Guns.txt</td><td>WARN</td><td>255</td><td>255</td><td>43</td><td>0</td><td>0</td><td>1</td></tr><tr><td>Girls Just Want To Have Fun.txt</td><td>ERROR</td><td>357</td><td>357</td><td>50</td><td>0</td><td>0</td><td>3</td></tr><tr><td>9_to_5.txt</td><td>WARN</td><td>345</td><td>345</td><td>37</td><td>0</td><td>0</td><td>1</td></tr><tr><td>learning to fly.txt</td><td>WARN</td><td>202</td><td>202</td><td>29</td><td>0</td><td>0</td><td>1</td></tr><tr><td>lyric_exile.txt</td><td>ERROR</td><td>556</td><td>556</td><td>75</td><td>0</td><td>3</td><td>2</td></tr><tr><td>get_back.txt</td><td>WARN</td><td>210</td><td>210</td><td>37</td><td>0</td><td>0</td><td>1</td></tr></table>
+<h2>Catalog validation</h2><p>Status: <strong>PASS</strong></p><pre>{
+  &quot;missingFiles&quot;: [],
+  &quot;invalidReferences&quot;: [],
+  &quot;duplicateIds&quot;: []
+}</pre><h2>Detailed diagnostics</h2><details><summary><strong>appetite.txt</strong> — WARN</summary><h4>Errors</h4><ul></ul><h4>Warnings</h4><ul><li>Unicode normalization changes the source text before tokenization.</li><li>Apostrophe variants detected; generator normalization converts them to ASCII apostrophe.</li><li>Digit characters are present in source text; digits are not word tiles under the generator tokenizer.</li></ul><h4>Unicode / tokenization checks</h4><pre>{
+  &quot;nonAsciiCodepoints&quot;: {
+    &quot;U+2019&quot;: 2
+  },
+  &quot;unicodeCategories&quot;: {
+    &quot;Lu&quot;: 56,
+    &quot;Ll&quot;: 988,
+    &quot;Zs&quot;: 224,
+    &quot;Cc&quot;: 42,
+    &quot;Nd&quot;: 4,
+    &quot;Ps&quot;: 7,
+    &quot;Pe&quot;: 7,
+    &quot;Po&quot;: 31,
+    &quot;Pf&quot;: 2,
+    &quot;Pd&quot;: 2
+  },
+  &quot;apostropheVariants&quot;: [
+    {
+      &quot;position&quot;: 80,
+      &quot;character&quot;: &quot;’&quot;,
+      &quot;codepoint&quot;: &quot;U+2019&quot;,
+      &quot;name&quot;: &quot;RIGHT SINGLE QUOTATION MARK&quot;
+    },
+    {
+      &quot;position&quot;: 523,
+      &quot;character&quot;: &quot;’&quot;,
+      &quot;codepoint&quot;: &quot;U+2019&quot;,
+      &quot;name&quot;: &quot;RIGHT SINGLE QUOTATION MARK&quot;
+    }
+  ],
+  &quot;zeroWidthCharacters&quot;: [],
+  &quot;nonStandardSpaces&quot;: [],
+  &quot;dashVariants&quot;: [],
+  &quot;digitCharacters&quot;: [
+    {
+      &quot;position&quot;: 39,
+      &quot;character&quot;: &quot;2&quot;,
+      &quot;codepoint&quot;: &quot;U+0032&quot;,
+      &quot;name&quot;: &quot;DIGIT TWO&quot;
+    },
+    {
+      &quot;position&quot;: 40,
+      &quot;character&quot;: &quot;0&quot;,
+      &quot;codepoint&quot;: &quot;U+0030&quot;,
+      &quot;name&quot;: &quot;DIGIT ZERO&quot;
+    },
+    {
+      &quot;position&quot;: 41,
+      &quot;character&quot;: &quot;2&quot;,
+      &quot;codepoint&quot;: &quot;U+0032&quot;,
+      &quot;name&quot;: &quot;DIGIT TWO&quot;
+    },
+    {
+      &quot;position&quot;: 42,
+      &quot;character&quot;: &quot;6&quot;,
+      &quot;codepoint&quot;: &quot;U+0036&quot;,
+      &quot;name&quot;: &quot;DIGIT SIX&quot;
+    }
+  ],
+  &quot;confusableCyrillicE&quot;: [],
+  &quot;normalizationChangedSource&quot;: true
+}</pre></details><details><summary><strong>overtime.txt</strong> — WARN</summary><h4>Errors</h4><ul></ul><h4>Warnings</h4><ul><li>Cyrillic e/E confusable characters detected and normalized by the generator.</li><li>Unicode normalization changes the source text before tokenization.</li><li>Digit characters are present in source text; digits are not word tiles under the generator tokenizer.</li></ul><h4>Unicode / tokenization checks</h4><pre>{
+  &quot;nonAsciiCodepoints&quot;: {
+    &quot;U+0435&quot;: 2
+  },
+  &quot;unicodeCategories&quot;: {
+    &quot;Lu&quot;: 60,
+    &quot;Ll&quot;: 998,
+    &quot;Zs&quot;: 220,
+    &quot;Cc&quot;: 48,
+    &quot;Nd&quot;: 4,
+    &quot;Ps&quot;: 7,
+    &quot;Pe&quot;: 7,
+    &quot;Po&quot;: 47,
+    &quot;Pd&quot;: 3
+  },
+  &quot;apostropheVariants&quot;: [],
+  &quot;zeroWidthCharacters&quot;: [],
+  &quot;nonStandardSpaces&quot;: [],
+  &quot;dashVariants&quot;: [],
+  &quot;digitCharacters&quot;: [
+    {
+      &quot;position&quot;: 31,
+      &quot;character&quot;: &quot;2&quot;,
+      &quot;codepoint&quot;: &quot;U+0032&quot;,
+      &quot;name&quot;: &quot;DIGIT TWO&quot;
+    },
+    {
+      &quot;position&quot;: 32,
+      &quot;character&quot;: &quot;0&quot;,
+      &quot;codepoint&quot;: &quot;U+0030&quot;,
+      &quot;name&quot;: &quot;DIGIT ZERO&quot;
+    },
+    {
+      &quot;position&quot;: 33,
+      &quot;character&quot;: &quot;2&quot;,
+      &quot;codepoint&quot;: &quot;U+0032&quot;,
+      &quot;name&quot;: &quot;DIGIT TWO&quot;
+    },
+    {
+      &quot;position&quot;: 34,
+      &quot;character&quot;: &quot;3&quot;,
+      &quot;codepoint&quot;: &quot;U+0033&quot;,
+      &quot;name&quot;: &quot;DIGIT THREE&quot;
+    }
+  ],
+  &quot;confusableCyrillicE&quot;: [
+    {
+      &quot;position&quot;: 630,
+      &quot;character&quot;: &quot;е&quot;,
+      &quot;codepoint&quot;: &quot;U+0435&quot;,
+      &quot;name&quot;: &quot;CYRILLIC SMALL LETTER IE&quot;
+    },
+    {
+      &quot;position&quot;: 682,
+      &quot;character&quot;: &quot;е&quot;,
+      &quot;codepoint&quot;: &quot;U+0435&quot;,
+      &quot;name&quot;: &quot;CYRILLIC SMALL LETTER IE&quot;
+    }
+  ],
+  &quot;normalizationChangedSource&quot;: true
+}</pre></details><details><summary><strong>pink_skies.txt</strong> — WARN</summary><h4>Errors</h4><ul></ul><h4>Warnings</h4><ul><li>Cyrillic e/E confusable characters detected and normalized by the generator.</li><li>Unicode normalization changes the source text before tokenization.</li><li>Digit characters are present in source text; digits are not word tiles under the generator tokenizer.</li></ul><h4>Unicode / tokenization checks</h4><pre>{
+  &quot;nonAsciiCodepoints&quot;: {
+    &quot;U+0435&quot;: 2
+  },
+  &quot;unicodeCategories&quot;: {
+    &quot;Lu&quot;: 49,
+    &quot;Ll&quot;: 936,
+    &quot;Zs&quot;: 217,
+    &quot;Cc&quot;: 47,
+    &quot;Nd&quot;: 8,
+    &quot;Ps&quot;: 7,
+    &quot;Pe&quot;: 7,
+    &quot;Po&quot;: 34
+  },
+  &quot;apostropheVariants&quot;: [],
+  &quot;zeroWidthCharacters&quot;: [],
+  &quot;nonStandardSpaces&quot;: [],
+  &quot;dashVariants&quot;: [],
+  &quot;digitCharacters&quot;: [
+    {
+      &quot;position&quot;: 51,
+      &quot;character&quot;: &quot;2&quot;,
+      &quot;codepoint&quot;: &quot;U+0032&quot;,
+      &quot;name&quot;: &quot;DIGIT TWO&quot;
+    },
+    {
+      &quot;position&quot;: 52,
+      &quot;character&quot;: &quot;0&quot;,
+      &quot;codepoint&quot;: &quot;U+0030&quot;,
+      &quot;name&quot;: &quot;DIGIT ZERO&quot;
+    },
+    {
+      &quot;position&quot;: 53,
+      &quot;character&quot;: &quot;2&quot;,
+      &quot;codepoint&quot;: &quot;U+0032&quot;,
+      &quot;name&quot;: &quot;DIGIT TWO&quot;
+    },
+    {
+      &quot;position&quot;: 54,
+      &quot;character&quot;: &quot;4&quot;,
+      &quot;codepoint&quot;: &quot;U+0034&quot;,
+      &quot;name&quot;: &quot;DIGIT FOUR&quot;
+    },
+    {
+      &quot;position&quot;: 473,
+      &quot;character&quot;: &quot;4&quot;,
+      &quot;codepoint&quot;: &quot;U+0034&quot;,
+      &quot;name&quot;: &quot;DIGIT FOUR&quot;
+    },
+    {
+      &quot;position&quot;: 475,
+      &quot;character&quot;: &quot;1&quot;,
+      &quot;codepoint&quot;: &quot;U+0031&quot;,
+      &quot;name&quot;: &quot;DIGIT ONE&quot;
+    },
+    {
+      &quot;position&quot;: 487,
+      &quot;character&quot;: &quot;0&quot;,
+      &quot;codepoint&quot;: &quot;U+0030&quot;,
+      &quot;name&quot;: &quot;DIGIT ZERO&quot;
+    },
+    {
+      &quot;position&quot;: 488,
+      &quot;character&quot;: &quot;8&quot;,
+      &quot;codepoint&quot;: &quot;U+0038&quot;,
+      &quot;name&quot;: &quot;DIGIT EIGHT&quot;
+    }
+  ],
+  &quot;confusableCyrillicE&quot;: [
+    {
+      &quot;position&quot;: 569,
+      &quot;character&quot;: &quot;е&quot;,
+      &quot;codepoint&quot;: &quot;U+0435&quot;,
+      &quot;name&quot;: &quot;CYRILLIC SMALL LETTER IE&quot;
+    },
+    {
+      &quot;position&quot;: 610,
+      &quot;character&quot;: &quot;е&quot;,
+      &quot;codepoint&quot;: &quot;U+0435&quot;,
+      &quot;name&quot;: &quot;CYRILLIC SMALL LETTER IE&quot;
+    }
+  ],
+  &quot;normalizationChangedSource&quot;: true
+}</pre></details><details><summary><strong>quittin_time.txt</strong> — WARN</summary><h4>Errors</h4><ul></ul><h4>Warnings</h4><ul><li>Cyrillic e/E confusable characters detected and normalized by the generator.</li><li>Unicode normalization changes the source text before tokenization.</li><li>Digit characters are present in source text; digits are not word tiles under the generator tokenizer.</li></ul><h4>Unicode / tokenization checks</h4><pre>{
+  &quot;nonAsciiCodepoints&quot;: {
+    &quot;U+0435&quot;: 2
+  },
+  &quot;unicodeCategories&quot;: {
+    &quot;Lu&quot;: 56,
+    &quot;Ll&quot;: 907,
+    &quot;Zs&quot;: 216,
+    &quot;Cc&quot;: 43,
+    &quot;Po&quot;: 45,
+    &quot;Nd&quot;: 4,
+    &quot;Ps&quot;: 5,
+    &quot;Pe&quot;: 5
+  },
+  &quot;apostropheVariants&quot;: [],
+  &quot;zeroWidthCharacters&quot;: [],
+  &quot;nonStandardSpaces&quot;: [],
+  &quot;dashVariants&quot;: [],
+  &quot;digitCharacters&quot;: [
+    {
+      &quot;position&quot;: 42,
+      &quot;character&quot;: &quot;2&quot;,
+      &quot;codepoint&quot;: &quot;U+0032&quot;,
+      &quot;name&quot;: &quot;DIGIT TWO&quot;
+    },
+    {
+      &quot;position&quot;: 43,
+      &quot;character&quot;: &quot;0&quot;,
+      &quot;codepoint&quot;: &quot;U+0030&quot;,
+      &quot;name&quot;: &quot;DIGIT ZERO&quot;
+    },
+    {
+      &quot;position&quot;: 44,
+      &quot;character&quot;: &quot;2&quot;,
+      &quot;codepoint&quot;: &quot;U+0032&quot;,
+      &quot;name&quot;: &quot;DIGIT TWO&quot;
+    },
+    {
+      &quot;position&quot;: 45,
+      &quot;character&quot;: &quot;2&quot;,
+      &quot;codepoint&quot;: &quot;U+0032&quot;,
+      &quot;name&quot;: &quot;DIGIT TWO&quot;
+    }
+  ],
+  &quot;confusableCyrillicE&quot;: [
+    {
+      &quot;position&quot;: 734,
+      &quot;character&quot;: &quot;е&quot;,
+      &quot;codepoint&quot;: &quot;U+0435&quot;,
+      &quot;name&quot;: &quot;CYRILLIC SMALL LETTER IE&quot;
+    },
+    {
+      &quot;position&quot;: 776,
+      &quot;character&quot;: &quot;е&quot;,
+      &quot;codepoint&quot;: &quot;U+0435&quot;,
+      &quot;name&quot;: &quot;CYRILLIC SMALL LETTER IE&quot;
+    }
+  ],
+  &quot;normalizationChangedSource&quot;: true
+}</pre></details><details><summary><strong>tourniquet.txt</strong> — WARN</summary><h4>Errors</h4><ul></ul><h4>Warnings</h4><ul><li>Digit characters are present in source text; digits are not word tiles under the generator tokenizer.</li></ul><h4>Unicode / tokenization checks</h4><pre>{
+  &quot;nonAsciiCodepoints&quot;: {},
+  &quot;unicodeCategories&quot;: {
+    &quot;Lu&quot;: 56,
+    &quot;Ll&quot;: 1328,
+    &quot;Zs&quot;: 298,
+    &quot;Cc&quot;: 49,
+    &quot;Nd&quot;: 4,
+    &quot;Po&quot;: 38,
+    &quot;Ps&quot;: 6,
+    &quot;Pe&quot;: 6
+  },
+  &quot;apostropheVariants&quot;: [],
+  &quot;zeroWidthCharacters&quot;: [],
+  &quot;nonStandardSpaces&quot;: [],
+  &quot;dashVariants&quot;: [],
+  &quot;digitCharacters&quot;: [
+    {
+      &quot;position&quot;: 33,
+      &quot;character&quot;: &quot;2&quot;,
+      &quot;codepoint&quot;: &quot;U+0032&quot;,
+      &quot;name&quot;: &quot;DIGIT TWO&quot;
+    },
+    {
+      &quot;position&quot;: 34,
+      &quot;character&quot;: &quot;0&quot;,
+      &quot;codepoint&quot;: &quot;U+0030&quot;,
+      &quot;name&quot;: &quot;DIGIT ZERO&quot;
+    },
+    {
+      &quot;position&quot;: 35,
+      &quot;character&quot;: &quot;2&quot;,
+      &quot;codepoint&quot;: &quot;U+0032&quot;,
+      &quot;name&quot;: &quot;DIGIT TWO&quot;
+    },
+    {
+      &quot;position&quot;: 36,
+      &quot;character&quot;: &quot;3&quot;,
+      &quot;codepoint&quot;: &quot;U+0033&quot;,
+      &quot;name&quot;: &quot;DIGIT THREE&quot;
+    }
+  ],
+  &quot;confusableCyrillicE&quot;: [],
+  &quot;normalizationChangedSource&quot;: false
+}</pre></details><details><summary><strong>everlong.txt</strong> — WARN</summary><h4>Errors</h4><ul></ul><h4>Warnings</h4><ul><li>Digit characters are present in source text; digits are not word tiles under the generator tokenizer.</li></ul><h4>Unicode / tokenization checks</h4><pre>{
+  &quot;nonAsciiCodepoints&quot;: {},
+  &quot;unicodeCategories&quot;: {
+    &quot;Lu&quot;: 92,
+    &quot;Ll&quot;: 1257,
+    &quot;Zs&quot;: 245,
+    &quot;Cc&quot;: 74,
+    &quot;Nd&quot;: 4,
+    &quot;Po&quot;: 41,
+    &quot;Pd&quot;: 52,
+    &quot;Ps&quot;: 12,
+    &quot;Pe&quot;: 12
+  },
+  &quot;apostropheVariants&quot;: [],
+  &quot;zeroWidthCharacters&quot;: [],
+  &quot;nonStandardSpaces&quot;: [],
+  &quot;dashVariants&quot;: [],
+  &quot;digitCharacters&quot;: [
+    {
+      &quot;position&quot;: 47,
+      &quot;character&quot;: &quot;1&quot;,
+      &quot;codepoint&quot;: &quot;U+0031&quot;,
+      &quot;name&quot;: &quot;DIGIT ONE&quot;
+    },
+    {
+      &quot;position&quot;: 48,
+      &quot;character&quot;: &quot;9&quot;,
+      &quot;codepoint&quot;: &quot;U+0039&quot;,
+      &quot;name&quot;: &quot;DIGIT NINE&quot;
+    },
+    {
+      &quot;position&quot;: 49,
+      &quot;character&quot;: &quot;9&quot;,
+      &quot;codepoint&quot;: &quot;U+0039&quot;,
+      &quot;name&quot;: &quot;DIGIT NINE&quot;
+    },
+    {
+      &quot;position&quot;: 50,
+      &quot;character&quot;: &quot;7&quot;,
+      &quot;codepoint&quot;: &quot;U+0037&quot;,
+      &quot;name&quot;: &quot;DIGIT SEVEN&quot;
+    }
+  ],
+  &quot;confusableCyrillicE&quot;: [],
+  &quot;normalizationChangedSource&quot;: false
+}</pre></details><details><summary><strong>21 Guns.txt</strong> — WARN</summary><h4>Errors</h4><ul></ul><h4>Warnings</h4><ul><li>Digit characters are present in source text; digits are not word tiles under the generator tokenizer.</li></ul><h4>Unicode / tokenization checks</h4><pre>{
+  &quot;nonAsciiCodepoints&quot;: {},
+  &quot;unicodeCategories&quot;: {
+    &quot;Lu&quot;: 63,
+    &quot;Ll&quot;: 1016,
+    &quot;Zs&quot;: 212,
+    &quot;Cc&quot;: 62,
+    &quot;Nd&quot;: 8,
+    &quot;Po&quot;: 34,
+    &quot;Pd&quot;: 9,
+    &quot;Ps&quot;: 7,
+    &quot;Pe&quot;: 7
+  },
+  &quot;apostropheVariants&quot;: [],
+  &quot;zeroWidthCharacters&quot;: [],
+  &quot;nonStandardSpaces&quot;: [],
+  &quot;dashVariants&quot;: [],
+  &quot;digitCharacters&quot;: [
+    {
+      &quot;position&quot;: 10,
+      &quot;character&quot;: &quot;2&quot;,
+      &quot;codepoint&quot;: &quot;U+0032&quot;,
+      &quot;name&quot;: &quot;DIGIT TWO&quot;
+    },
+    {
+      &quot;position&quot;: 11,
+      &quot;character&quot;: &quot;1&quot;,
+      &quot;codepoint&quot;: &quot;U+0031&quot;,
+      &quot;name&quot;: &quot;DIGIT ONE&quot;
+    },
+    {
+      &quot;position&quot;: 18,
+      &quot;character&quot;: &quot;2&quot;,
+      &quot;codepoint&quot;: &quot;U+0032&quot;,
+      &quot;name&quot;: &quot;DIGIT TWO&quot;
+    },
+    {
+      &quot;position&quot;: 19,
+      &quot;character&quot;: &quot;1&quot;,
+      &quot;codepoint&quot;: &quot;U+0031&quot;,
+      &quot;name&quot;: &quot;DIGIT ONE&quot;
+    },
+    {
+      &quot;position&quot;: 41,
+      &quot;character&quot;: &quot;2&quot;,
+      &quot;codepoint&quot;: &quot;U+0032&quot;,
+      &quot;name&quot;: &quot;DIGIT TWO&quot;
+    },
+    {
+      &quot;position&quot;: 42,
+      &quot;character&quot;: &quot;0&quot;,
+      &quot;codepoint&quot;: &quot;U+0030&quot;,
+      &quot;name&quot;: &quot;DIGIT ZERO&quot;
+    },
+    {
+      &quot;position&quot;: 43,
+      &quot;character&quot;: &quot;0&quot;,
+      &quot;codepoint&quot;: &quot;U+0030&quot;,
+      &quot;name&quot;: &quot;DIGIT ZERO&quot;
+    },
+    {
+      &quot;position&quot;: 44,
+      &quot;character&quot;: &quot;9&quot;,
+      &quot;codepoint&quot;: &quot;U+0039&quot;,
+      &quot;name&quot;: &quot;DIGIT NINE&quot;
+    }
+  ],
+  &quot;confusableCyrillicE&quot;: [],
+  &quot;normalizationChangedSource&quot;: false
+}</pre></details><details><summary><strong>Girls Just Want To Have Fun.txt</strong> — ERROR</summary><h4>Errors</h4><ul><li>Source metadata does not match lyrics JSON metadata.</li></ul><h4>Warnings</h4><ul><li>Unicode normalization changes the source text before tokenization.</li><li>Apostrophe variants detected; generator normalization converts them to ASCII apostrophe.</li><li>Digit characters are present in source text; digits are not word tiles under the generator tokenizer.</li></ul><h4>Unicode / tokenization checks</h4><pre>{
+  &quot;nonAsciiCodepoints&quot;: {
+    &quot;U+2019&quot;: 1
+  },
+  &quot;unicodeCategories&quot;: {
+    &quot;Lu&quot;: 91,
+    &quot;Ll&quot;: 1475,
+    &quot;Zs&quot;: 321,
+    &quot;Cc&quot;: 78,
+    &quot;Pf&quot;: 1,
+    &quot;Nd&quot;: 7,
+    &quot;Po&quot;: 76,
+    &quot;Ps&quot;: 24,
+    &quot;Pe&quot;: 24,
+    &quot;Pd&quot;: 2
+  },
+  &quot;apostropheVariants&quot;: [
+    {
+      &quot;position&quot;: 44,
+      &quot;character&quot;: &quot;’&quot;,
+      &quot;codepoint&quot;: &quot;U+2019&quot;,
+      &quot;name&quot;: &quot;RIGHT SINGLE QUOTATION MARK&quot;
+    }
+  ],
+  &quot;zeroWidthCharacters&quot;: [],
+  &quot;nonStandardSpaces&quot;: [],
+  &quot;dashVariants&quot;: [],
+  &quot;digitCharacters&quot;: [
+    {
+      &quot;position&quot;: 59,
+      &quot;character&quot;: &quot;1&quot;,
+      &quot;codepoint&quot;: &quot;U+0031&quot;,
+      &quot;name&quot;: &quot;DIGIT ONE&quot;
+    },
+    {
+      &quot;position&quot;: 60,
+      &quot;character&quot;: &quot;9&quot;,
+      &quot;codepoint&quot;: &quot;U+0039&quot;,
+      &quot;name&quot;: &quot;DIGIT NINE&quot;
+    },
+    {
+      &quot;position&quot;: 61,
+      &quot;character&quot;: &quot;8&quot;,
+      &quot;codepoint&quot;: &quot;U+0038&quot;,
+      &quot;name&quot;: &quot;DIGIT EIGHT&quot;
+    },
+    {
+      &quot;position&quot;: 62,
+      &quot;character&quot;: &quot;3&quot;,
+      &quot;codepoint&quot;: &quot;U+0033&quot;,
+      &quot;name&quot;: &quot;DIGIT THREE&quot;
+    },
+    {
+      &quot;position&quot;: 86,
+      &quot;character&quot;: &quot;1&quot;,
+      &quot;codepoint&quot;: &quot;U+0031&quot;,
+      &quot;name&quot;: &quot;DIGIT ONE&quot;
+    },
+    {
+      &quot;position&quot;: 321,
+      &quot;character&quot;: &quot;2&quot;,
+      &quot;codepoint&quot;: &quot;U+0032&quot;,
+      &quot;name&quot;: &quot;DIGIT TWO&quot;
+    },
+    {
+      &quot;position&quot;: 749,
+      &quot;character&quot;: &quot;3&quot;,
+      &quot;codepoint&quot;: &quot;U+0033&quot;,
+      &quot;name&quot;: &quot;DIGIT THREE&quot;
+    }
+  ],
+  &quot;confusableCyrillicE&quot;: [],
+  &quot;normalizationChangedSource&quot;: true
+}</pre></details><details><summary><strong>9_to_5.txt</strong> — WARN</summary><h4>Errors</h4><ul></ul><h4>Warnings</h4><ul><li>Digit characters are present in source text; digits are not word tiles under the generator tokenizer.</li></ul><h4>Unicode / tokenization checks</h4><pre>{
+  &quot;nonAsciiCodepoints&quot;: {},
+  &quot;unicodeCategories&quot;: {
+    &quot;Lu&quot;: 46,
+    &quot;Ll&quot;: 1301,
+    &quot;Zs&quot;: 335,
+    &quot;Cc&quot;: 49,
+    &quot;Nd&quot;: 24,
+    &quot;Po&quot;: 66,
+    &quot;Ps&quot;: 4,
+    &quot;Pe&quot;: 4
+  },
+  &quot;apostropheVariants&quot;: [],
+  &quot;zeroWidthCharacters&quot;: [],
+  &quot;nonStandardSpaces&quot;: [],
+  &quot;dashVariants&quot;: [],
+  &quot;digitCharacters&quot;: [
+    {
+      &quot;position&quot;: 13,
+      &quot;character&quot;: &quot;9&quot;,
+      &quot;codepoint&quot;: &quot;U+0039&quot;,
+      &quot;name&quot;: &quot;DIGIT NINE&quot;
+    },
+    {
+      &quot;position&quot;: 18,
+      &quot;character&quot;: &quot;5&quot;,
+      &quot;codepoint&quot;: &quot;U+0035&quot;,
+      &quot;name&quot;: &quot;DIGIT FIVE&quot;
+    },
+    {
+      &quot;position&quot;: 20,
+      &quot;character&quot;: &quot;9&quot;,
+      &quot;codepoint&quot;: &quot;U+0039&quot;,
+      &quot;name&quot;: &quot;DIGIT NINE&quot;
+    },
+    {
+      &quot;position&quot;: 25,
+      &quot;character&quot;: &quot;5&quot;,
+      &quot;codepoint&quot;: &quot;U+0035&quot;,
+      &quot;name&quot;: &quot;DIGIT FIVE&quot;
+    },
+    {
+      &quot;position&quot;: 40,
+      &quot;character&quot;: &quot;1&quot;,
+      &quot;codepoint&quot;: &quot;U+0031&quot;,
+      &quot;name&quot;: &quot;DIGIT ONE&quot;
+    },
+    {
+      &quot;position&quot;: 41,
+      &quot;character&quot;: &quot;9&quot;,
+      &quot;codepoint&quot;: &quot;U+0039&quot;,
+      &quot;name&quot;: &quot;DIGIT NINE&quot;
+    },
+    {
+      &quot;position&quot;: 42,
+      &quot;character&quot;: &quot;8&quot;,
+      &quot;codepoint&quot;: &quot;U+0038&quot;,
+      &quot;name&quot;: &quot;DIGIT EIGHT&quot;
+    },
+    {
+      &quot;position&quot;: 43,
+      &quot;character&quot;: &quot;0&quot;,
+      &quot;codepoint&quot;: &quot;U+0030&quot;,
+      &quot;name&quot;: &quot;DIGIT ZERO&quot;
+    },
+    {
+      &quot;position&quot;: 332,
+      &quot;character&quot;: &quot;9&quot;,
+      &quot;codepoint&quot;: &quot;U+0039&quot;,
+      &quot;name&quot;: &quot;DIGIT NINE&quot;
+    },
+    {
+      &quot;position&quot;: 337,
+      &quot;character&quot;: &quot;5&quot;,
+      &quot;codepoint&quot;: &quot;U+0035&quot;,
+      &quot;name&quot;: &quot;DIGIT FIVE&quot;
+    },
+    {
+      &quot;position&quot;: 357,
+      &quot;character&quot;: &quot;9&quot;,
+      &quot;codepoint&quot;: &quot;U+0039&quot;,
+      &quot;name&quot;: &quot;DIGIT NINE&quot;
+    },
+    {
+      &quot;position&quot;: 362,
+      &quot;character&quot;: &quot;5&quot;,
+      &quot;codepoint&quot;: &quot;U+0035&quot;,
+      &quot;name&quot;: &quot;DIGIT FIVE&quot;
+    },
+    {
+      &quot;position&quot;: 542,
+      &quot;character&quot;: &quot;9&quot;,
+      &quot;codepoint&quot;: &quot;U+0039&quot;,
+      &quot;name&quot;: &quot;DIGIT NINE&quot;
+    },
+    {
+      &quot;position&quot;: 547,
+      &quot;character&quot;: &quot;5&quot;,
+      &quot;codepoint&quot;: &quot;U+0035&quot;,
+      &quot;name&quot;: &quot;DIGIT FIVE&quot;
+    },
+    {
+      &quot;position&quot;: 1034,
+      &quot;character&quot;: &quot;9&quot;,
+      &quot;codepoint&quot;: &quot;U+0039&quot;,
+      &quot;name&quot;: &quot;DIGIT NINE&quot;
+    },
+    {
+      &quot;position&quot;: 1039,
+      &quot;character&quot;: &quot;5&quot;,
+      &quot;codepoint&quot;: &quot;U+0035&quot;,
+      &quot;name&quot;: &quot;DIGIT FIVE&quot;
+    },
+    {
+      &quot;position&quot;: 1217,
+      &quot;character&quot;: &quot;9&quot;,
+      &quot;codepoint&quot;: &quot;U+0039&quot;,
+      &quot;name&quot;: &quot;DIGIT NINE&quot;
+    },
+    {
+      &quot;position&quot;: 1222,
+      &quot;character&quot;: &quot;5&quot;,
+      &quot;codepoint&quot;: &quot;U+0035&quot;,
+      &quot;name&quot;: &quot;DIGIT FIVE&quot;
+    },
+    {
+      &quot;position&quot;: 1424,
+      &quot;character&quot;: &quot;9&quot;,
+      &quot;codepoint&quot;: &quot;U+0039&quot;,
+      &quot;name&quot;: &quot;DIGIT NINE&quot;
+    },
+    {
+      &quot;position&quot;: 1429,
+      &quot;character&quot;: &quot;5&quot;,
+      &quot;codepoint&quot;: &quot;U+0035&quot;,
+      &quot;name&quot;: &quot;DIGIT FIVE&quot;
+    },
+    {
+      &quot;position&quot;: 1613,
+      &quot;character&quot;: &quot;9&quot;,
+      &quot;codepoint&quot;: &quot;U+0039&quot;,
+      &quot;name&quot;: &quot;DIGIT NINE&quot;
+    },
+    {
+      &quot;position&quot;: 1618,
+      &quot;character&quot;: &quot;5&quot;,
+      &quot;codepoint&quot;: &quot;U+0035&quot;,
+      &quot;name&quot;: &quot;DIGIT FIVE&quot;
+    },
+    {
+      &quot;position&quot;: 1820,
+      &quot;character&quot;: &quot;9&quot;,
+      &quot;codepoint&quot;: &quot;U+0039&quot;,
+      &quot;name&quot;: &quot;DIGIT NINE&quot;
+    },
+    {
+      &quot;position&quot;: 1825,
+      &quot;character&quot;: &quot;5&quot;,
+      &quot;codepoint&quot;: &quot;U+0035&quot;,
+      &quot;name&quot;: &quot;DIGIT FIVE&quot;
+    }
+  ],
+  &quot;confusableCyrillicE&quot;: [],
+  &quot;normalizationChangedSource&quot;: false
+}</pre></details><details><summary><strong>learning to fly.txt</strong> — WARN</summary><h4>Errors</h4><ul></ul><h4>Warnings</h4><ul><li>Digit characters are present in source text; digits are not word tiles under the generator tokenizer.</li></ul><h4>Unicode / tokenization checks</h4><pre>{
+  &quot;nonAsciiCodepoints&quot;: {},
+  &quot;unicodeCategories&quot;: {
+    &quot;Lu&quot;: 66,
+    &quot;Ll&quot;: 828,
+    &quot;Zs&quot;: 188,
+    &quot;Cc&quot;: 48,
+    &quot;Nd&quot;: 7,
+    &quot;Ps&quot;: 18,
+    &quot;Pe&quot;: 18,
+    &quot;Po&quot;: 22
+  },
+  &quot;apostropheVariants&quot;: [],
+  &quot;zeroWidthCharacters&quot;: [],
+  &quot;nonStandardSpaces&quot;: [],
+  &quot;dashVariants&quot;: [],
+  &quot;digitCharacters&quot;: [
+    {
+      &quot;position&quot;: 74,
+      &quot;character&quot;: &quot;1&quot;,
+      &quot;codepoint&quot;: &quot;U+0031&quot;,
+      &quot;name&quot;: &quot;DIGIT ONE&quot;
+    },
+    {
+      &quot;position&quot;: 75,
+      &quot;character&quot;: &quot;9&quot;,
+      &quot;codepoint&quot;: &quot;U+0039&quot;,
+      &quot;name&quot;: &quot;DIGIT NINE&quot;
+    },
+    {
+      &quot;position&quot;: 76,
+      &quot;character&quot;: &quot;9&quot;,
+      &quot;codepoint&quot;: &quot;U+0039&quot;,
+      &quot;name&quot;: &quot;DIGIT NINE&quot;
+    },
+    {
+      &quot;position&quot;: 77,
+      &quot;character&quot;: &quot;1&quot;,
+      &quot;codepoint&quot;: &quot;U+0031&quot;,
+      &quot;name&quot;: &quot;DIGIT ONE&quot;
+    },
+    {
+      &quot;position&quot;: 96,
+      &quot;character&quot;: &quot;1&quot;,
+      &quot;codepoint&quot;: &quot;U+0031&quot;,
+      &quot;name&quot;: &quot;DIGIT ONE&quot;
+    },
+    {
+      &quot;position&quot;: 338,
+      &quot;character&quot;: &quot;2&quot;,
+      &quot;codepoint&quot;: &quot;U+0032&quot;,
+      &quot;name&quot;: &quot;DIGIT TWO&quot;
+    },
+    {
+      &quot;position&quot;: 592,
+      &quot;character&quot;: &quot;3&quot;,
+      &quot;codepoint&quot;: &quot;U+0033&quot;,
+      &quot;name&quot;: &quot;DIGIT THREE&quot;
+    }
+  ],
+  &quot;confusableCyrillicE&quot;: [],
+  &quot;normalizationChangedSource&quot;: false
+}</pre></details><details><summary><strong>lyric_exile.txt</strong> — ERROR</summary><h4>Errors</h4><ul><li>Source TXT and lyrics JSON have line-by-line mismatches.</li></ul><h4>Warnings</h4><ul><li>Unicode normalization changes the source text before tokenization.</li><li>Digit characters are present in source text; digits are not word tiles under the generator tokenizer.</li></ul><h4>Line-by-line mismatches</h4><table><tr><th>Line</th><th>Source</th><th>Lyrics JSON</th><th>Source tokens</th><th>JSON tokens</th></tr><tr><td>3</td><td>Laughin&#x27;, but the joke&#x27;s not funny at all</td><td>Laughin&#x27;, but the joke&#x27;s not funny at all</td><td>Laughin&#x27; | but | the | joke&#x27;s | not | funny | at | all</td><td>Laughin&#x27; | but | the | joke&#x27;s | not | funny | at | all</td></tr><tr><td>4</td><td>And it took you five whole minutes</td><td>And it took you five whole minutes</td><td>And | it | took | you | five | whole | minutes</td><td>And | it | took | you | five | whole | minutes</td></tr><tr><td>5</td><td>To pack us up and leave me with it</td><td>To pack us up and leave me with it</td><td>To | pack | us | up | and | leave | me | with | it</td><td>To | pack | us | up | and | leave | me | with | it</td></tr></table><h4>Unicode / tokenization checks</h4><pre>{
+  &quot;nonAsciiCodepoints&quot;: {
+    &quot;U+2005&quot;: 4
+  },
+  &quot;unicodeCategories&quot;: {
+    &quot;Lu&quot;: 131,
+    &quot;Ll&quot;: 2114,
+    &quot;Zs&quot;: 486,
+    &quot;Po&quot;: 66,
+    &quot;Cc&quot;: 100,
+    &quot;Nd&quot;: 4,
+    &quot;Ps&quot;: 30,
+    &quot;Pe&quot;: 30,
+    &quot;Pd&quot;: 1
+  },
+  &quot;apostropheVariants&quot;: [],
+  &quot;zeroWidthCharacters&quot;: [],
+  &quot;nonStandardSpaces&quot;: [],
+  &quot;dashVariants&quot;: [],
+  &quot;digitCharacters&quot;: [
+    {
+      &quot;position&quot;: 43,
+      &quot;character&quot;: &quot;2&quot;,
+      &quot;codepoint&quot;: &quot;U+0032&quot;,
+      &quot;name&quot;: &quot;DIGIT TWO&quot;
+    },
+    {
+      &quot;position&quot;: 44,
+      &quot;character&quot;: &quot;0&quot;,
+      &quot;codepoint&quot;: &quot;U+0030&quot;,
+      &quot;name&quot;: &quot;DIGIT ZERO&quot;
+    },
+    {
+      &quot;position&quot;: 45,
+      &quot;character&quot;: &quot;2&quot;,
+      &quot;codepoint&quot;: &quot;U+0032&quot;,
+      &quot;name&quot;: &quot;DIGIT TWO&quot;
+    },
+    {
+      &quot;position&quot;: 46,
+      &quot;character&quot;: &quot;0&quot;,
+      &quot;codepoint&quot;: &quot;U+0030&quot;,
+      &quot;name&quot;: &quot;DIGIT ZERO&quot;
+    }
+  ],
+  &quot;confusableCyrillicE&quot;: [],
+  &quot;normalizationChangedSource&quot;: true
+}</pre></details><details><summary><strong>get_back.txt</strong> — WARN</summary><h4>Errors</h4><ul></ul><h4>Warnings</h4><ul><li>Digit characters are present in source text; digits are not word tiles under the generator tokenizer.</li></ul><h4>Unicode / tokenization checks</h4><pre>{
+  &quot;nonAsciiCodepoints&quot;: {},
+  &quot;unicodeCategories&quot;: {
+    &quot;Lu&quot;: 72,
+    &quot;Ll&quot;: 835,
+    &quot;Zs&quot;: 183,
+    &quot;Cc&quot;: 53,
+    &quot;Nd&quot;: 4,
+    &quot;Po&quot;: 28,
+    &quot;Ps&quot;: 6,
+    &quot;Pe&quot;: 6
+  },
+  &quot;apostropheVariants&quot;: [],
+  &quot;zeroWidthCharacters&quot;: [],
+  &quot;nonStandardSpaces&quot;: [],
+  &quot;dashVariants&quot;: [],
+  &quot;digitCharacters&quot;: [
+    {
+      &quot;position&quot;: 31,
+      &quot;character&quot;: &quot;1&quot;,
+      &quot;codepoint&quot;: &quot;U+0031&quot;,
+      &quot;name&quot;: &quot;DIGIT ONE&quot;
+    },
+    {
+      &quot;position&quot;: 32,
+      &quot;character&quot;: &quot;9&quot;,
+      &quot;codepoint&quot;: &quot;U+0039&quot;,
+      &quot;name&quot;: &quot;DIGIT NINE&quot;
+    },
+    {
+      &quot;position&quot;: 33,
+      &quot;character&quot;: &quot;7&quot;,
+      &quot;codepoint&quot;: &quot;U+0037&quot;,
+      &quot;name&quot;: &quot;DIGIT SEVEN&quot;
+    },
+    {
+      &quot;position&quot;: 34,
+      &quot;character&quot;: &quot;0&quot;,
+      &quot;codepoint&quot;: &quot;U+0030&quot;,
+      &quot;name&quot;: &quot;DIGIT ZERO&quot;
+    }
+  ],
+  &quot;confusableCyrillicE&quot;: [],
+  &quot;normalizationChangedSource&quot;: false
+}</pre></details>
+<h2>Orphans</h2><pre>{
+  &quot;orphanSources&quot;: [],
+  &quot;orphanLyricsJson&quot;: [],
+  &quot;orphanWordCountJson&quot;: []
+}</pre>
+</body></html>

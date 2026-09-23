@@ -8,11 +8,6 @@
  * JSON data. This file contains game-state, draw, persona, and simulation
  * logic only; it does not create or manipulate the simulator interface.
  *
- * TEMPORARY DIAGNOSTIC:
- * This build records the seeded RNG stream, shuffle consumption, and the
- * first two rounds so the current RNG/draw architecture can be verified
- * before Hank Solver work changes any game mechanics.
- *
  * PERSONAS:
  *   Dolly — Aggressive Row Filler
  *     Aggressive line completion with adaptive restraint when the hand
@@ -597,44 +592,11 @@
     function simulateGame(songBundle, options) {
         const random = options.random;
         const mode = options.mode || CONFIG.defaultMode;
-
-        /*
-         * TEMPORARY RNG DIAGNOSTIC:
-         * Record the seeded random stream without changing simulator behavior.
-         * This lets us determine how shuffle, draws, and persona decisions
-         * consume the same RNG stream.
-         */
-        const rngDiagnostic = {
-            seed: options.diagnosticSeed ?? null,
-            totalCalls: 0,
-            calls: [],
-            shuffle: null,
-            rounds: []
-        };
-
-        const diagnosticRandom = function (label) {
-            const value = random();
-            rngDiagnostic.totalCalls += 1;
-            rngDiagnostic.calls.push({
-                call: rngDiagnostic.totalCalls,
-                label: label || "random",
-                value
-            });
-            return value;
-        };
         const gameConfig = getModeConfig(mode);
         const persona = options.persona || CONFIG.defaultPersona;
         const allLines = songBundle.lines;
         const pool = songBundle.pool.slice();
-
-        const shuffleCallsBefore = rngDiagnostic.totalCalls;
-        shuffle(pool, diagnosticRandom);
-        rngDiagnostic.shuffle = {
-            callsBefore: shuffleCallsBefore,
-            callsAfter: rngDiagnostic.totalCalls,
-            callsUsed: rngDiagnostic.totalCalls - shuffleCallsBefore,
-            poolFirst20: pool.slice(0, 20).map(tile => tile.word)
-        };
+        shuffle(pool, random);
 
         const hand = [], activeLines = [], completedLines = [], completedIds = new Set();
         let previousPlayed = 0, totalDrawn = 0, totalPlayed = 0;
@@ -644,37 +606,14 @@
             if (pool.length === 0) break;
             const requestedDraw = calculateDraw(round, previousPlayed);
             const handBeforeDraw = hand.length;
-
-            const rngCallsBeforeDraw = rngDiagnostic.totalCalls;
-            const drawn = drawTiles(
-                pool, hand, requestedDraw, diagnosticRandom, gameConfig
-            );
-            const rngCallsAfterDraw = rngDiagnostic.totalCalls;
-
+            const drawn = drawTiles(pool, hand, requestedDraw, random, gameConfig);
             drawn.forEach(tile => hand.push(tile));
             totalDrawn += drawn.length;
 
-            const rngCallsBeforePlay = rngDiagnostic.totalCalls;
             const playResult = playHand(
                 hand, activeLines, allLines, completedIds, completedLines,
-                diagnosticRandom, gameConfig, persona, round
+                random, gameConfig, persona, round
             );
-            const rngCallsAfterPlay = rngDiagnostic.totalCalls;
-
-            if (round <= 2) {
-                rngDiagnostic.rounds.push({
-                    round,
-                    requestedDraw,
-                    actualDraw: drawn.length,
-                    rngCallsBeforeDraw,
-                    rngCallsAfterDraw,
-                    drawRandomCalls: rngCallsAfterDraw - rngCallsBeforeDraw,
-                    rngCallsBeforePlay,
-                    rngCallsAfterPlay,
-                    decisionRandomCalls: rngCallsAfterPlay - rngCallsBeforePlay,
-                    drawn: drawn.map(tile => tile.word)
-                });
-            }
             const playedThisRound = playResult.playedThisTurn;
             totalPlayed += playedThisRound;
             previousPlayed = playedThisRound;
@@ -709,8 +648,7 @@
             roundsPlayed: rounds.length, totalSourceWords: totalWordsInSource,
             totalDrawn, totalPlayed, held: hand.length,
             completedLines: completedLines.length, activeLines: activeLines.length,
-            poolRemaining: pool.length, rounds,
-            diagnostic: rngDiagnostic
+            poolRemaining: pool.length, rounds
         };
     }
 
@@ -751,14 +689,7 @@
         const mode = options?.mode || CONFIG.defaultMode;
         const persona = options?.persona || CONFIG.defaultPersona;
         for (let i = 0; i < trialCount; i += 1) {
-            trials.push(simulateGame(songBundle, {
-                random: randomFactory(i),
-                mode,
-                persona,
-                diagnosticSeed: options?.seed != null
-                    ? Number(options.seed) + i
-                    : null
-            }));
+            trials.push(simulateGame(songBundle, { random: randomFactory(i), mode, persona }));
         }
         const average = field => trials.reduce((sum, result) => sum + result[field], 0) / Math.max(1, trials.length);
         const wins = trials.filter(result => result.won).length;
