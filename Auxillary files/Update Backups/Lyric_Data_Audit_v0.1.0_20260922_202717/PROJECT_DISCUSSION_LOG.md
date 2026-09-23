@@ -376,14 +376,3 @@ Hank returns `PROVEN_UNSOLVABLE` only after its reachable state search has compl
 
 ### Deferred validation
 The first implementation establishes the architecture and correctness-oriented search contract. Additional validation should include independent tiny-game brute-force comparisons, seeded golden states, solution replay validation, and regression checks before Hank is treated as a fully validated mathematical oracle for large song pools.
-
-## 2026-09-23 — Lyric Data Audit 0.1.0
-
-### Decision
-A dedicated read-only data audit was added before making further Hank/search changes. The purpose is to determine whether unexpectedly high simulator failure rates are caused by source-data inconsistencies rather than game strategy or solver behavior.
-
-### Audit scope
-The audit compares maintained TXT lyric sources, generated lyrics JSON, generated word-count JSON, physical tile inventories, and `song_library/song_catalog.json`. It checks metadata, line-by-line conservation, per-word physical counts, Unicode/tokenization conditions, catalog references, and orphan files.
-
-### Safety
-The audit does not regenerate or modify song-library data. Reports are written separately under `Auxillary files/Lyric Data Audit/`.

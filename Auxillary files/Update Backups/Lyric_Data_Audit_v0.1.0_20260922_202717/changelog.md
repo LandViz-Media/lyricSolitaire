@@ -185,17 +185,3 @@ New songs discovered or added to `/song_library` may be recorded here.
 
 ### Data
 - Inspected the available `song_library` before the update. No song-library files are modified by this release.
-
-## [Lyric Data Audit 0.1.0] — 2026-09-23
-
-### Added
-- Added a read-only **Lyric Data Audit** for validating the song source-to-tile pipeline.
-- Added Finder folder selection through `Audit_Lyric_Data.command`.
-- Added per-song source/JSON/physical-tile conservation checks.
-- Added per-word frequency mismatch reporting and line-by-line lyric comparison.
-- Added Unicode normalization, apostrophe, zero-width character, whitespace, dash, digit, and confusable-character diagnostics.
-- Added `song_catalog.json` file/reference and metadata validation.
-- Added JSON and HTML audit reports under `Auxillary files/Lyric Data Audit/`.
-
-### Safety
-- The audit never regenerates, edits, renames, moves, or deletes files in `song_library`.
