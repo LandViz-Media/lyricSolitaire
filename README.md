@@ -1,42 +1,55 @@
-# Lyric Solitaire 0.1.9 Update
+# Lyric Solitaire — Separate RNG Streams v0.1.10
 
-This update introduces **Hank — Exhaustive Game Analysis**, a separate solver for analyzing one exact seeded Lyric Solitaire game.
+This update separates the Simulator's deterministic random-number generation into two streams:
 
-## Included
+- **Tile-draw RNG** — physical pool shuffle and random-index tile draws.
+- **Player-decision RNG** — persona tie-breaking and other random player choices.
 
-- `simulator.html` — adds **Solve This Game with Hank ↗**
-- `hank.html` — independent Hank Solver interface
-- `js/utilities/hankState.js`
-- `js/utilities/hankRules.js`
-- `js/utilities/hankSearch.js`
-- `js/utilities/hankSolver.js`
-- `js/config/projectVersion.js`
-- `docs/HANK.md`
-- `docs/SIMULATOR.md`
-- `changelog.md`
-- `PROJECT_DISCUSSION_LOG.md`
-- `Install_LyricSolitaire_0.1.9.command`
-
-## Simulator → Hank workflow
-
-The Simulator remains the batch simulation environment for Dolly, Johnny, Kenny, and Garth.
-
-When a selected game needs exact analysis, click **Solve This Game with Hank ↗**. The browser opens a separate Hank tab containing the selected song(s), mode, and seed. Hank independently reconstructs the seeded game and performs the search.
-
-The Simulator does **not** run Hank internally, and Hank does **not** depend on a Simulator trial result.
-
-## Hank results
-
-Hank reports one of three statuses:
-
-- **PROVEN SOLVABLE**
-- **PROVEN UNSOLVABLE**
-- **SEARCH INCOMPLETE**
-
-The last status is used whenever a state-count or time limit prevents complete enumeration.
+The existing game mechanics are preserved. The tile stream uses the same per-trial seed as before,
+so player-decision RNG calls no longer advance the tile-draw stream.
 
 ## Install
 
-Double-click `Install_LyricSolitaire_0.1.9.command` on macOS and select the local Lyric Solitaire repository root. The installer backs up changed files into `Auxillary files/Update Backups/0.1.9_<timestamp>/` before copying the update.
+1. Double-click `Install_LyricSolitaire_RNG_Streams_v0.1.10.command`.
+2. Select the local **Lyric Solitaire repository root** in the Finder dialog.
+3. The installer backs up every changed file under:
+   `Auxillary files/Update Backups/0.1.10_<timestamp>/`
+4. Run the Simulator normally.
 
-No song-library files are changed by this update.
+The installer does **not** modify `song_library/` or its contents.
+
+## Recommended validation
+
+Run:
+
+- Song: Everlong
+- Persona: Dolly
+- Mode: Easy / Open
+- Trials: 1000
+- Seed: 32451
+
+Export the results so the new RNG behavior can be compared with the previous diagnostic export.
+
+## Tile RNG Diagnostic
+
+This v0.1.10 build includes an opt-in **Tile RNG Diagnostic** checkbox in Simulator Lab.
+When enabled, each trial records the tile RNG seed, initial shuffle RNG-call count, and every
+physical tile draw in order. Each draw records its global draw index, round, within-round draw
+index, word/key, RNG value, selected pool index, and pool size before removal.
+
+Use this mode to compare Dolly, Kenny, Johnny, and Garth with the same song, mode, and seed.
+The tile-draw sequence should remain identical across personas even when their decision RNG usage differs.
+
+
+### Paired Tile RNG Diagnostic
+The v0.1.10 diagnostic workflow can run Dolly and Kenny on the same song, mode, and seed and export one JSON comparison proving whether their tile-draw sequences are identical despite independent decision RNG usage.
+
+
+## Paired Tile RNG Comparison Update
+
+The paired Dolly/Kenny comparison now separates two diagnostics:
+
+- **Tile-stream identity** compares `drawIndex`, `word`, `key`, `randomValue`, `poolIndex`, and `poolLengthBefore`. It intentionally ignores `round` and `roundDrawIndex`.
+- **Round timing** separately compares `round` and `roundDrawIndex`, so different persona play rates can be reported without being mistaken for a different tile RNG stream.
+
+The JSON retains the top-level `comparison.identical` field for compatibility; it represents physical tile-stream identity. Detailed results are available under `comparison.tileStream` and `comparison.roundTiming`.

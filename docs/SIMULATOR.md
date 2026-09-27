@@ -153,3 +153,28 @@ The Simulator Lab includes a diagnostic workflow for validating the separation o
 The workflow exports one JSON file containing both trials plus a programmatic comparison of `tileDrawDiagnostic.draws`. A comparison is **IDENTICAL** only when every recorded draw matches, including draw index, round, tile identity, RNG value, selected pool index, and pool length. If a difference exists, the report identifies the first differing draw and includes both records.
 
 This is diagnostic only and does not alter game rules or the normal Simulator export workflow.
+
+
+## Paired Tile RNG Comparison — Diagnostic Interpretation
+
+The Dolly/Kenny paired comparison intentionally separates **what tile was drawn** from **when the tile was drawn**.
+
+### Tile-stream identity
+The physical tile stream is compared using only:
+
+- `drawIndex`
+- `word`
+- `key`
+- `randomValue`
+- `poolIndex`
+- `poolLengthBefore`
+
+`round` and `roundDrawIndex` are excluded from this identity test. Therefore, two personas can receive the same physical tile sequence even when their different play decisions cause the same tile to occur in different rounds.
+
+### Round timing
+Round timing is reported separately using:
+
+- `round`
+- `roundDrawIndex`
+
+The comparison JSON contains `comparison.tileStream` and `comparison.roundTiming`. The top-level `comparison.identical` remains the physical tile-stream result for compatibility with earlier diagnostic exports.

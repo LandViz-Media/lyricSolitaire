@@ -1,227 +1,189 @@
-## v0.1.10 Diagnostic Update — Paired Tile RNG Comparison
+# Simulator Lab
 
-- Added a dedicated paired comparison workflow for Dolly and Kenny.
-- Runs both personas on the same single song, mode, and seed.
-- Forces Tile RNG Diagnostic on for both runs.
-- Compares `tileDrawDiagnostic.draws` programmatically, including draw index, round, tile identity, RNG value, pool index, and pool length.
-- Reports the first differing draw and an overall `IDENTICAL` / `DIFFERENT` result.
-- Downloads one comparison JSON containing both trials and the comparison result.
-- No game mechanics or normal simulation behavior changed.
+**Simulator version: 0.1.7**
 
-# Changelog
+## Purpose
 
-## [0.1.10] — 2026-09-24 — Tile RNG Diagnostic
+The Simulator Lab is a research and balance-testing tool. It uses the maintained lyric JSON and word-count JSON data and retains complete individual trials so results can be examined later without rerunning an experiment.
 
-### Diagnostics
-- Added an opt-in **Tile RNG Diagnostic** mode to the Simulator.
-- Records the tile RNG seed used for each trial.
-- Records every physical tile draw in exact order, with global draw index, round number, within-round draw index, drawn word/key, tile RNG value, selected pool index, and pool size before removal.
-- Records the number of tile-RNG calls consumed by the initial Fisher-Yates shuffle.
-- Diagnostic data is omitted from normal simulations unless the checkbox is enabled.
-- Game mechanics and the separate tile/decision RNG architecture are unchanged.
+## Personas
 
-## [0.1.10] — 2026-09-23
+The simulator now contains three deliberately different decision-making models:
 
-### Changed
-- Separated the Simulator random-number generation into two deterministic streams:
-  - **Tile-draw RNG** controls the physical-pool shuffle and all tile draws.
-  - **Player-decision RNG** controls persona tie-breaking and other player-choice randomness.
-- Preserved the existing game rules, draw formula, hand limits, row limits, persona restrictions,
-  final-round behavior, and physical tile-selection mechanics.
-- Kept the tile stream seeded from the same per-trial seed used previously, so the tile RNG is
-  no longer advanced by player-decision calls.
-- Retained backward compatibility in `runTrials()` for callers that provide a single RNG function.
+- **Dolly — Aggressive Row Filler:** aggressively completes active lines, but adapts new-line opening as the game advances and the hand becomes crowded.
+- **Johnny — Walks the Line:** plays as many words as possible but opens no more than one new lyric line per round.
+- **Kenny — The Gambler:** favors existing active lines first, then takes substantially more new-line risk; in Round 1 he targets nine or ten active lines when the mode permits it.
 
-### Diagnostics / Research Purpose
-- This change directly addresses the RNG diagnostic finding that decision tie-breaks were consuming
-  the same random stream used for future tile draws.
-- The separation makes a seeded trial's tile-draw stream independent of how many random player
-  decisions occur during earlier rounds.
-- No song-library files are modified by this release.
+The detailed implementation logic is documented separately in `docs/personas/`.
+
+## Experiment setup
+
+Experiment Setup filters in this order:
+1. Genre(s)
+2. Artist(s)
+3. Song(s)
+4. Persona
+5. Difficulty / Mode
+6. Experiment Name (auto-generated; editable)
+7. Trials
+8. Random Seed
+
+Song selection supports multiple songs. When more than one song is selected, their physical word pools and distinct lyric-line occurrences are combined into one simulation bundle.
+
+## Deterministic seeds
+
+The entered Random Seed is a **base seed**. Trial `i` receives a deterministic random stream derived from that seed and the trial index. Therefore, the same experiment inputs should reproduce the same trial collection.
+
+Changing any of these can change results:
+- selected song(s)
+- persona
+- difficulty/mode
+- trial count
+- random seed
+- simulation engine version
+
+## Draw and hand capacity
+
+The requested draw is:
+
+- Round 1: 12
+- Later rounds: `(13 - Round) + previous round words played`
+
+The requested draw is then capped by:
+- remaining physical word-pool size
+- available hand capacity
+
+For example, with a 40-tile Standard hand, a player holding 39 tiles at the start of a round can draw only one additional tile even if the calculated requested draw is 10.
+
+## Modes
+
+| Mode | Rows | Hand Limit | Maximum Rounds |
+|---|---:|---:|---:|
+| Easy / Open | 12 | 50 | 12 |
+| Standard | 10 | 40 | 10 |
+| Hard | 8 | 30 | 8 |
+
+## Round trace
+
+Each trial records requested draw, actual draw, hand size before and after play, words played, completed lines, active lines, pool remaining, and the number of new lines opened during the round. It also records per-round playability diagnostics. These metrics count physical tiles, so duplicate words count as separate tiles:
+
+- `playableOnExistingLines`: physical tiles that can be accommodated by the remaining word demand on already-active lines. Duplicate copies are capped by the number of matching slots, so three copies of a word with only one matching slot count as one playable tile.
+- `playableByOpeningNewLine`: physical tiles not accommodated by existing lines that match remaining demand on at least one candidate unopened line. This is an opportunity count, not a guarantee that every candidate line will actually be opened.
+- `playedOnExistingLines`: tiles actually played onto lines that were already active.
+- `playedByOpeningNewLine`: tiles actually played by opening a new line.
+- `playableTilesRemainingUnplayed`: tiles still in the hand after the play phase that could legally be played either on an active line or by opening a new line, ignoring persona-specific reluctance to open a row.
+
+The final metric is especially useful for determining whether a persona is actually holding back playable tiles. The first two metrics are a start-of-round snapshot; the two `played...` metrics record what actually happened during the play phase.
+
+## Export
+
+Use the **Export Results (JSON)** button to export the complete browser session. The optional Experiment Name is retained in the JSON record and contributes to the downloaded filename.
+
+Filenames include a timestamp, so multiple exports on the same calendar day receive distinct names.
+
+The export retains every experiment and every individual trial. This is intentional: later analysis should not require rerunning an experiment.
+
+## Reset
+
+Reset clears the page display but does not erase completed experiments from the browser session.
+
+## Endgame behavior
+
+Persona differences are strongest in the earlier rounds. In the second-to-last round, personas become more willing to open new lines because it is the last meaningful setup opportunity. In the final round, all personas use the same maximum-play rule: existing-line plays remain first priority, but persona-specific restrictions on opening new lines are suspended. A legal new line may be opened whenever a row is available.
+
+## Lyric foresight
+
+New-line selection includes limited look-ahead. The simulator rewards a candidate lyric line when the opening word also makes several other words already in the hand playable. This models the advantage of a player who knows the song and can recognize a productive line before opening it. Kenny receives the strongest foresight weight, Dolly an intermediate weight, and Johnny a lighter weight.
+
+## Experiment naming
+
+Experiment Name is automatically generated from the current song selection, persona, mode, trial count, and random seed, for example: `Everlong — Dolly — Standard — 10 trials — Seed 32451`. The field remains editable. A manually edited name is captured for that experiment; after the experiment is run, subsequent parameter changes generate a fresh name for the next experiment.
+
+## Diagnostic Reference Persona — Garth
+
+**Garth — Heuristic Reference Player** is a permanent diagnostic persona. Garth is not intended to represent a typical human playing style. Instead, he uses the simulator's full knowledge of the current lyric lines and hand to evaluate legal moves and look for promising short-term cascades.
+
+Garth's heuristic gives strong priority to: 
+
+1. completing a lyric line immediately;
+2. maximizing additional words in the current hand that can use the resulting line;
+3. advancing a line toward completion; and
+4. avoiding unnecessary new-line openings when otherwise comparable moves exist.
+
+Garth evaluates the current legal move set repeatedly after each play. This makes him useful as a reference point when comparing the human-style personas, but **Garth is not a mathematical proof of solvability**. A Garth loss does not prove that a deal is unsolvable.
+
+### Future Guaranteed Persona — Hank
+
+The project reserves **Hank** as the name for a future mathematically guaranteed solver. Hank should only be introduced after the solver can be defined precisely and validated as an exhaustive/complete search under the simulator's actual rules. Until then, Garth remains the upper-reference diagnostic.
+
+## Simulator → Hank Solver
+
+The Simulator is the launching point for exact analysis, but Hank is intentionally a separate tool rather than a fifth persona.
+
+After selecting the song(s), mode, and random seed, **Solve This Game with Hank ↗** opens `hank.html` in a new browser tab. The URL carries the game-defining song IDs, mode, and seed. Hank loads the song data itself and reconstructs the exact seeded game independently.
+
+This separation is important for correctness: the Simulator does not execute Hank's search, and Hank does not depend on the Simulator's current trial state. See `docs/HANK.md` for the solver contract and proof-status definitions.
 
 
-## [0.1.8] — 2026-09-20
+## 0.1.10 — Separate RNG Streams
 
-### Simulator
-- Added **Garth — Heuristic Reference Player** as a permanent diagnostic persona.
-- Garth evaluates legal moves across the current hand and lyric board rather than following a human-style row-opening rule.
-- Garth rewards immediate line completion, then near-term hand coverage/progress, with a small penalty for opening a new line.
-- Garth remains deterministic under the simulator's seeded trial streams.
-- Clearly documented Garth as a heuristic reference rather than a guaranteed solver.
-- Kept the existing Dolly, Johnny, Kenny, and final-round rules unchanged.
+The Simulator now uses two deterministic random streams within each seeded trial. The **tile-draw
+stream** controls the initial physical-pool shuffle and every random-index tile draw. The
+**player-decision stream** controls persona tie-breaks and other random choices made while playing.
 
-### Future / Deferred
-- Reserved the name **Hank — Guaranteed Solver** for a future mathematically guaranteed search/solver persona.
-- Hank is intentionally not implemented in 0.1.8; the next design step is to determine whether an exhaustive or provably complete search is computationally practical across the simulator's song sizes and modes.
+The tile stream uses the same per-trial seed that the Simulator previously used, while the decision
+stream is derived independently from that seed. Consequently, additional decision RNG calls no longer
+advance the tile-draw RNG. The underlying game mechanics are unchanged.
 
-## [0.1.7] — 2026-09-20
+For compatibility, the simulation engine still accepts callers that provide a single RNG function;
+in that case the old shared-stream behavior remains available. The Simulator UI uses the new
+separated streams.
 
-### Changed
-- Added automatic Experiment Name generation from current song selection, persona, mode, trial count, and random seed.
-- Kept Experiment Name editable; a manually edited name is captured for that experiment, while the next experiment returns to automatic naming after the run.
-- Added a second-to-last-round endgame adjustment for all personas.
-- Added a universal final-round maximum-play rule that suspends persona-specific new-line restrictions.
-- Added limited lyric foresight when selecting new lines: candidate lines that unlock multiple words already in the hand receive additional weight. This models the advantage of knowing the song.
-- Corrected playability diagnostics so duplicate physical copies of a word are not all counted as playable when fewer matching slots exist on the board.
-- Bumped the simulator to 0.1.7 and export schema to 1.3.3.
+## Tile RNG Diagnostic
 
-### Diagnostics
-- Per-round playability metrics now distinguish physical tile capacity from simple word-key compatibility.
+The Simulator includes an opt-in **Tile RNG Diagnostic** checkbox. When enabled, each trial records the tile RNG seed, the initial shuffle's tile-RNG call count, every physical tile draw in order, a global and round-specific draw index, the drawn word/key, the tile RNG value used, and the selected pool index and pool size before removal.
+
+Use this mode for controlled RNG validation, especially when comparing two personas with the same song, mode, and seed. The expected result under the v0.1.10 separate-stream architecture is an identical tile-draw sequence even when persona decision RNG usage differs. The diagnostic is intentionally opt-in because exports can become substantially larger.
 
 
-## [0.1.6] — 2026-09-19
+## Paired Tile RNG Comparison
 
-### Simulator Diagnostics
-- Added per-round playability metrics to every simulated trial.
-- Recorded how many physical tiles were playable on existing active lines at the start of the play phase.
-- Recorded how many tiles required opening a new line to become playable at the start of the play phase.
-- Recorded how many tiles were actually played on existing lines versus by opening a new line.
-- Recorded how many playable tiles remained unplayed after the play phase, using a persona-independent definition of legal playability.
-- Kept duplicate word occurrences as separate physical tiles in all diagnostic counts.
-- Bumped the simulator version to 0.1.6 and the exported experiment schema to 1.3.2.
+The Simulator Lab includes a diagnostic workflow for validating the separation of tile-draw and player-decision RNG streams. Select exactly one song and the desired mode, set the seed, and choose **Run Dolly + Kenny Tile RNG Comparison**. The workflow runs one Dolly trial and one Kenny trial using the same tile RNG seed while each persona receives its own decision RNG stream.
 
-### Research Purpose
-- These diagnostics are intended to distinguish genuine persona restraint from simple lack of legal plays, especially when investigating whether a persona is holding playable tiles before the final rounds.
+The workflow exports one JSON file containing both trials plus a programmatic comparison of `tileDrawDiagnostic.draws`. A comparison is **IDENTICAL** only when every recorded draw matches, including draw index, round, tile identity, RNG value, selected pool index, and pool length. If a difference exists, the report identifies the first differing draw and includes both records.
+
+This is diagnostic only and does not alter game rules or the normal Simulator export workflow.
 
 
-## [0.1.5] — 2026-09-07
+## Paired Tile RNG Comparison — Diagnostic Interpretation
 
-### Simulator
-- Made seeded trial creation explicitly deterministic: trial `i` receives a reproducible random stream derived from the entered base seed and trial index.
-- Added three named simulator personas: **Dolly — Aggressive Row Filler**, **Johnny — Walks the Line**, and **Kenny — The Gambler**.
-- Reworked persona execution so existing active-line matches always receive priority before a new lyric line can be opened.
-- Added Dolly's adaptive new-line target and hand-pressure behavior to reduce unnecessary board saturation as a game progresses.
-- Added Johnny's one-new-line-per-round constraint.
-- Added Kenny's high-risk opening behavior, including a Round 1 target of nine or ten active lines when the selected mode permits it.
-- Added `openedNewLines` to each round trace for persona analysis.
+The Dolly/Kenny paired comparison intentionally separates **what tile was drawn** from **when the tile was drawn**.
 
-### Experiment Exports
-- Added an optional **Experiment Name** field.
-- Experiment names are retained in exported experiment records.
-- Export filenames now include a descriptive slug and timestamp, preventing same-day filename collisions.
-- Preserved complete session/trial export behavior.
+### Tile-stream identity
+The physical tile stream is compared using only:
 
-### Documentation
-- Added detailed persona files under `docs/personas/`. Each begins with a plain-language description followed by engine implementation terminology.
-- Updated Simulator documentation and project discussion log with the new persona model and deterministic-testing decision.
+- `drawIndex`
+- `word`
+- `key`
+- `randomValue`
+- `poolIndex`
+- `poolLengthBefore`
 
-## [0.1.4] — 2026-09-04
+`round` and `roundDrawIndex` are excluded from this identity test. Therefore, two personas can receive the same physical tile sequence even when their different play decisions cause the same tile to occur in different rounds.
+
+### Round timing
+Round timing is reported separately using:
+
+- `round`
+- `roundDrawIndex`
+
+The comparison JSON contains `comparison.tileStream` and `comparison.roundTiming`. The top-level `comparison.identical` remains the physical tile-stream result for compatibility with earlier diagnostic exports.
 
 
+## 2026-09-27 — Paired RNG Comparison Refinement
 
-### Simulator
-- Added Genre(s) as the first Experiment Setup filter, before Artist(s).
-- Genre choices are derived from the current song catalog; selecting genre(s) filters the available artists and songs.
-- Song selector now displays song titles only; artist context remains available through the separate Artist(s) selector.
-- Updated simulator header treatment to use the shared Lyric Solitaire tool-header artwork and corrected the header alignment/left-edge spacing.
-- Preserved the existing simulation engine, persona system, session logging, and result schema.
-
-### Results Viewer
-- Updated the Results Viewer header to match the visual language of the Simulator, using the shared tool-header artwork derived from the Lyric Solitaire cover graphic.
-- Added the simulator version badge to the Results Viewer header.
-
-### Generator
-- Updated the Generator header to match the shared Simulator/Results visual design while retaining its existing v0.1.4.4 generation behavior.
-
-### Project Memory
-- Added `PROJECT_DISCUSSION_LOG.md` as the durable record of project discussions, decisions, rationale, issues, and deferred ideas.
-
-### Data
-- The user reports that `Get Back` by The Beatles has been added to `song_library` and the catalog has been updated on GitHub.
-- No song-library data is modified by this release.
-
-## [0.1.3.2] — 2026-09-02
-
-### Fixed
-- Fixed the lyric generator metadata parser to use the maintained source format:
-  Artist, Song Title, Album, Year, Genre.
-- Fixed the generator so Artist and Song Title are no longer reversed when JSON is generated.
-
-### Added
-- Added Raw GitHub URL loading to the lyric generator.
-- Added file-browser and pasted-text source options to the generator workflow.
-- Added automatic artist-key/folder detection using existing entries in
-  `song_library/song_catalog.json`, with a surname-first fallback for new artists.
-- Added generator version `0.1.3.2` to the shared project version configuration.
-
-### Changed
-- Updated generator instructions and source-text examples to match the established
-  five-line lyric source convention.
-- Kept the artist key editable after automatic detection.
-
-### Repository Cleanup
-- Removed the obsolete `/json` song-data location and retired the old lyric-generator tool path.
-- Removed obsolete backup/update files from the active repository; project history is now maintained in this changelog.
-
-### Data
-- No new song was added in this release. Dolly Parton / 9 to 5 remains intentionally
-  out of the maintained song library until it can be regenerated with the corrected generator.
-
-## [0.1.3.1] — 2026-09-02
-
-### Fixed
-- Corrected the v0.1.3 overlay so all required JavaScript dependencies are
-  actually installed.
-- Fixed the blank Artist, Song, and Persona controls caused by the missing
-  JavaScript dependency tree.
-- Added explicit cache-busting to simulator JavaScript references.
-- Added the current simulator version to every individual trial.
-- Kept experiment data in browser memory instead of localStorage, avoiding
-  quota failures for 1,000-trial experiments.
-
-### Added
-- First named persona: **Dolly — Aggressive Row Filler**.
-- Single session-wide **Export Results (JSON)** workflow.
-- Persona metadata and filtering.
-- Initial Results Viewer session-file support.
-- Shared navigation between Home, Simulator, Generator, and Results.
-
-### Important
-v0.1.3 was not a valid testing release because its installer package did not
-reliably install the JavaScript dependency tree. Do not use v0.1.3 as the
-baseline for experiments. Use v0.1.3.1.
-
-## [0.1.3] — 2026-09-02
-
-Initial persona, single-session export, results viewer, generator, and shared
-navigation work.
-
-## Data Changelog
-
-New songs discovered or added to `/song_library` may be recorded here.
-## [0.1.3.2] — 2026-09-02
-
-### Changed
-- Rebuilt the Lyric Generator interface with a clearer five-step workflow and a visual design consistent with the Simulator and Results tools.
-- Added Raw GitHub URL loading alongside local `.txt` file browsing and pasted lyric text.
-- Updated the generator to use the maintained source format: **Artist, Song Title, Album, Year, Genre**.
-- Added automatic artist-key detection using the existing `song_catalog.json` when an artist is already registered, with derived keys for new artists.
-- Added an explicit `generatorVersion` to the shared project version configuration.
-
-### Fixed
-- Corrected the generator's metadata parsing bug that treated the first line as the song title and the second line as the artist.
-- Updated the source-format instructions and placeholder text to match the established `song_library` convention.
-
-### Notes
-- No song-library data was changed in this release. New or changed songs should continue to be verified against `song_library/` before catalog updates.
-
-## [0.1.9] — 2026-09-22
-
-### Hank Solver
-- Added **Hank — Exhaustive Game Analysis** as a separate solver UI and engine rather than a fifth Simulator persona.
-- Added `hank.html`, launched from Simulator Lab with **Solve This Game with Hank ↗**.
-- The Simulator passes only selected song IDs, mode, and seed; Hank independently loads the song data and reconstructs the exact seeded game.
-- Recreated the Simulator's seeded 32-bit random generator, Fisher-Yates shuffle, and random-index physical-tile draws as explicit Hank state transitions.
-- Added canonical game-state representation, legal move generation, state transitions, memoization, and conservative exhaustive depth-first search.
-- Added explicit proof statuses: `PROVEN_SOLVABLE`, `PROVEN_UNSOLVABLE`, and `SEARCH_INCOMPLETE`.
-- Added configurable maximum-state and maximum-time limits so incomplete searches are never mislabeled as unsolvable.
-- Added solution-trace and initial-state export information.
-- Hank does not use Dolly, Johnny, Kenny, or Garth strategy restrictions.
-
-### Architecture
-- Kept Simulator Lab focused on batch simulation and persona comparison.
-- Kept Hank as an independent exact-analysis instrument.
-- Added `docs/HANK.md` documenting the solver contract and Simulator handoff.
-
-### Data
-- Inspected the available `song_library` before the update. No song-library files are modified by this release.
+- Refined the paired Dolly/Kenny Tile RNG comparison.
+- Tile-stream identity now compares only physical draw fields: `drawIndex`, `word`, `key`, `randomValue`, `poolIndex`, and `poolLengthBefore`.
+- `round` and `roundDrawIndex` are now excluded from tile-stream identity.
+- Added separate round-timing comparison and first timing difference reporting.
+- Preserved top-level `comparison.identical` as the physical tile-stream identity result.
