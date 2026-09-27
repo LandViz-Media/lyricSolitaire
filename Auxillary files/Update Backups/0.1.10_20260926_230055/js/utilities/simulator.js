@@ -8,10 +8,10 @@
  * JSON data. This file contains game-state, draw, persona, and simulation
  * logic only; it does not create or manipulate the simulator interface.
  *
- * DIAGNOSTIC MODE:
- * Optional tile-draw diagnostics record the tile RNG seed and every physical
- * tile drawn, in order, with global and per-round draw indexes. Diagnostic
- * logging is opt-in so normal simulations remain compact.
+ * TEMPORARY DIAGNOSTIC:
+ * This build records the seeded RNG stream, shuffle consumption, and the
+ * first two rounds so the current RNG/draw architecture can be verified
+ * before Hank Solver work changes any game mechanics.
  *
  * PERSONAS:
  *   Dolly — Aggressive Row Filler
@@ -214,30 +214,13 @@
         return remaining;
     }
 
-    function drawTiles(pool, hand, requestedAmount, random, gameConfig, diagnostic) {
+    function drawTiles(pool, hand, requestedAmount, random, gameConfig) {
         const availableCapacity = Math.max(0, gameConfig.maxHand - hand.length);
         const actualAmount = Math.min(requestedAmount, pool.length, availableCapacity);
         const drawn = [];
         for (let i = 0; i < actualAmount; i += 1) {
-            const poolLengthBefore = pool.length;
-            const randomValue = random();
-            const index = Math.floor(randomValue * poolLengthBefore);
-            const tile = pool.splice(index, 1)[0];
-            drawn.push(tile);
-            if (diagnostic) {
-                diagnostic.drawIndex += 1;
-                diagnostic.roundDrawIndex += 1;
-                diagnostic.draws.push({
-                    drawIndex: diagnostic.drawIndex,
-                    round: diagnostic.round,
-                    roundDrawIndex: diagnostic.roundDrawIndex,
-                    word: tile.word,
-                    key: tile.key,
-                    randomValue,
-                    poolIndex: index,
-                    poolLengthBefore
-                });
-            }
+            const index = Math.floor(random() * pool.length);
+            drawn.push(pool.splice(index, 1)[0]);
         }
         return drawn;
     }
@@ -637,26 +620,7 @@
         const persona = options.persona || CONFIG.defaultPersona;
         const allLines = songBundle.lines;
         const pool = songBundle.pool.slice();
-
-        const diagnosticEnabled = options.diagnosticTileDraws === true;
-        const diagnostic = diagnosticEnabled ? {
-            enabled: true,
-            tileRngSeed: options.tileRngSeed ?? null,
-            drawIndexBase: 1,
-            drawIndex: 0,
-            shuffleRandomCalls: 0,
-            draws: []
-        } : null;
-
-        if (diagnostic) {
-            const diagnosticShuffleRandom = function () {
-                diagnostic.shuffleRandomCalls += 1;
-                return tileRandom();
-            };
-            shuffle(pool, diagnosticShuffleRandom);
-        } else {
-            shuffle(pool, tileRandom);
-        }
+        shuffle(pool, tileRandom);
 
         const hand = [], activeLines = [], completedLines = [], completedIds = new Set();
         let previousPlayed = 0, totalDrawn = 0, totalPlayed = 0;
@@ -666,11 +630,7 @@
             if (pool.length === 0) break;
             const requestedDraw = calculateDraw(round, previousPlayed);
             const handBeforeDraw = hand.length;
-            if (diagnostic) {
-                diagnostic.round = round;
-                diagnostic.roundDrawIndex = 0;
-            }
-            const drawn = drawTiles(pool, hand, requestedDraw, tileRandom, gameConfig, diagnostic);
+            const drawn = drawTiles(pool, hand, requestedDraw, tileRandom, gameConfig);
             drawn.forEach(tile => hand.push(tile));
             totalDrawn += drawn.length;
 
@@ -713,8 +673,7 @@
             roundsPlayed: rounds.length, totalSourceWords: totalWordsInSource,
             totalDrawn, totalPlayed, held: hand.length,
             completedLines: completedLines.length, activeLines: activeLines.length,
-            poolRemaining: pool.length, rounds,
-            ...(diagnostic ? { tileDrawDiagnostic: diagnostic } : {})
+            poolRemaining: pool.length, rounds
         };
     }
 
@@ -766,11 +725,7 @@
                 decisionRandom: streams?.decisionRandom,
                 random: typeof randomSource === "function" ? randomSource : undefined,
                 mode,
-                persona,
-                diagnosticTileDraws: options?.diagnosticTileDraws === true,
-                tileRngSeed: options?.diagnosticTileDraws === true
-                    ? ((Number(options?.seed) >>> 0) + i) >>> 0
-                    : null
+                persona
             }));
         }
 

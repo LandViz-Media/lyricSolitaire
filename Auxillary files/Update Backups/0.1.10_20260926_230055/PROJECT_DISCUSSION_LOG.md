@@ -408,22 +408,3 @@ The next validation experiment should repeat **Everlong — Dolly — Easy / Ope
 Seed 32451** and inspect the exported trial records. The important check is that decision RNG usage
 can vary without advancing the tile RNG stream. Existing persona and draw-rule regression tests
 should remain unchanged apart from the expected decision-stream effects.
-
-## 2026-09-24 — v0.1.10 Tile RNG Diagnostic
-
-### Decision
-Add an opt-in Simulator diagnostic mode that logs the physical tile-draw stream independently of persona decisions.
-
-### Diagnostic contents
-For each trial the export records the tile RNG seed and every physical tile draw in order. Each draw includes a global draw index, round, within-round draw index, word/key, RNG value, selected pool index, and pool length before removal. The initial shuffle's tile-RNG call count is also recorded.
-
-### Purpose
-This provides a direct cross-persona validation method: the same song, mode, and seed should produce the same tile-draw sequence for Dolly, Kenny, Johnny, Garth, and Hank regardless of differences in decision-RNG usage.
-
-### Mechanics
-The diagnostic is logging-only. It does not change draw rules, hand limits, row limits, persona behavior, or RNG streams. Normal runs remain compact because the detailed tile log is opt-in.
-
-
-## 2026-09-26 — v0.1.10 Paired Tile RNG Comparison
-
-Added a dedicated Simulator Lab diagnostic workflow because individual persona exports could not conveniently be compared from one export. The workflow requires exactly one song, runs Dolly and Kenny for one trial using the same tile RNG seed, enables tile-draw diagnostics automatically, compares every `tileDrawDiagnostic.draws` record, reports the first difference, and downloads one JSON comparison. This is intended to provide a direct validation of the architectural requirement that player decision RNG usage must not affect the tile-draw stream. No gameplay rules are changed.

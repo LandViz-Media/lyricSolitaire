@@ -138,18 +138,3 @@ advance the tile-draw RNG. The underlying game mechanics are unchanged.
 For compatibility, the simulation engine still accepts callers that provide a single RNG function;
 in that case the old shared-stream behavior remains available. The Simulator UI uses the new
 separated streams.
-
-## Tile RNG Diagnostic
-
-The Simulator includes an opt-in **Tile RNG Diagnostic** checkbox. When enabled, each trial records the tile RNG seed, the initial shuffle's tile-RNG call count, every physical tile draw in order, a global and round-specific draw index, the drawn word/key, the tile RNG value used, and the selected pool index and pool size before removal.
-
-Use this mode for controlled RNG validation, especially when comparing two personas with the same song, mode, and seed. The expected result under the v0.1.10 separate-stream architecture is an identical tile-draw sequence even when persona decision RNG usage differs. The diagnostic is intentionally opt-in because exports can become substantially larger.
-
-
-## Paired Tile RNG Comparison
-
-The Simulator Lab includes a diagnostic workflow for validating the separation of tile-draw and player-decision RNG streams. Select exactly one song and the desired mode, set the seed, and choose **Run Dolly + Kenny Tile RNG Comparison**. The workflow runs one Dolly trial and one Kenny trial using the same tile RNG seed while each persona receives its own decision RNG stream.
-
-The workflow exports one JSON file containing both trials plus a programmatic comparison of `tileDrawDiagnostic.draws`. A comparison is **IDENTICAL** only when every recorded draw matches, including draw index, round, tile identity, RNG value, selected pool index, and pool length. If a difference exists, the report identifies the first differing draw and includes both records.
-
-This is diagnostic only and does not alter game rules or the normal Simulator export workflow.

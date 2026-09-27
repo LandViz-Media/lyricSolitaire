@@ -1,24 +1,4 @@
-## v0.1.10 Diagnostic Update — Paired Tile RNG Comparison
-
-- Added a dedicated paired comparison workflow for Dolly and Kenny.
-- Runs both personas on the same single song, mode, and seed.
-- Forces Tile RNG Diagnostic on for both runs.
-- Compares `tileDrawDiagnostic.draws` programmatically, including draw index, round, tile identity, RNG value, pool index, and pool length.
-- Reports the first differing draw and an overall `IDENTICAL` / `DIFFERENT` result.
-- Downloads one comparison JSON containing both trials and the comparison result.
-- No game mechanics or normal simulation behavior changed.
-
 # Changelog
-
-## [0.1.10] — 2026-09-24 — Tile RNG Diagnostic
-
-### Diagnostics
-- Added an opt-in **Tile RNG Diagnostic** mode to the Simulator.
-- Records the tile RNG seed used for each trial.
-- Records every physical tile draw in exact order, with global draw index, round number, within-round draw index, drawn word/key, tile RNG value, selected pool index, and pool size before removal.
-- Records the number of tile-RNG calls consumed by the initial Fisher-Yates shuffle.
-- Diagnostic data is omitted from normal simulations unless the checkbox is enabled.
-- Game mechanics and the separate tile/decision RNG architecture are unchanged.
 
 ## [0.1.10] — 2026-09-23
 

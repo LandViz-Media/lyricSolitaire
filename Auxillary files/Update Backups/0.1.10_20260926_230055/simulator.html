@@ -55,13 +55,9 @@ pre{margin:0;background:#172026;color:#edf1f2;padding:12px;max-height:560px;over
 <label>Experiment Name <span style="font-weight:400;color:#66727a">(auto-generated; editable)</span><input id="experimentName" type="text" maxlength="120"></label>
 <label>Trials<input id="trials" type="number" min="1" max="10000" value="1000"></label>
 <label>Random Seed<input id="seed" type="number" value="12345"></label>
-<label style="display:flex;align-items:center;gap:8px;font-weight:600"><input id="tileRngDiagnostic" type="checkbox" style="width:auto"> Tile RNG Diagnostic</label>
 <div class="buttons"><button id="runButton">Run Simulation</button><button class="secondary" id="resetButton">Reset</button></div>
-<button id="pairedRngButton" class="secondary" style="width:100%;margin-top:8px">Run Dolly + Kenny Tile RNG Comparison</button>
 <button id="hankButton" class="secondary" style="width:100%;margin-top:8px" title="Open Hank in a separate tab and solve this exact seeded game">Solve This Game with Hank ↗</button>
 <p id="resetHelp" style="font-size:12px;color:#66727a;margin:8px 0 0">Reset is optional between tests. Run Simulation starts a fresh experiment.</p>
-<p style="font-size:12px;color:#66727a;margin:6px 0 0">Tile RNG Diagnostic logs every physical tile draw, including the tile RNG seed and draw indexes. Use for diagnostic runs; exports can be substantially larger.</p>
-<p style="font-size:12px;color:#66727a;margin:6px 0 0">The paired comparison runs Dolly and Kenny independently from the same tile RNG seed and produces one comparison JSON.</p>
 <div id="status" class="status">Loading song catalog…</div>
 </div></aside>
 
@@ -189,110 +185,6 @@ function openHankSolver(){
   window.open(`hank.html?${params.toString()}`,"_blank","noopener");
 }
 
-function compareTileDraws(dollyTrial, kennyTrial){
-  const a=dollyTrial?.tileDrawDiagnostic?.draws || [];
-  const b=kennyTrial?.tileDrawDiagnostic?.draws || [];
-  const length=Math.max(a.length,b.length);
-  let firstDifference=null;
-  for(let i=0;i<length;i+=1){
-    const left=a[i] || null;
-    const right=b[i] || null;
-    const same=left&&right
-      && left.drawIndex===right.drawIndex
-      && left.round===right.round
-      && left.roundDrawIndex===right.roundDrawIndex
-      && left.word===right.word
-      && left.key===right.key
-      && left.randomValue===right.randomValue
-      && left.poolIndex===right.poolIndex
-      && left.poolLengthBefore===right.poolLengthBefore;
-    if(!same){
-      firstDifference={
-        arrayIndex:i,
-        drawIndex:left?.drawIndex ?? right?.drawIndex ?? null,
-        round:left?.round ?? right?.round ?? null,
-        roundDrawIndex:left?.roundDrawIndex ?? right?.roundDrawIndex ?? null,
-        dolly:left,
-        kenny:right
-      };
-      break;
-    }
-  }
-  return {
-    identical:firstDifference===null && a.length===b.length,
-    dollyDrawCount:a.length,
-    kennyDrawCount:b.length,
-    firstDifference
-  };
-}
-function downloadJson(filename,data){
-  const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement("a");
-  a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();
-  setTimeout(()=>URL.revokeObjectURL(url),1000);
-}
-async function runPairedRngComparison(){
-  const songs=selectedSongs();
-  if(songs.length!==1){setStatus("Select exactly one song for the paired RNG comparison.","warn");return}
-  const trials=1;
-  const seedInput=Number($("seed").value);
-  const seed=Number.isFinite(seedInput)?Math.trunc(seedInput):12345;
-  const mode=$("difficulty").value;
-  const song=songs[0];
-  const engine=window.LyricSolitaireSimulator;
-  if(!engine){setStatus("Simulation engine is not loaded.","error");return}
-  try{
-    $("pairedRngButton").disabled=true;
-    $("runButton").disabled=true;
-    clearResults();
-    $("log").innerHTML='<div class="ok">Starting paired Tile RNG comparison.</div>';
-    setStatus("Loading song data for paired comparison…");
-    const data=await loadSongs(songs);
-    const bundle=engine.prepareSongBundle(data[0].lyricsData,data[0].wordCountData);
-    addLog(`Song: ${song.title}.`);
-    addLog(`Mode: ${engine.getModeConfig(mode).label}.`);
-    addLog(`Tile RNG seed: ${seed}.`);
-    addLog("Running Dolly and Kenny with independent decision streams…");
-    const makeRun=personaId=>engine.runTrials(
-      bundle,
-      trials,
-      trialIndex=>createTrialRandomStreams(seed+trialIndex),
-      {mode,persona:personaId,seed,diagnosticTileDraws:true}
-    );
-    const dollyResult=makeRun("aggressive_row_filler");
-    const kennyResult=makeRun("gambler");
-    const comparison=compareTileDraws(dollyResult.trials[0],kennyResult.trials[0]);
-    const payload={
-      schemaVersion:"1.0.0",
-      tool:"Lyric Solitaire Tile RNG Paired Comparison",
-      simulatorVersion:window.LyricSolitaireProject.simulatorVersion,
-      timestamp:new Date().toISOString(),
-      parameters:{song:{id:song.id,title:song.title,artist:song.artist},mode,modeLabel:engine.getModeConfig(mode).label,seed,trials:1},
-      rngModel:"separate_tile_and_decision_streams",
-      personas:{dolly:dollyResult.trials[0],kenny:kennyResult.trials[0]},
-      comparison
-    };
-    const stamp=new Date().toISOString().replace(/[:.]/g,"-");
-    downloadJson(`lyric-solitaire-tile-rng-comparison-${song.title.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")}-${seed}-${stamp}.json`,payload);
-    if(comparison.identical){
-      addLog(`RESULT: IDENTICAL — ${comparison.dollyDrawCount} tile draws matched exactly.`);
-      setStatus("Tile RNG comparison: IDENTICAL.","ok");
-    }else{
-      addLog(`RESULT: DIFFERENT — first differing draw: ${comparison.firstDifference.drawIndex}.`);
-      setStatus(`Tile RNG comparison: DIFFERENT at draw ${comparison.firstDifference.drawIndex}.`,"error");
-    }
-    $("rawResult").textContent=JSON.stringify(payload,null,2);
-  }catch(err){
-    console.error(err);
-    setStatus(err.message,"error");
-    addLog(`ERROR: ${err.message}`);
-  }finally{
-    $("pairedRngButton").disabled=false;
-    $("runButton").disabled=false;
-  }
-}
-
 async function run(){
   const songs=selectedSongs();
   if(!songs.length){setStatus("Select at least one song.","warn");return}
@@ -343,12 +235,7 @@ async function run(){
       bundle,
       trials,
       (trialIndex)=>createTrialRandomStreams(seed + trialIndex),
-      {
-        mode,
-        persona:persona.id,
-        seed,
-        diagnosticTileDraws:$('tileRngDiagnostic').checked
-      }
+      {mode,persona:persona.id,seed}
     );
 
     $("mTrials").textContent=result.trialCount;
@@ -470,7 +357,6 @@ async function init(){
     });
     $("runButton").addEventListener("click",run);
     $("hankButton").addEventListener("click",openHankSolver);
-    $("pairedRngButton").addEventListener("click",runPairedRngComparison);
 
     $("resetButton").addEventListener("click",()=>{
       clearResults();
