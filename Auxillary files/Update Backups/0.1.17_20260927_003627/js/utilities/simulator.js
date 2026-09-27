@@ -42,7 +42,7 @@
  *   Standard    : 10 rows, 40-tile hand, 10 rounds
  *   Hard        :  8 rows, 30-tile hand,  8 rounds
  *
- * RNG MODEL (v0.1.17):
+ * RNG MODEL (v0.1.16):
  *   Tile draws and player/persona decisions use separate deterministic streams.
  *   This prevents decision tie-breaks from changing future tile draws for a seeded trial.
  *
@@ -82,7 +82,7 @@
     };
 
     const CONFIG = {
-        version: "0.1.17",
+        version: "0.1.16",
         initialDraw: 12,
         defaultMode: "easy",
         modes: MODE_CONFIG,
@@ -409,12 +409,6 @@
         const canOpen = activeLines.length < gameConfig.maxRows;
 
         hand.forEach(function (tile, handIndex) {
-            // Preserve the physical tile's original hand index when a
-            // hypothetical opening removes another tile and shifts the array.
-            const physicalHandIndex = Number.isInteger(tile.diagnosticOriginalHandIndex)
-                ? tile.diagnosticOriginalHandIndex
-                : handIndex;
-
             activeLines.forEach(function (line) {
                 if (!lineCanUseWord(line, tile.key)) return;
                 const missingAfter = countPotentialLineCompletions(line, hand, handIndex);
@@ -553,16 +547,10 @@
         });
 
         hand.forEach(function (tile, handIndex) {
-            // Preserve the physical tile's original hand index when a
-            // hypothetical opening removes another tile and shifts the array.
-            const physicalHandIndex = Number.isInteger(tile.diagnosticOriginalHandIndex)
-                ? tile.diagnosticOriginalHandIndex
-                : handIndex;
-
             activeLines.forEach(function (line) {
                 if (!lineCanUseWord(line, tile.key)) return;
                 moves.push({
-                    handIndex: physicalHandIndex,
+                    handIndex,
                     word: tile.word,
                     key: tile.key,
                     action: "PLAY_ACTIVE",
@@ -620,55 +608,6 @@
      * records whether the opening is currently allowed, blocked by the
      * persona policy, or blocked because the board has reached maxRows.
      */
-    function analyzeOpeningPlayableOpportunities(
-        hand, activeLines, allLines, completedIds, allowNewLine
-    ) {
-        /*
-         * Enumerate the physical hand tiles and the specific lyric lines they
-         * can currently advance. This is used only by the v0.1.17 diagnostic
-         * to explain aggregate playability changes at the word/line level.
-         */
-        const activeIds = new Set(activeLines.map(line => line.id));
-        const opportunities = [];
-
-        hand.forEach(function (tile, handIndex) {
-            // Preserve the physical tile's original hand index when a
-            // hypothetical opening removes another tile and shifts the array.
-            const physicalHandIndex = Number.isInteger(tile.diagnosticOriginalHandIndex)
-                ? tile.diagnosticOriginalHandIndex
-                : handIndex;
-
-            activeLines.forEach(function (line) {
-                if (!lineCanUseWord(line, tile.key)) return;
-                opportunities.push({
-                    handIndex: physicalHandIndex,
-                    word: tile.word,
-                    key: tile.key,
-                    lineId: line.id,
-                    lineText: line.text,
-                    source: "ACTIVE_LINE"
-                });
-            });
-
-            if (!allowNewLine) return;
-
-            allLines.forEach(function (line) {
-                if (activeIds.has(line.id) || completedIds.has(line.id)) return;
-                if (!lineCanUseWord(line, tile.key)) return;
-                opportunities.push({
-                    handIndex: physicalHandIndex,
-                    word: tile.word,
-                    key: tile.key,
-                    lineId: line.id,
-                    lineText: line.text,
-                    source: "NEW_LINE"
-                });
-            });
-        });
-
-        return opportunities;
-    }
-
     function analyzeStrategicOpenings(
         hand, activeLines, allLines, completedIds, gameConfig,
         persona, round, openedThisRound
@@ -681,18 +620,6 @@
         const dualUseOpportunities = [];
         const newLineOnlyOpportunities = [];
         const allOpeningOpportunities = [];
-
-        // v0.1.17 baseline: retain the exact physical tile/line opportunities
-        // so each hypothetical opening can report what becomes newly playable.
-        const baselinePlayableOpportunities = analyzeOpeningPlayableOpportunities(
-            hand, activeLines, allLines, completedIds,
-            activeLines.length < gameConfig.maxRows
-        );
-        const baselinePlayableOpportunityKeys = new Set(
-            baselinePlayableOpportunities.map(item =>
-                `${item.handIndex}|${item.lineId}|${item.source}`
-            )
-        );
 
         const openingAllowed = mayOpenNewLine(persona, {
             round,
@@ -717,20 +644,7 @@
             });
 
             candidates.forEach(function (sourceLine) {
-                const hypotheticalHand = hand
-                    .filter((_, index) => index !== handIndex)
-                    .map((remainingTile, originalIndex) => {
-                        // Attach a non-gameplay diagnostic-only identity so the
-                        // before/after comparison remains tied to the same
-                        // physical tile even after array indices shift.
-                        const originalHandIndex = originalIndex >= handIndex
-                            ? originalIndex + 1
-                            : originalIndex;
-                        return {
-                            ...remainingTile,
-                            diagnosticOriginalHandIndex: originalHandIndex
-                        };
-                    });
+                const hypotheticalHand = hand.filter((_, index) => index !== handIndex);
                 const hypotheticalActive = activeLines.map(cloneLine);
                 const target = cloneLine(sourceLine);
 
@@ -750,29 +664,8 @@
                     compacted.length < gameConfig.maxRows
                 );
 
-                // v0.1.17: enumerate the exact word/line opportunities after
-                // this hypothetical opening, then retain only opportunities
-                // that did not exist in the baseline state. The opened tile is
-                // intentionally absent because it has already been consumed.
-                const futurePlayableOpportunities = analyzeOpeningPlayableOpportunities(
-                    hypotheticalHand,
-                    compacted,
-                    allLines,
-                    hypotheticalCompleted,
-                    compacted.length < gameConfig.maxRows
-                );
-                const newlyPlayableOpportunities = futurePlayableOpportunities
-                    .filter(item => !baselinePlayableOpportunityKeys.has(
-                        `${item.handIndex}|${item.lineId}|${item.source}`
-                    ))
-                    .sort(function (a, b) {
-                        return a.handIndex - b.handIndex ||
-                            a.lineId - b.lineId ||
-                            a.source.localeCompare(b.source);
-                    });
-
                 const opportunity = {
-                    handIndex: physicalHandIndex,
+                    handIndex,
                     word: tile.word,
                     key: tile.key,
                     existingLinePlayable: canPlayExisting,
@@ -791,22 +684,7 @@
                     futurePlayableByOpeningNewLine: future.newLine,
                     baselinePlayableTiles: basePlayability.total,
                     futurePlayabilityDelta: future.total - basePlayability.total,
-                    increasesFuturePlayability: future.total > basePlayability.total,
-                    // v0.1.17 opening-value comparison. These are the specific
-                    // physical hand tiles and lyric lines newly available after
-                    // this hypothetical opening.
-                    newlyPlayableOpportunityCount: newlyPlayableOpportunities.length,
-                    newlyPlayableWords: Array.from(new Set(
-                        newlyPlayableOpportunities.map(item => item.word)
-                    )),
-                    newlyPlayableLines: newlyPlayableOpportunities.map(item => ({
-                        handIndex: item.handIndex,
-                        word: item.word,
-                        key: item.key,
-                        lineId: item.lineId,
-                        lineText: item.lineText,
-                        source: item.source
-                    }))
+                    increasesFuturePlayability: future.total > basePlayability.total
                 };
 
                 allOpeningOpportunities.push(opportunity);
@@ -858,7 +736,7 @@
             hasImprovingOpenings: improvingDualUse.length > 0,
             opportunities: dualUseOpportunities,
 
-            // v0.1.17: all new-line opportunities, including new-line-only tiles.
+            // v0.1.16: all new-line opportunities, including new-line-only tiles.
             openingPolicy: {
                 persona,
                 round,
@@ -880,18 +758,7 @@
             hasNewLineOnlyOpenings: newLineOnlyOpportunities.length > 0,
             hasBlockedNewLineOnlyOpenings: blockedNewLineOnly.length > 0,
             newLineOnlyOpportunities,
-            allOpeningOpportunities,
-            // v0.1.17 summary counts make it easy to compare opening value
-            // without parsing every opportunity object.
-            openingValueComparison: {
-                opportunityCount: allOpeningOpportunities.length,
-                opportunitiesWithNewlyPlayableContent: allOpeningOpportunities.filter(
-                    item => item.newlyPlayableOpportunityCount > 0
-                ).length,
-                totalNewlyPlayableOpportunityCount: allOpeningOpportunities.reduce(
-                    (sum, item) => sum + item.newlyPlayableOpportunityCount, 0
-                )
-            }
+            allOpeningOpportunities
         };
     }
 

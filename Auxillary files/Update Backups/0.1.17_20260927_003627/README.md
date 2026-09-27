@@ -1,4 +1,4 @@
-# Lyric Solitaire — Separate RNG Streams v0.1.17
+# Lyric Solitaire — Separate RNG Streams v0.1.16
 
 This update separates the Simulator's deterministic random-number generation into two streams:
 
@@ -10,10 +10,10 @@ so player-decision RNG calls no longer advance the tile-draw stream.
 
 ## Install
 
-1. Double-click `Install_LyricSolitaire_RNG_Streams_v0.1.17.command`.
+1. Double-click `Install_LyricSolitaire_RNG_Streams_v0.1.16.command`.
 2. Select the local **Lyric Solitaire repository root** in the Finder dialog.
 3. The installer backs up every changed file under:
-   `Auxillary files/Update Backups/0.1.17_<timestamp>/`
+   `Auxillary files/Update Backups/0.1.16_<timestamp>/`
 4. Run the Simulator normally.
 
 The installer does **not** modify `song_library/` or its contents.
@@ -62,18 +62,6 @@ The paired Dolly/Kenny comparison now records persona decisions, persona-specifi
 ### v0.1.13 — Decision Divergence Classification
 The paired Dolly/Kenny comparison now distinguishes a genuinely different legal move from a move that is structurally the same but targets a different duplicate lyric-line instance. A duplicate-instance divergence has the same action, hand tile, word/key, and lyric text but a different `lineId`. The exported `decisionDivergence` record includes `reason` and `moveComparison` fields for this distinction.
 
-
-### v0.1.17 — Opening Value Comparison Diagnostics
-
-Adds a diagnostic-only before/after comparison for every hypothetical new-line opening. Each opening now records the specific physical hand tiles, words, and lyric lines that become newly playable after the opening. The diagnostic distinguishes opportunities on existing active lines from opportunities on newly available inactive lines, while preserving the v0.1.16 blocked-opening and aggregate playability metrics.
-
-New fields include:
-- `newlyPlayableOpportunityCount`
-- `newlyPlayableWords`
-- `newlyPlayableLines` with `handIndex`, `word`, `key`, `lineId`, `lineText`, and `source`
-- `openingValueComparison` summary counts
-
-The hypothetical comparison preserves each physical hand tile's original index so duplicate words remain distinguishable. No gameplay, RNG, persona behavior, or win logic is changed.
 
 ### v0.1.16 — Blocked New-Line Opening Diagnostics
 

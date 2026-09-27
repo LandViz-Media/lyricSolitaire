@@ -215,3 +215,7 @@ Implemented a follow-on diagnostic for the v0.1.13 duplicate-line-instance findi
 ## 2026-09-27 — v0.1.15 Strategic Opening Diagnostic
 
 Added a non-invasive terminal-state diagnostic to identify hand tiles that can both play on existing active lines and open inactive lyric lines. Each hypothetical opening records future physical-tile playability and the change from the current state. Gameplay mechanics, persona behavior, RNG streams, and win logic are unchanged.
+
+## v0.1.17 — Opening Value Comparison
+
+The v0.1.17 diagnostic extends the blocked new-line opening analysis by identifying the exact physical hand tiles and lyric lines that become newly playable after each hypothetical opening. It compares the baseline playable opportunity set with the hypothetical post-opening set and reports newly available opportunities by word, physical hand index, lyric line ID/text, and whether the opportunity is on an active line or an inactive line opened by the hypothetical state. This is diagnostic-only and does not alter gameplay or RNG behavior.

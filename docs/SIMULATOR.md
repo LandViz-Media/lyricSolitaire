@@ -1,6 +1,6 @@
 # Simulator Lab
 
-**Simulator version: 0.1.16**
+**Simulator version: 0.1.17**
 
 ## Purpose
 
@@ -203,3 +203,9 @@ The simulator records a terminal play-phase strategic opening audit for each per
 ### v0.1.14 — Consequential Decision Divergence
 
 When the first decision divergence is `DUPLICATE_LINE_INSTANCE`, the paired diagnostic continues through the later decision trace. `comparison.firstConsequentialDivergence` identifies the first later substantive move difference and reports the physical tile selected by each persona. This makes it possible to distinguish the initial structural duplicate-line difference from the first consequential behavioral difference and the first change in tile-consumption identity.
+
+### v0.1.17 — Opening Value Comparison
+
+The v0.1.17 diagnostic compares the exact playable opportunity set before and after every hypothetical new-line opening. For each opening it records the physical hand tile, word, lyric line ID/text, and whether the newly playable opportunity is on an existing active line (`ACTIVE_LINE`) or an inactive line available in the hypothetical state (`NEW_LINE`). The comparison preserves original physical hand indices when the opening removes a tile, so duplicate word tiles remain distinguishable.
+
+The diagnostic also reports `newlyPlayableOpportunityCount`, `newlyPlayableWords`, `newlyPlayableLines`, and an `openingValueComparison` aggregate summary. It remains diagnostic-only and does not alter gameplay, RNG consumption, persona decisions, or win logic.

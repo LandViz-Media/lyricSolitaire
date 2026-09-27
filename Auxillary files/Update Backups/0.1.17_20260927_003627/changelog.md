@@ -1,12 +1,3 @@
-## 0.1.17 — Opening Value Comparison Diagnostics
-
-- Added exact before/after playable-opportunity enumeration for every hypothetical new-line opening.
-- Records which physical hand tiles, words, and lyric lines become newly playable after each opening.
-- Distinguishes `ACTIVE_LINE` and `NEW_LINE` sources.
-- Preserves original physical hand indices through hypothetical tile removal so duplicate word tiles remain traceable.
-- Added `openingValueComparison` aggregate summary.
-- Diagnostic remains non-invasive: no gameplay, RNG, persona behavior, or win logic changes.
-
 ## 0.1.16 — Blocked New-Line Opening Diagnostics
 
 Added a diagnostic-only inventory of every new-line opening available from the current hand, including new-line-only tiles. Each opportunity records `openingAllowed`, `blockedByPersonaPolicy`, `blockedByRowCapacity`, and `openingBlockReason`. Existing v0.1.15 dual-use diagnostics remain unchanged.
