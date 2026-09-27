@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lyric Solitaire — Simulator Lab</title>
+<style>
+:root{--paper:#f5f0e4;--white:#fffdf7;--ink:#17232b;--muted:#66727a;--navy:#102936;--gold:#d59a1a;--line:#d3c5a8;--green:#2d754e}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{background:var(--navy);border-bottom:5px solid var(--gold);position:relative}.hero{width:100%;height:190px;display:block;object-fit:cover;object-position:center}.hero-title{margin:0;padding:9px 18px;background:var(--navy);color:#f5e3b4;font-size:22px;font-weight:900;letter-spacing:.04em}.version-badge{position:absolute;top:16px;right:16px;background:#102936ee;color:#f5e3b5;border:1px solid var(--gold);border-radius:9px;padding:8px 12px;text-align:center}.version-badge small{display:block;font-size:10px}.version-badge strong{font-size:18px}
+main{width:min(1500px,calc(100% - 32px));margin:18px auto 45px;display:grid;gap:16px}.grid{display:grid;grid-template-columns:280px 1fr 300px;gap:16px}.panel{background:var(--white);border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:0 3px 12px rgba(35,28,16,.06)}.panel h2{margin:0;padding:11px 14px;background:var(--navy);color:#f6e5b5;font-size:16px}.body{padding:14px}
+label{display:grid;gap:5px;font-size:13px;font-weight:700;margin-bottom:11px}select,input,button{font:inherit;border:1px solid #b6ab96;border-radius:7px;padding:8px;background:#fff}select[multiple]{min-height:112px}#genreSelect{min-height:86px}button{cursor:pointer;font-weight:800;background:var(--gold);border-color:#8d650f;color:#fff}button.secondary{background:#fff;color:var(--ink)}button:disabled{opacity:.5;cursor:not-allowed}.buttons{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.status{padding:9px;border-radius:8px;background:#eee8da;color:var(--muted);font-size:13px;margin-top:8px}.status.ok{color:var(--green)}.status.error{color:#8b403c}.status.warn{color:#876014}
+.metrics{display:grid;grid-template-columns:repeat(6,1fr);gap:9px}.metric{padding:11px;border:1px solid var(--line);border-radius:9px;background:#fffcf5;text-align:center}.metric span{display:block;font-size:11px;color:var(--muted);text-transform:uppercase}.metric strong{display:block;font-size:24px;margin-top:4px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:9px}.stat{padding:10px;border:1px solid var(--line);border-radius:8px}.stat small{display:block;color:var(--muted)}.stat b{font-size:19px}
+.chips span{display:inline-block;padding:4px 8px;border:1px solid var(--line);border-radius:15px;margin:3px;background:#fffdf7;font-size:12px}.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:7px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{background:#f4eee1}
+pre{margin:0;background:#172026;color:#edf1f2;padding:12px;max-height:560px;overflow:auto;font-size:12px;line-height:1.45}.log{line-height:1.6;font-size:13px}.log .ok::before{content:"✓ ";color:var(--green);font-weight:900}.export-box{margin-top:12px;padding:10px;border:1px dashed var(--line);border-radius:8px;background:#faf7ef}.export-box p{margin:0 0 7px;color:var(--muted);font-size:12px}footer{text-align:center;color:var(--muted);font-size:12px;padding:15px}
+@media(max-width:1100px){.grid{grid-template-columns:1fr 1fr}.results{grid-column:1/-1}.metrics{grid-template-columns:repeat(3,1fr)}}@media(max-width:720px){.grid,.two{grid-template-columns:1fr}.metrics,.stats{grid-template-columns:1fr 1fr}.hero{height:170px}}
+.tool-nav{display:flex;gap:7px;padding:8px 18px;background:#0a1d26;border-top:1px solid #8d650f}
+.tool-nav a{color:#f3e4bd;text-decoration:none;border:1px solid #80651f;border-radius:6px;padding:6px 12px;font-size:12px;font-weight:800}
+.tool-nav a.active,.tool-nav a:hover{background:#d59a1a;color:#102936}
+</style>
+</head>
+<body>
+<header>
+<img class="hero" src="images/lyric-solitaire-tool-header-wide.png" alt="Lyric Solitaire">
+<div class="hero-title">Simulator Lab</div>
+<div class="version-badge"><small>SIMULATOR</small><strong id="headerVersion">v—</strong></div>
+<nav class="tool-nav" aria-label="Lyric Solitaire tools">
+  <a href="index.html">Home</a>
+  <a class="active" href="simulator.html">Simulator</a>
+  <a href="hank.html">Hank Solver</a>
+  <a href="generator.html">Generator</a>
+  <a href="results.html">Results</a>
+</nav>
+</header>
+
+<main>
+<section class="grid">
+<aside class="panel"><h2>Experiment Setup</h2><div class="body">
+<label>Genre(s)<select id="genreSelect" multiple></select></label>
+<label>Artist(s)<select id="artistSelect" multiple></select></label>
+<label>Song(s)<select id="songSelect" multiple></select></label>
+<label>Persona
+<select id="personaSelect"></select>
+</label>
+<div id="personaInfo" class="status">Loading persona…</div>
+<label>Difficulty / Mode
+<select id="difficulty">
+<option value="easy">Easy / Open — 12 rows / 50 tiles / 12 rounds</option>
+<option value="standard">Standard — 10 rows / 40 tiles / 10 rounds</option>
+<option value="hard">Hard — 8 rows / 30 tiles / 8 rounds</option>
+</select>
+</label>
+<label>Experiment Name <span style="font-weight:400;color:#66727a">(auto-generated; editable)</span><input id="experimentName" type="text" maxlength="120"></label>
+<label>Trials<input id="trials" type="number" min="1" max="10000" value="1000"></label>
+<label>Random Seed<input id="seed" type="number" value="12345"></label>
+<label style="display:flex;align-items:center;gap:8px;font-weight:600"><input id="tileRngDiagnostic" type="checkbox" style="width:auto"> Tile RNG Diagnostic</label>
+<div class="buttons"><button id="runButton">Run Simulation</button><button class="secondary" id="resetButton">Reset</button></div>
+<button id="pairedRngButton" class="secondary" style="width:100%;margin-top:8px">Run Dolly + Kenny Decision Comparison</button>
+<button id="hankButton" class="secondary" style="width:100%;margin-top:8px" title="Open Hank in a separate tab and solve this exact seeded game">Solve This Game with Hank ↗</button>
+<p id="resetHelp" style="font-size:12px;color:#66727a;margin:8px 0 0">Reset is optional between tests. Run Simulation starts a fresh experiment.</p>
+<p style="font-size:12px;color:#66727a;margin:6px 0 0">Tile RNG Diagnostic logs every physical tile draw. The paired comparison also records each persona decision, available legal moves, and resulting state to locate the first behavioral divergence.</p>
+<p style="font-size:12px;color:#66727a;margin:6px 0 0">The paired comparison runs Dolly and Kenny independently from the same tile RNG seed and produces one comparison JSON.</p>
+<div id="status" class="status">Loading song catalog…</div>
+</div></aside>
+
+<section class="panel results"><h2>Simulation Results</h2><div class="body">
+<div class="metrics">
+<div class="metric"><span>Trials</span><strong id="mTrials">—</strong></div>
+<div class="metric"><span>Wins</span><strong id="mWins">—</strong></div>
+<div class="metric"><span>Win Rate</span><strong id="mWinRate">—</strong></div>
+<div class="metric"><span>Avg Rounds</span><strong id="mRounds">—</strong></div>
+<div class="metric"><span>Avg Words Played</span><strong id="mWords">—</strong></div>
+<div class="metric"><span>All Words Used</span><strong id="mAllWords">—</strong></div>
+</div>
+<div class="stats">
+<div class="stat"><small>Total Words</small><b id="totalWords">—</b></div>
+<div class="stat"><small>Unique Words</small><b id="uniqueWords">—</b></div>
+<div class="stat"><small>Physical Pool</small><b id="poolWords">—</b></div>
+<div class="stat"><small>Avg Completed Lines</small><b id="mLines">—</b></div>
+</div>
+<h3 style="margin-bottom:6px">Selected Songs</h3><div id="selectedSongs" class="chips">No songs selected.</div>
+<div class="export-box">
+<p>Canonical test record: export this experiment and place the JSON file in <code>test_results/</code>.</p>
+<p><strong>Experiment ID:</strong> <span id="experimentId">—</span></p>
+<p><strong>Simulator Version:</strong> <span id="experimentVersion">v—</span></p>
+<p><strong>Session Experiments:</strong> <span id="sessionCount">0</span></p>
+<div class="buttons"><button id="exportSessionButton" disabled>Export Results (JSON)</button></div>
+</div>
+</div></section>
+
+<aside class="panel"><h2>Simulation Log</h2><div class="body log" id="log"><div class="ok">Waiting for experiment.</div></div></aside>
+</section>
+
+<section class="two">
+<section class="panel"><h2>Song Information</h2><div class="body" id="songData">Select one or more songs.</div></section>
+<section class="panel"><h2>Individual Game Trace — Sample Trial</h2><div class="body"><pre id="trace">No simulation has been run.</pre></div></section>
+</section>
+
+<section class="panel"><h2>Aggregate Engine Result</h2><pre id="rawResult">No result.</pre></section>
+</main>
+
+<footer>Lyric Solitaire Simulator <span id="footerVersion">v—</span> — Experimental results may change as the game model evolves.</footer>
+
+<script src="js/config/projectVersion.js?v=0.1.17"></script>
+<script src="js/data/songCatalog.js?v=0.1.17"></script>
+<script src="js/utilities/simulator.js?v=0.1.17"></script>
+<script src="js/utilities/testResultLogger.js?v=0.1.17"></script>
+<script>
+/*
+ * Simulator Lab Controller
+ *
+ * Responsibility:
+ * Connect the developer-facing UI to the song catalog, simulation engine,
+ * and test-result logger. Game rules remain in simulator.js.
+ */
+const state={catalog:null,lastRecord:null,sessionId:`LS-SESSION-${Date.now()}`};
+const $=id=>document.getElementById(id);
+function esc(v){return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
+function setStatus(text,kind=""){$("status").textContent=text;$("status").className=`status ${kind}`}
+function addLog(text){const d=document.createElement("div");d.className="ok";d.textContent=text;$("log").appendChild(d)}
+function seededRandom(seed){let t=(Number(seed)>>>0)||1;return function(){t+=0x6D2B79F5;let x=t;x=Math.imul(x^x>>>15,x|1);x^=x+Math.imul(x^x>>>7,x|61);return((x^x>>>14)>>>0)/4294967296}}
+/*
+ * Create two deterministic RNG streams for each trial.
+ * The tile stream keeps the exact prior trial seed so tile generation remains
+ * reproducible from the same seed. The decision stream is derived independently
+ * so persona tie-breaks cannot advance the tile-draw stream.
+ */
+function createTrialRandomStreams(trialSeed){
+  const normalizedSeed=Number(trialSeed)>>>0;
+  const decisionSeed=(normalizedSeed^0x9E3779B9)>>>0;
+  return {
+    tileRandom:seededRandom(normalizedSeed),
+    decisionRandom:seededRandom(decisionSeed)
+  };
+}
+function selectedSongs(){const ids=new Set([...$("songSelect").selectedOptions].map(o=>o.value));return state.catalog.songs.filter(s=>ids.has(s.id))}
+function selectedPersona(){
+  return window.LyricSolitaireProject.personas.find(p=>p.id===$("personaSelect").value)
+    || window.LyricSolitaireProject.personas[0];
+}
+function personaShortName(persona){
+  return String(persona.name||"").split(" — ")[0] || String(persona.name||"");
+}
+function generatedExperimentName(){
+  const songs=selectedSongs();
+  const songName=songs.length?songs.map(s=>s.title).join(" + "):"No Song";
+  const persona=selectedPersona();
+  const modeLabel=$("difficulty").selectedOptions[0]?.textContent.split(" — ")[0] || $("difficulty").value;
+  const trials=Math.max(1,Math.min(10000,Number($("trials").value)||1));
+  const seedInput=Number($("seed").value);
+  const seed=Number.isFinite(seedInput)?Math.trunc(seedInput):12345;
+  return `${songName} — ${personaShortName(persona)} — ${modeLabel} — ${trials} trials — Seed ${seed}`;
+}
+let experimentNameManuallyEdited=false;
+let lastGeneratedExperimentName="";
+function refreshExperimentName(force=false){
+  const generated=generatedExperimentName();
+  if(force || !experimentNameManuallyEdited || $("experimentName").value.trim()===lastGeneratedExperimentName){
+    $("experimentName").value=generated;
+    experimentNameManuallyEdited=false;
+  }
+  lastGeneratedExperimentName=generated;
+}
+function songGenres(song){return String(song.genre||"").split(/[,;/]/).map(g=>g.trim()).filter(Boolean)}
+function selectedGenres(){return [...$("genreSelect").selectedOptions].map(o=>o.value)}
+function selectedArtists(){return [...$("artistSelect").selectedOptions].map(o=>o.value)}
+function filteredCatalogSongs(){const genres=selectedGenres();const artists=selectedArtists();return state.catalog.songs.filter(s=>(!genres.length||genres.some(g=>songGenres(s).includes(g)))&&(!artists.length||artists.includes(s.artistKey)))}
+function updateArtistOptions(){const genres=selectedGenres();const old=new Set(selectedArtists());$("artistSelect").replaceChildren();state.catalog.artists.filter(a=>!genres.length||state.catalog.songs.some(s=>s.artistKey===a.key&&genres.some(g=>songGenres(s).includes(g)))).sort((a,b)=>a.name.localeCompare(b.name)).forEach(a=>{const o=document.createElement("option");o.value=a.key;o.textContent=a.name;o.selected=old.has(a.key);$("artistSelect").appendChild(o)});updateSongOptions()}
+function updateSongOptions(){const old=new Set([...$("songSelect").selectedOptions].map(o=>o.value));$("songSelect").replaceChildren();filteredCatalogSongs().sort((a,b)=>a.title.localeCompare(b.title)||a.artist.localeCompare(b.artist)).forEach(s=>{const o=document.createElement("option");o.value=s.id;o.textContent=s.title;o.selected=old.has(s.id);$("songSelect").appendChild(o)});updateSongInfo()}
+async function loadSongs(songs){return Promise.all(songs.map(async s=>{const l=window.LyricSolitaireSongCatalog.resolveDataPath(s.lyrics);const w=window.LyricSolitaireSongCatalog.resolveDataPath(s.wordCount);const [lr,wr]=await Promise.all([fetch(l,{cache:"no-store"}),fetch(w,{cache:"no-store"})]);if(!lr.ok)throw new Error(`Could not load ${l}`);if(!wr.ok)throw new Error(`Could not load ${w}`);return {...s,lyricsData:await lr.json(),wordCountData:await wr.json()}}))}
+function wordStats(data){const words=data.flatMap(s=>s.wordCountData.words||[]);return{total:words.reduce((n,w)=>n+(Number(w.count)||0),0),unique:new Set(words.map(w=>String(w.word).normalize("NFKC").toLocaleLowerCase())).size}}
+function updateSongInfo(){const songs=selectedSongs();$("selectedSongs").innerHTML=songs.length?songs.map(s=>`<span>${esc(s.title)}</span>`).join(""):"No songs selected.";$("songData").innerHTML=songs.length?`<table><thead><tr><th>Song</th><th>Artist</th><th>Album</th><th>Year</th><th>Genre</th></tr></thead><tbody>${songs.map(s=>`<tr><td>${esc(s.title)}</td><td>${esc(s.artist)}</td><td>${esc(s.album)}</td><td>${s.year??"—"}</td><td>${esc(s.genre??"—")}</td></tr>`).join("")}</tbody></table>`:"Select one or more songs."}
+function clearResults(){["mTrials","mWins","mWinRate","mRounds","mWords","mAllWords","totalWords","uniqueWords","poolWords","mLines"].forEach(id=>$(id).textContent="—");$("trace").textContent="No simulation has been run.";$("rawResult").textContent="No result.";$("exportSessionButton").disabled=true;$("experimentId").textContent="—"}
+function updateHankButton(){
+  const hasSongs=selectedSongs().length>0;
+  $("hankButton").disabled=!hasSongs;
+}
+function openHankSolver(){
+  const songs=selectedSongs();
+  if(!songs.length){setStatus("Select at least one song before opening Hank.","warn");return}
+  const seedInput=Number($("seed").value);
+  const seed=Number.isFinite(seedInput)?Math.trunc(seedInput):12345;
+  const params=new URLSearchParams();
+  songs.forEach(song=>params.append("song",song.id));
+  params.set("mode",$("difficulty").value);
+  params.set("seed",String(seed));
+  window.open(`hank.html?${params.toString()}`,"_blank","noopener");
+}
+
+function compareTileDraws(dollyTrial, kennyTrial){
+  const a=dollyTrial?.tileDrawDiagnostic?.draws || [];
+  const b=kennyTrial?.tileDrawDiagnostic?.draws || [];
+  const length=Math.max(a.length,b.length);
+  let firstTileDifference=null;
+  for(let i=0;i<length;i+=1){
+    const left=a[i] || null;
+    const right=b[i] || null;
+    const same=left&&right
+      && left.drawIndex===right.drawIndex
+      && left.word===right.word
+      && left.key===right.key
+      && left.randomValue===right.randomValue
+      && left.poolIndex===right.poolIndex
+      && left.poolLengthBefore===right.poolLengthBefore;
+    if(!same){
+      firstTileDifference={arrayIndex:i,drawIndex:left?.drawIndex ?? right?.drawIndex ?? null,dolly:left,kenny:right};
+      break;
+    }
+  }
+  let firstTimingDifference=null;
+  for(let i=0;i<length;i+=1){
+    const left=a[i] || null;
+    const right=b[i] || null;
+    const same=left&&right && left.round===right.round && left.roundDrawIndex===right.roundDrawIndex;
+    if(!same){
+      firstTimingDifference={arrayIndex:i,drawIndex:left?.drawIndex ?? right?.drawIndex ?? null,dolly:left?{round:left.round,roundDrawIndex:left.roundDrawIndex}:null,kenny:right?{round:right.round,roundDrawIndex:right.roundDrawIndex}:null};
+      break;
+    }
+  }
+  const tileStreamIdentical=firstTileDifference===null && a.length===b.length;
+  const roundTimingIdentical=firstTimingDifference===null && a.length===b.length;
+  return {
+    identical:tileStreamIdentical,
+    dollyDrawCount:a.length,
+    kennyDrawCount:b.length,
+    tileStream:{identical:tileStreamIdentical,comparedFields:["drawIndex","word","key","randomValue","poolIndex","poolLengthBefore"],ignoredFields:["round","roundDrawIndex"],firstDifference:firstTileDifference},
+    roundTiming:{identical:roundTimingIdentical,comparedFields:["round","roundDrawIndex"],firstDifference:firstTimingDifference},
+    firstDifference:firstTileDifference
+  };
+}
+function compareDecisionTraces(dollyTrial, kennyTrial){
+  const a=dollyTrial?.decisionDiagnostic?.decisions || [];
+  const b=kennyTrial?.decisionDiagnostic?.decisions || [];
+  const length=Math.max(a.length,b.length);
+  for(let i=0;i<length;i+=1){
+    const left=a[i] || null;
+    const right=b[i] || null;
+    const same=left&&right
+      && left.action===right.action
+      && left.handIndex===right.handIndex
+      && left.word===right.word
+      && left.key===right.key
+      && left.lineId===right.lineId;
+    if(!same){
+      let reason="DIFFERENT_LEGAL_MOVE";
+      let moveComparison={
+        sameMoveType:false,
+        sameHandTile:false,
+        sameWord:false,
+        sameLineText:false,
+        differentLineId:false,
+        duplicateLineInstance:false
+      };
+
+      if(left&&right){
+        const beforeSame=JSON.stringify(left.stateBefore)===JSON.stringify(right.stateBefore);
+        const afterSame=JSON.stringify(left.stateAfter)===JSON.stringify(right.stateAfter);
+        const sameMoveType=left.action===right.action;
+        const sameHandTile=left.handIndex===right.handIndex;
+        const sameWord=left.word===right.word && left.key===right.key;
+        const sameLineText=left.lineText===right.lineText;
+        const differentLineId=left.lineId!==right.lineId;
+        const duplicateLineInstance=sameMoveType && sameHandTile && sameWord && sameLineText && differentLineId;
+
+        moveComparison={
+          sameMoveType,
+          sameHandTile,
+          sameWord,
+          sameLineText,
+          differentLineId,
+          duplicateLineInstance
+        };
+
+        if(beforeSame && afterSame){
+          reason="DIAGNOSTIC_ALIGNMENT_DIFFERENCE";
+        }else if(!beforeSame){
+          reason="STATE_ALREADY_DIVERGED";
+        }else if(duplicateLineInstance){
+          reason="DUPLICATE_LINE_INSTANCE";
+        }else if(!sameMoveType || !sameHandTile || !sameWord || !sameLineText){
+          reason="DIFFERENT_LEGAL_MOVE";
+        }else if(!afterSame){
+          reason="RESULTING_STATE_DIFFERENT";
+        }
+      }else{
+        reason="ONE_PERSONA_HAS_NO_CORRESPONDING_MOVE";
+      }
+      return {
+        identical:false,
+        comparedFields:["action","handIndex","word","key","lineId"],
+        decisionIndex:left?.decisionIndex ?? right?.decisionIndex ?? null,
+        round:left?.round ?? right?.round ?? null,
+        diagnosticSequenceIndex:i,
+        decisionArrayIndex:i,
+        reason,
+        moveComparison,
+        dolly:left,
+        kenny:right
+      };
+    }
+  }
+  return {
+    identical:a.length===b.length,
+    comparedFields:["action","handIndex","word","key","lineId"],
+    decisionIndex:null,
+    round:null,
+    diagnosticSequenceIndex:null,
+    decisionArrayIndex:null,
+    reason:a.length===b.length?"NO_DIVERGENCE":"ONE_PERSONA_HAS_ADDITIONAL_MOVES",
+    moveComparison:null,
+    dolly:null,
+    kenny:null
+  };
+}
+function compareConsequentialDecisionDivergence(dollyTrial, kennyTrial, firstDecisionDivergence){
+  // Responsibility: Find the first later decision whose selected move differs
+  // in a way that can change physical tile consumption, while treating a
+  // duplicate-line-instance difference as the upstream structural divergence.
+  const a=dollyTrial?.decisionDiagnostic?.decisions || [];
+  const b=kennyTrial?.decisionDiagnostic?.decisions || [];
+
+  if(!firstDecisionDivergence || firstDecisionDivergence.identical){
+    return {
+      found:false,
+      reason:"NO_PRIOR_DIVERGENCE",
+      firstDecisionIndex:null,
+      firstSequenceIndex:null,
+      dolly:null,
+      kenny:null,
+      moveComparison:null,
+      tileConsumption:null
+    };
+  }
+
+  const divergenceSequenceIndex=firstDecisionDivergence.diagnosticSequenceIndex;
+  const startIndex=Number.isInteger(divergenceSequenceIndex)
+    ? divergenceSequenceIndex+1
+    : Math.max(0, (firstDecisionDivergence.decisionArrayIndex ?? -1)+1);
+  const length=Math.max(a.length,b.length);
+
+  for(let i=startIndex;i<length;i+=1){
+    const left=a[i] || null;
+    const right=b[i] || null;
+    if(!left || !right){
+      return {
+        found:true,
+        reason:"ONE_PERSONA_HAS_NO_CORRESPONDING_MOVE",
+        firstDecisionIndex:left?.decisionIndex ?? right?.decisionIndex ?? null,
+        firstSequenceIndex:i+1,
+        dolly:left,
+        kenny:right,
+        moveComparison:null,
+        tileConsumption:{
+          changed:true,
+          dollyConsumedTile:left ? {handIndex:left.handIndex,word:left.word,key:left.key} : null,
+          kennyConsumedTile:right ? {handIndex:right.handIndex,word:right.word,key:right.key} : null,
+          sameConsumedTile:false
+        }
+      };
+    }
+
+    const sameAction=left.action===right.action;
+    const sameHandTile=left.handIndex===right.handIndex;
+    const sameWord=left.word===right.word && left.key===right.key;
+    const sameLineText=left.lineText===right.lineText;
+    const differentLineId=left.lineId!==right.lineId;
+    const moveDiff=!sameAction || !sameHandTile || !sameWord || !sameLineText || differentLineId;
+
+    // A consequential divergence is the first later decision that is no
+    // longer merely another duplicate-line-instance representation. In
+    // particular, a different physical tile selected from the hand is the
+    // first point where tile consumption identity changes.
+    const sameConsumedTile=sameHandTile && sameWord;
+    const consumptionChanged=!sameConsumedTile;
+
+    if(moveDiff && (!sameAction || !sameHandTile || !sameWord || !sameLineText)){
+      return {
+        found:true,
+        reason:"FIRST_CONSEQUENTIAL_MOVE_DIFFERENCE",
+        firstDecisionIndex:left.decisionIndex ?? right.decisionIndex ?? null,
+        firstSequenceIndex:i+1,
+        round:left.round ?? right.round ?? null,
+        dolly:left,
+        kenny:right,
+        moveComparison:{
+          sameMoveType:sameAction,
+          sameHandTile,
+          sameWord,
+          sameLineText,
+          differentLineId,
+          duplicateLineInstance:false
+        },
+        tileConsumption:{
+          changed:consumptionChanged,
+          dollyConsumedTile:{handIndex:left.handIndex,word:left.word,key:left.key},
+          kennyConsumedTile:{handIndex:right.handIndex,word:right.word,key:right.key},
+          sameConsumedTile
+        }
+      };
+    }
+  }
+
+  return {
+    found:false,
+    reason:"NO_LATER_CONSEQUENTIAL_DIVERGENCE",
+    firstDecisionIndex:null,
+    firstSequenceIndex:null,
+    dolly:null,
+    kenny:null,
+    moveComparison:null,
+    tileConsumption:null
+  };
+}
+
+function downloadJson(filename,data){
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+async function runPairedRngComparison(){
+  const songs=selectedSongs();
+  if(songs.length!==1){setStatus("Select exactly one song for the paired RNG comparison.","warn");return}
+  const trials=1;
+  const seedInput=Number($("seed").value);
+  const seed=Number.isFinite(seedInput)?Math.trunc(seedInput):12345;
+  const mode=$("difficulty").value;
+  const song=songs[0];
+  const engine=window.LyricSolitaireSimulator;
+  if(!engine){setStatus("Simulation engine is not loaded.","error");return}
+  try{
+    $("pairedRngButton").disabled=true;
+    $("runButton").disabled=true;
+    clearResults();
+    $("log").innerHTML='<div class="ok">Starting paired Tile RNG comparison.</div>';
+    setStatus("Loading song data for paired comparison…");
+    const data=await loadSongs(songs);
+    const bundle=engine.prepareSongBundle(data[0].lyricsData,data[0].wordCountData);
+    addLog(`Song: ${song.title}.`);
+    addLog(`Mode: ${engine.getModeConfig(mode).label}.`);
+    addLog(`Tile RNG seed: ${seed}.`);
+    addLog("Running Dolly and Kenny with independent decision streams…");
+    const makeRun=personaId=>engine.runTrials(
+      bundle,
+      trials,
+      trialIndex=>createTrialRandomStreams(seed+trialIndex),
+      {mode,persona:personaId,seed,diagnosticTileDraws:true,decisionDiagnostic:true}
+    );
+    const dollyResult=makeRun("aggressive_row_filler");
+    const kennyResult=makeRun("gambler");
+    const comparison=compareTileDraws(dollyResult.trials[0],kennyResult.trials[0]);
+    const decisionDivergence=compareDecisionTraces(dollyResult.trials[0],kennyResult.trials[0]);
+    const firstConsequentialDivergence=compareConsequentialDecisionDivergence(
+      dollyResult.trials[0],
+      kennyResult.trials[0],
+      decisionDivergence
+    );
+    const payload={
+      schemaVersion:"1.0.0",
+      tool:"Lyric Solitaire Decision Divergence Comparison",
+      simulatorVersion:window.LyricSolitaireProject.simulatorVersion,
+      timestamp:new Date().toISOString(),
+      parameters:{song:{id:song.id,title:song.title,artist:song.artist},mode,modeLabel:engine.getModeConfig(mode).label,seed,trials:1},
+      rngModel:"separate_tile_and_decision_streams",
+      personas:{dolly:dollyResult.trials[0],kenny:kennyResult.trials[0]},
+      comparison:{...comparison,decisionDivergence,firstConsequentialDivergence}
+    };
+    const stamp=new Date().toISOString().replace(/[:.]/g,"-");
+    downloadJson(`lyric-solitaire-decision-divergence-${song.title.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")}-${seed}-${stamp}.json`,payload);
+    if(comparison.tileStream.identical){
+      addLog(`TILE STREAM: IDENTICAL — ${comparison.dollyDrawCount} tile draws matched on all physical-draw fields.`);
+    }else{
+      const d=comparison.tileStream.firstDifference;
+      addLog(`TILE STREAM: DIFFERENT — first differing tile draw: ${d?.drawIndex ?? "unknown"}.`);
+    }
+    if(comparison.roundTiming.identical){
+      addLog("ROUND TIMING: IDENTICAL — round and round-draw positions matched.");
+    }else{
+      const t=comparison.roundTiming.firstDifference;
+      addLog(`ROUND TIMING: DIFFERENT — first timing difference at draw ${t?.drawIndex ?? "unknown"}.`);
+      if(t){
+        addLog(`  Dolly: Round ${t.dolly?.round ?? "—"}, draw ${t.dolly?.roundDrawIndex ?? "—"}; Kenny: Round ${t.kenny?.round ?? "—"}, draw ${t.kenny?.roundDrawIndex ?? "—"}.`);
+      }
+    }
+    if(decisionDivergence.identical){
+      addLog("DECISION TRACE: IDENTICAL — no differing selected move was found.");
+    }else{
+      const d=decisionDivergence;
+      addLog(`DECISION DIVERGENCE: first difference at decision ${d.decisionIndex ?? "unknown"}, Round ${d.round ?? "unknown"}.`);
+      addLog(`  Classification: ${d.reason}.`);
+      if(d.reason==="DUPLICATE_LINE_INSTANCE"){
+        addLog(`  Same legal move type and same lyric text; different duplicate line instances were selected.`);
+      }else if(d.reason==="DIFFERENT_LEGAL_MOVE"){
+        addLog(`  The selected legal moves differ in action, hand tile, word, or lyric target.`);
+      }
+      addLog(`  Dolly: ${d.dolly?.action ?? "—"} ${d.dolly?.word ?? "—"} → line ${d.dolly?.lineId ?? "—"}.`);
+      addLog(`  Kenny: ${d.kenny?.action ?? "—"} ${d.kenny?.word ?? "—"} → line ${d.kenny?.lineId ?? "—"}.`);
+      addLog(`  Dolly available moves: ${d.dolly?.availableMoves?.length ?? 0}; Kenny available moves: ${d.kenny?.availableMoves?.length ?? 0}.`);
+    }
+    if(firstConsequentialDivergence.found){
+      const c=firstConsequentialDivergence;
+      addLog(`CONSEQUENTIAL DIVERGENCE: first later move difference at decision ${c.firstDecisionIndex ?? "unknown"}, Round ${c.round ?? "unknown"}.`);
+      if(c.tileConsumption?.changed){
+        addLog(`  TILE CONSUMPTION DIVERGENCE: Dolly consumed ${c.tileConsumption.dollyConsumedTile?.word ?? "—"} (hand index ${c.tileConsumption.dollyConsumedTile?.handIndex ?? "—"}); Kenny consumed ${c.tileConsumption.kennyConsumedTile?.word ?? "—"} (hand index ${c.tileConsumption.kennyConsumedTile?.handIndex ?? "—"}).`);
+      }else{
+        addLog("  The selected physical tile is the same; the consequential difference is in the move/target behavior.");
+      }
+    }else{
+      addLog(`CONSEQUENTIAL DIVERGENCE: ${firstConsequentialDivergence.reason}.`);
+    }
+    if(comparison.tileStream.identical){
+      setStatus(comparison.roundTiming.identical
+        ? "Tile stream: IDENTICAL. Round timing: IDENTICAL."
+        : "Tile stream: IDENTICAL. Round timing: DIFFERENT.","ok");
+    }else{
+      setStatus(`Tile stream: DIFFERENT at draw ${comparison.tileStream.firstDifference?.drawIndex ?? "unknown"}.`,"error");
+    }
+    $("rawResult").textContent=JSON.stringify(payload,null,2);
+  }catch(err){
+    console.error(err);
+    setStatus(err.message,"error");
+    addLog(`ERROR: ${err.message}`);
+  }finally{
+    $("pairedRngButton").disabled=false;
+    $("runButton").disabled=false;
+  }
+}
+
+async function run(){
+  const songs=selectedSongs();
+  if(!songs.length){setStatus("Select at least one song.","warn");return}
+
+  const trials=Math.max(1,Math.min(10000,Number($("trials").value)||1));
+  const seedInput=Number($("seed").value);
+  const seed=Number.isFinite(seedInput)?Math.trunc(seedInput):12345;
+  const experimentName=$("experimentName").value.trim();
+  const mode=$("difficulty").value;
+  const persona=selectedPersona();
+
+  try{
+    clearResults();
+    $("log").innerHTML='<div class="ok">Starting new experiment.</div>';
+    setStatus("Loading selected song data…");
+
+    const data=await loadSongs(songs);
+    const stats=wordStats(data);
+
+    $("totalWords").textContent=stats.total;
+    $("uniqueWords").textContent=stats.unique;
+    $("poolWords").textContent=stats.total;
+
+    addLog(`Loaded ${songs.length} song${songs.length===1?"":"s"}.`);
+    addLog(`Persona: ${persona.name}.`);
+    addLog(`Total words: ${stats.total} • Unique words: ${stats.unique}.`);
+
+    const engine=window.LyricSolitaireSimulator;
+    if(!engine) throw new Error("Simulation engine is not loaded.");
+
+    const bundles=data.map(s=>engine.prepareSongBundle(
+      s.lyricsData,
+      s.wordCountData
+    ));
+    const bundle=bundles.length===1
+      ? bundles[0]
+      : engine.combineSongBundles(bundles);
+
+    addLog(
+      `Word-pool check: ${bundle.poolMatchesLyrics
+        ? "matches lyric data"
+        : "DOES NOT MATCH lyric data"}.`
+    );
+
+    setStatus("Running simulation…");
+
+    const result=engine.runTrials(
+      bundle,
+      trials,
+      (trialIndex)=>createTrialRandomStreams(seed + trialIndex),
+      {
+        mode,
+        persona:persona.id,
+        seed,
+        diagnosticTileDraws:$('tileRngDiagnostic').checked
+      }
+    );
+
+    $("mTrials").textContent=result.trialCount;
+    $("mWins").textContent=result.wins;
+    $("mWinRate").textContent=`${(result.winRate*100).toFixed(1)}%`;
+    $("mRounds").textContent=result.averageRounds.toFixed(2);
+    $("mWords").textContent=result.averagePlayed.toFixed(2);
+    $("mAllWords").textContent=result.everAllWordsUsed
+      ? `${result.allWordsUsedTrials}/${result.trialCount}`
+      : "No";
+    $("mLines").textContent=result.averageCompletedLines.toFixed(2);
+
+    addLog(
+      `All words used in ${result.allWordsUsedTrials} of ${result.trialCount} trials.`
+    );
+
+    $("trace").textContent=JSON.stringify(
+      result.trials?.[0] || null,
+      null,
+      2
+    );
+    $("rawResult").textContent=JSON.stringify(result,null,2);
+
+    const experimentId=`LS-SIM-${Date.now()}`;
+    const cfg=engine.getModeConfig(mode);
+
+    const record=window.LyricSolitaireTestLogger.createExperimentRecord({
+      version:window.LyricSolitaireProject.simulatorVersion,
+      experimentId,
+      experimentName,
+      sessionId:state.sessionId,
+      parameters:{
+        mode,
+        modeLabel:cfg.label,
+        trials,
+        randomSeed:seed,
+        startingRows:cfg.maxRows,
+        handLimit:cfg.maxHand,
+        maximumRounds:cfg.maxRounds
+      },
+      persona,
+      songs:data.map(s=>({
+        id:s.id,
+        title:s.title,
+        artist:s.artist,
+        album:s.album,
+        year:s.year,
+        genre:s.genre,
+        ...wordStats([s])
+      })),
+      result
+    });
+
+    window.LyricSolitaireTestLogger.addExperiment(record);
+    state.lastRecord=record;
+
+    // The just-completed record keeps its captured name. The next parameter
+    // change should generate a fresh name for the next experiment.
+    experimentNameManuallyEdited=false;
+    lastGeneratedExperimentName=generatedExperimentName();
+
+    $("experimentId").textContent=experimentId;
+    $("experimentVersion").textContent=`v${window.LyricSolitaireProject.simulatorVersion}`;
+    $("sessionCount").textContent=
+      window.LyricSolitaireTestLogger.session.length;
+    $("exportSessionButton").disabled=false;
+
+    addLog(
+      `Complete trial collection retained: ${record.trials.length} trials.`
+    );
+    addLog(
+      `Session experiments: ${window.LyricSolitaireTestLogger.session.length}.`
+    );
+    addLog(`Simulation complete: ${result.trialCount} trials.`);
+
+    setStatus("Simulation complete.","ok");
+  }catch(err){
+    console.error(err);
+    setStatus(err.message,"error");
+    addLog(`ERROR: ${err.message}`);
+  }
+}
+async function init(){
+  try{
+    const version=window.LyricSolitaireProject.simulatorVersion;
+    $("headerVersion").textContent=`v${version}`;
+    $("footerVersion").textContent=`v${version}`;
+    $("experimentVersion").textContent=`v${version}`;
+
+    state.catalog=await window.LyricSolitaireSongCatalog.load();
+
+    const genres=[...new Set(state.catalog.songs.flatMap(songGenres))].sort((a,b)=>a.localeCompare(b));
+    genres.forEach(g=>{const o=document.createElement("option");o.value=g;o.textContent=g;$("genreSelect").appendChild(o)});
+    updateArtistOptions();
+
+    window.LyricSolitaireProject.personas.forEach(p=>{
+      const o=document.createElement("option");
+      o.value=p.id;
+      o.textContent=p.name;
+      $("personaSelect").appendChild(o);
+    });
+
+    $("personaSelect").value=window.LyricSolitaireProject.defaultPersonaId;
+
+    $("personaInfo").textContent=selectedPersona().description;
+
+    $("genreSelect").addEventListener("change",()=>{updateArtistOptions();refreshExperimentName();updateHankButton();});
+    $("artistSelect").addEventListener("change",()=>{updateSongOptions();refreshExperimentName();updateHankButton();});
+    $("songSelect").addEventListener("change",()=>{updateSongInfo();refreshExperimentName();updateHankButton();});
+    $("personaSelect").addEventListener("change",()=>{
+      $("personaInfo").textContent=selectedPersona().description;
+      refreshExperimentName();
+    });
+    $("difficulty").addEventListener("change",()=>{refreshExperimentName();updateHankButton();});
+    $("trials").addEventListener("input",()=>refreshExperimentName());
+    $("seed").addEventListener("input",()=>{refreshExperimentName();updateHankButton();});
+    $("experimentName").addEventListener("input",()=>{
+      experimentNameManuallyEdited=true;
+    });
+    $("runButton").addEventListener("click",run);
+    $("hankButton").addEventListener("click",openHankSolver);
+    $("pairedRngButton").addEventListener("click",runPairedRngComparison);
+
+    $("resetButton").addEventListener("click",()=>{
+      clearResults();
+      $("log").innerHTML='<div class="ok">Waiting for experiment.</div>';
+      $("sessionCount").textContent=
+        window.LyricSolitaireTestLogger.session.length;
+      refreshExperimentName(true);
+      setStatus("Ready.");
+    });
+
+    $("exportSessionButton").addEventListener("click",()=>{
+      try{
+        window.LyricSolitaireTestLogger.exportSession(version, $("experimentName").value.trim());
+      }catch(error){
+        setStatus(error.message,"warn");
+      }
+    });
+
+    updateSongOptions();
+    refreshExperimentName(true);
+    updateHankButton();
+
+    setStatus(
+      `Catalog loaded: ${state.catalog.artists.length} artists, `
+      + `${state.catalog.songs.length} songs.`,
+      "ok"
+    );
+  }catch(err){
+    console.error(err);
+    setStatus(`Startup failed: ${err.message}`,"error");
+  }
+}
+init();
+</script>
+</body>
+</html>

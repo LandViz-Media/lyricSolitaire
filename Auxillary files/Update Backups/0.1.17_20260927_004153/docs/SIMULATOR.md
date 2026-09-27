@@ -1,0 +1,211 @@
+# Simulator Lab
+
+**Simulator version: 0.1.17**
+
+## Purpose
+
+The Simulator Lab is a research and balance-testing tool. It uses the maintained lyric JSON and word-count JSON data and retains complete individual trials so results can be examined later without rerunning an experiment.
+
+## Personas
+
+The simulator now contains three deliberately different decision-making models:
+
+- **Dolly — Aggressive Row Filler:** aggressively completes active lines, but adapts new-line opening as the game advances and the hand becomes crowded.
+- **Johnny — Walks the Line:** plays as many words as possible but opens no more than one new lyric line per round.
+- **Kenny — The Gambler:** favors existing active lines first, then takes substantially more new-line risk; in Round 1 he targets nine or ten active lines when the mode permits it.
+
+The detailed implementation logic is documented separately in `docs/personas/`.
+
+## Experiment setup
+
+Experiment Setup filters in this order:
+1. Genre(s)
+2. Artist(s)
+3. Song(s)
+4. Persona
+5. Difficulty / Mode
+6. Experiment Name (auto-generated; editable)
+7. Trials
+8. Random Seed
+
+Song selection supports multiple songs. When more than one song is selected, their physical word pools and distinct lyric-line occurrences are combined into one simulation bundle.
+
+## Deterministic seeds
+
+The entered Random Seed is a **base seed**. Trial `i` receives a deterministic random stream derived from that seed and the trial index. Therefore, the same experiment inputs should reproduce the same trial collection.
+
+Changing any of these can change results:
+- selected song(s)
+- persona
+- difficulty/mode
+- trial count
+- random seed
+- simulation engine version
+
+## Draw and hand capacity
+
+The requested draw is:
+
+- Round 1: 12
+- Later rounds: `(13 - Round) + previous round words played`
+
+The requested draw is then capped by:
+- remaining physical word-pool size
+- available hand capacity
+
+For example, with a 40-tile Standard hand, a player holding 39 tiles at the start of a round can draw only one additional tile even if the calculated requested draw is 10.
+
+## Modes
+
+| Mode | Rows | Hand Limit | Maximum Rounds |
+|---|---:|---:|---:|
+| Easy / Open | 12 | 50 | 12 |
+| Standard | 10 | 40 | 10 |
+| Hard | 8 | 30 | 8 |
+
+## Round trace
+
+Each trial records requested draw, actual draw, hand size before and after play, words played, completed lines, active lines, pool remaining, and the number of new lines opened during the round. It also records per-round playability diagnostics. These metrics count physical tiles, so duplicate words count as separate tiles:
+
+- `playableOnExistingLines`: physical tiles that can be accommodated by the remaining word demand on already-active lines. Duplicate copies are capped by the number of matching slots, so three copies of a word with only one matching slot count as one playable tile.
+- `playableByOpeningNewLine`: physical tiles not accommodated by existing lines that match remaining demand on at least one candidate unopened line. This is an opportunity count, not a guarantee that every candidate line will actually be opened.
+- `playedOnExistingLines`: tiles actually played onto lines that were already active.
+- `playedByOpeningNewLine`: tiles actually played by opening a new line.
+- `playableTilesRemainingUnplayed`: tiles still in the hand after the play phase that could legally be played either on an active line or by opening a new line, ignoring persona-specific reluctance to open a row.
+
+The final metric is especially useful for determining whether a persona is actually holding back playable tiles. The first two metrics are a start-of-round snapshot; the two `played...` metrics record what actually happened during the play phase.
+
+## Export
+
+Use the **Export Results (JSON)** button to export the complete browser session. The optional Experiment Name is retained in the JSON record and contributes to the downloaded filename.
+
+Filenames include a timestamp, so multiple exports on the same calendar day receive distinct names.
+
+The export retains every experiment and every individual trial. This is intentional: later analysis should not require rerunning an experiment.
+
+## Reset
+
+Reset clears the page display but does not erase completed experiments from the browser session.
+
+## Endgame behavior
+
+Persona differences are strongest in the earlier rounds. In the second-to-last round, personas become more willing to open new lines because it is the last meaningful setup opportunity. In the final round, all personas use the same maximum-play rule: existing-line plays remain first priority, but persona-specific restrictions on opening new lines are suspended. A legal new line may be opened whenever a row is available.
+
+## Lyric foresight
+
+New-line selection includes limited look-ahead. The simulator rewards a candidate lyric line when the opening word also makes several other words already in the hand playable. This models the advantage of a player who knows the song and can recognize a productive line before opening it. Kenny receives the strongest foresight weight, Dolly an intermediate weight, and Johnny a lighter weight.
+
+## Experiment naming
+
+Experiment Name is automatically generated from the current song selection, persona, mode, trial count, and random seed, for example: `Everlong — Dolly — Standard — 10 trials — Seed 32451`. The field remains editable. A manually edited name is captured for that experiment; after the experiment is run, subsequent parameter changes generate a fresh name for the next experiment.
+
+## Diagnostic Reference Persona — Garth
+
+**Garth — Heuristic Reference Player** is a permanent diagnostic persona. Garth is not intended to represent a typical human playing style. Instead, he uses the simulator's full knowledge of the current lyric lines and hand to evaluate legal moves and look for promising short-term cascades.
+
+Garth's heuristic gives strong priority to: 
+
+1. completing a lyric line immediately;
+2. maximizing additional words in the current hand that can use the resulting line;
+3. advancing a line toward completion; and
+4. avoiding unnecessary new-line openings when otherwise comparable moves exist.
+
+Garth evaluates the current legal move set repeatedly after each play. This makes him useful as a reference point when comparing the human-style personas, but **Garth is not a mathematical proof of solvability**. A Garth loss does not prove that a deal is unsolvable.
+
+### Future Guaranteed Persona — Hank
+
+The project reserves **Hank** as the name for a future mathematically guaranteed solver. Hank should only be introduced after the solver can be defined precisely and validated as an exhaustive/complete search under the simulator's actual rules. Until then, Garth remains the upper-reference diagnostic.
+
+## Simulator → Hank Solver
+
+The Simulator is the launching point for exact analysis, but Hank is intentionally a separate tool rather than a fifth persona.
+
+After selecting the song(s), mode, and random seed, **Solve This Game with Hank ↗** opens `hank.html` in a new browser tab. The URL carries the game-defining song IDs, mode, and seed. Hank loads the song data itself and reconstructs the exact seeded game independently.
+
+This separation is important for correctness: the Simulator does not execute Hank's search, and Hank does not depend on the Simulator's current trial state. See `docs/HANK.md` for the solver contract and proof-status definitions.
+
+
+## 0.1.12 — Separate RNG Streams
+
+The Simulator now uses two deterministic random streams within each seeded trial. The **tile-draw
+stream** controls the initial physical-pool shuffle and every random-index tile draw. The
+**player-decision stream** controls persona tie-breaks and other random choices made while playing.
+
+The tile stream uses the same per-trial seed that the Simulator previously used, while the decision
+stream is derived independently from that seed. Consequently, additional decision RNG calls no longer
+advance the tile-draw RNG. The underlying game mechanics are unchanged.
+
+For compatibility, the simulation engine still accepts callers that provide a single RNG function;
+in that case the old shared-stream behavior remains available. The Simulator UI uses the new
+separated streams.
+
+## Tile RNG Diagnostic
+
+The Simulator includes an opt-in **Tile RNG Diagnostic** checkbox. When enabled, each trial records the tile RNG seed, the initial shuffle's tile-RNG call count, every physical tile draw in order, a global and round-specific draw index, the drawn word/key, the tile RNG value used, and the selected pool index and pool size before removal.
+
+Use this mode for controlled RNG validation, especially when comparing two personas with the same song, mode, and seed. The expected result under the v0.1.12 separate-stream architecture is an identical tile-draw sequence even when persona decision RNG usage differs. The diagnostic is intentionally opt-in because exports can become substantially larger.
+
+
+## Paired Tile RNG Comparison
+
+The Simulator Lab includes a diagnostic workflow for validating the separation of tile-draw and player-decision RNG streams. Select exactly one song and the desired mode, set the seed, and choose **Run Dolly + Kenny Tile RNG Comparison**. The workflow runs one Dolly trial and one Kenny trial using the same tile RNG seed while each persona receives its own decision RNG stream.
+
+The workflow exports one JSON file containing both trials plus a programmatic comparison of `tileDrawDiagnostic.draws`. A comparison is **IDENTICAL** only when every recorded draw matches, including draw index, round, tile identity, RNG value, selected pool index, and pool length. If a difference exists, the report identifies the first differing draw and includes both records.
+
+This is diagnostic only and does not alter game rules or the normal Simulator export workflow.
+
+
+## Paired Tile RNG Comparison — Diagnostic Interpretation
+
+The Dolly/Kenny paired comparison intentionally separates **what tile was drawn** from **when the tile was drawn**.
+
+### Tile-stream identity
+The physical tile stream is compared using only:
+
+- `drawIndex`
+- `word`
+- `key`
+- `randomValue`
+- `poolIndex`
+- `poolLengthBefore`
+
+`round` and `roundDrawIndex` are excluded from this identity test. Therefore, two personas can receive the same physical tile sequence even when their different play decisions cause the same tile to occur in different rounds.
+
+### Round timing
+Round timing is reported separately using:
+
+- `round`
+- `roundDrawIndex`
+
+The comparison JSON contains `comparison.tileStream` and `comparison.roundTiming`. The top-level `comparison.identical` remains the physical tile-stream result for compatibility with earlier diagnostic exports.
+
+
+### v0.1.12 — Decision Divergence Diagnostic
+The paired Dolly/Kenny comparison now records persona decisions, persona-specific available legal moves, and the resulting game state. The comparison reports the first differing selected move and preserves the separate tile-stream and round-timing diagnostics.
+
+
+### v0.1.13 — Decision Divergence Classification
+The paired decision comparison now distinguishes two important cases:
+
+- **`DIFFERENT_LEGAL_MOVE`** — the personas selected different legal moves, based on action, physical hand tile, word/key, or lyric target text.
+- **`DUPLICATE_LINE_INSTANCE`** — both selected the same move type using the same hand tile and word, and targeted identical lyric text, but selected different `lineId` values because the song contains duplicate lyric-line instances.
+
+The exported `comparison.decisionDivergence.moveComparison` record exposes these component comparisons explicitly. This prevents a duplicated lyric line from being reported as a fundamentally different move simply because its occurrence ID differs.
+
+
+### v0.1.16 — Blocked New-Line Opening Diagnostics
+
+The v0.1.16 diagnostic enumerates every hand tile that can open an inactive lyric line, including tiles that cannot currently play on an active line. Each opportunity records whether opening is allowed, blocked by persona policy, or blocked by row capacity. Gameplay, RNG consumption, and win logic are unchanged.
+
+
+The simulator records a terminal play-phase strategic opening audit for each persona. It identifies hand tiles that can both advance an existing active line and open an inactive lyric line, then simulates each candidate opening on cloned state to measure future physical-tile playability. This diagnostic does not change gameplay or RNG behavior.
+
+### v0.1.14 — Consequential Decision Divergence
+
+When the first decision divergence is `DUPLICATE_LINE_INSTANCE`, the paired diagnostic continues through the later decision trace. `comparison.firstConsequentialDivergence` identifies the first later substantive move difference and reports the physical tile selected by each persona. This makes it possible to distinguish the initial structural duplicate-line difference from the first consequential behavioral difference and the first change in tile-consumption identity.
+
+### v0.1.17 — Opening Value Comparison
+
+The v0.1.17 diagnostic compares the exact playable opportunity set before and after every hypothetical new-line opening. For each opening it records the physical hand tile, word, lyric line ID/text, and whether the newly playable opportunity is on an existing active line (`ACTIVE_LINE`) or an inactive line available in the hypothetical state (`NEW_LINE`). The comparison preserves original physical hand indices when the opening removes a tile, so duplicate word tiles remain distinguishable.
+
+The diagnostic also reports `newlyPlayableOpportunityCount`, `newlyPlayableWords`, `newlyPlayableLines`, and an `openingValueComparison` aggregate summary. It remains diagnostic-only and does not alter gameplay, RNG consumption, persona decisions, or win logic.

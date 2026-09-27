@@ -709,10 +709,6 @@
             : (blockedByPersonaPolicy ? "PERSONA_POLICY" : null);
 
         hand.forEach(function (tile, handIndex) {
-            // Preserve the physical tile identity for v0.1.17 comparisons.
-            const physicalHandIndex = Number.isInteger(tile.diagnosticOriginalHandIndex)
-                ? tile.diagnosticOriginalHandIndex
-                : handIndex;
             const canPlayExisting = activeLines.some(line => lineCanUseWord(line, tile.key));
             const candidates = allLines.filter(function (line) {
                 return !activeIds.has(line.id) &&
