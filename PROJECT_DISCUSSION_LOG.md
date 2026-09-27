@@ -197,3 +197,7 @@ The first paired comparison showed a false distinction: Dolly and Kenny had iden
 ## 2026-09-27 — v0.1.12 Decision Divergence Diagnostic
 
 Implemented v0.1.12 to locate the first behavioral divergence between Dolly and Kenny after establishing that the tile RNG stream is identical through the common draw sequence. The paired comparison now records each persona's selected move, persona-specific legal moves available at that decision point, and state before/after the move. The export reports the first differing selected move separately from tile-stream identity and round timing.
+
+
+## 2026-09-27 — v0.1.13 Decision Divergence Classification
+Implemented v0.1.13 to refine the paired Dolly/Kenny divergence diagnostic. The comparison now distinguishes a genuinely different legal move from the same move type applied to different duplicate lyric-line instances. Selected-move identity includes action, handIndex, word/key, and lineId; when the line IDs differ but action, hand tile, word/key, and line text match, the divergence is classified as `DUPLICATE_LINE_INSTANCE`. Other substantive move differences are classified as `DIFFERENT_LEGAL_MOVE`. The export also includes `moveComparison` details so the distinction is machine-readable.

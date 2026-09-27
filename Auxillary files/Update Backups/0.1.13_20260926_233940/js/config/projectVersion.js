@@ -7,7 +7,7 @@
  */
 window.LyricSolitaireProject = {
     gameVersion: "0.1.0",
-    simulatorVersion: "0.1.13",
+    simulatorVersion: "0.1.12",
     hankVersion: "0.1.9",
     generatorVersion: "0.1.4.4",
     dataSchemaVersion: "1.3.3",

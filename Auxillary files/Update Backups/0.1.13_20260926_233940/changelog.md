@@ -1,6 +1,15 @@
+# Changelog
+
+## v0.1.12
+- Added paired Dolly/Kenny decision divergence diagnostics.
+- Records each selected move with persona-specific available legal moves.
+- Records state before and after each selected move.
+- Reports the first differing selected move, round, available-move counts, and resulting states.
+- Preserves the v0.1.11 tile-stream identity comparison and separate round-timing comparison.
+
 # Simulator Lab
 
-**Simulator version: 0.1.13**
+**Simulator version: 0.1.7**
 
 ## Purpose
 
@@ -125,7 +134,7 @@ After selecting the song(s), mode, and random seed, **Solve This Game with Hank 
 This separation is important for correctness: the Simulator does not execute Hank's search, and Hank does not depend on the Simulator's current trial state. See `docs/HANK.md` for the solver contract and proof-status definitions.
 
 
-## 0.1.12 — Separate RNG Streams
+## 0.1.10 — Separate RNG Streams
 
 The Simulator now uses two deterministic random streams within each seeded trial. The **tile-draw
 stream** controls the initial physical-pool shuffle and every random-index tile draw. The
@@ -143,7 +152,7 @@ separated streams.
 
 The Simulator includes an opt-in **Tile RNG Diagnostic** checkbox. When enabled, each trial records the tile RNG seed, the initial shuffle's tile-RNG call count, every physical tile draw in order, a global and round-specific draw index, the drawn word/key, the tile RNG value used, and the selected pool index and pool size before removal.
 
-Use this mode for controlled RNG validation, especially when comparing two personas with the same song, mode, and seed. The expected result under the v0.1.12 separate-stream architecture is an identical tile-draw sequence even when persona decision RNG usage differs. The diagnostic is intentionally opt-in because exports can become substantially larger.
+Use this mode for controlled RNG validation, especially when comparing two personas with the same song, mode, and seed. The expected result under the v0.1.10 separate-stream architecture is an identical tile-draw sequence even when persona decision RNG usage differs. The diagnostic is intentionally opt-in because exports can become substantially larger.
 
 
 ## Paired Tile RNG Comparison
@@ -180,14 +189,10 @@ Round timing is reported separately using:
 The comparison JSON contains `comparison.tileStream` and `comparison.roundTiming`. The top-level `comparison.identical` remains the physical tile-stream result for compatibility with earlier diagnostic exports.
 
 
-### v0.1.12 — Decision Divergence Diagnostic
-The paired Dolly/Kenny comparison now records persona decisions, persona-specific available legal moves, and the resulting game state. The comparison reports the first differing selected move and preserves the separate tile-stream and round-timing diagnostics.
+## 2026-09-27 — Paired RNG Comparison Refinement
 
-
-### v0.1.13 — Decision Divergence Classification
-The paired decision comparison now distinguishes two important cases:
-
-- **`DIFFERENT_LEGAL_MOVE`** — the personas selected different legal moves, based on action, physical hand tile, word/key, or lyric target text.
-- **`DUPLICATE_LINE_INSTANCE`** — both selected the same move type using the same hand tile and word, and targeted identical lyric text, but selected different `lineId` values because the song contains duplicate lyric-line instances.
-
-The exported `comparison.decisionDivergence.moveComparison` record exposes these component comparisons explicitly. This prevents a duplicated lyric line from being reported as a fundamentally different move simply because its occurrence ID differs.
+- Refined the paired Dolly/Kenny Tile RNG comparison.
+- Tile-stream identity now compares only physical draw fields: `drawIndex`, `word`, `key`, `randomValue`, `poolIndex`, and `poolLengthBefore`.
+- `round` and `roundDrawIndex` are now excluded from tile-stream identity.
+- Added separate round-timing comparison and first timing difference reporting.
+- Preserved top-level `comparison.identical` as the physical tile-stream identity result.

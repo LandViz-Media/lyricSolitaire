@@ -103,10 +103,10 @@ pre{margin:0;background:#172026;color:#edf1f2;padding:12px;max-height:560px;over
 
 <footer>Lyric Solitaire Simulator <span id="footerVersion">v—</span> — Experimental results may change as the game model evolves.</footer>
 
-<script src="js/config/projectVersion.js?v=0.1.13"></script>
-<script src="js/data/songCatalog.js?v=0.1.13"></script>
-<script src="js/utilities/simulator.js?v=0.1.13"></script>
-<script src="js/utilities/testResultLogger.js?v=0.1.13"></script>
+<script src="js/config/projectVersion.js?v=0.1.9"></script>
+<script src="js/data/songCatalog.js?v=0.1.9"></script>
+<script src="js/utilities/simulator.js?v=0.1.12"></script>
+<script src="js/utilities/testResultLogger.js?v=0.1.12"></script>
 <script>
 /*
  * Simulator Lab Controller
@@ -239,61 +239,26 @@ function compareDecisionTraces(dollyTrial, kennyTrial){
     const right=b[i] || null;
     const same=left&&right
       && left.action===right.action
-      && left.handIndex===right.handIndex
       && left.word===right.word
       && left.key===right.key
       && left.lineId===right.lineId;
     if(!same){
-      let reason="DIFFERENT_LEGAL_MOVE";
-      let moveComparison={
-        sameMoveType:false,
-        sameHandTile:false,
-        sameWord:false,
-        sameLineText:false,
-        differentLineId:false,
-        duplicateLineInstance:false
-      };
-
+      let reason="CHOSEN_MOVE_DIFFERENT";
       if(left&&right){
         const beforeSame=JSON.stringify(left.stateBefore)===JSON.stringify(right.stateBefore);
         const afterSame=JSON.stringify(left.stateAfter)===JSON.stringify(right.stateAfter);
-        const sameMoveType=left.action===right.action;
-        const sameHandTile=left.handIndex===right.handIndex;
-        const sameWord=left.word===right.word && left.key===right.key;
-        const sameLineText=left.lineText===right.lineText;
-        const differentLineId=left.lineId!==right.lineId;
-        const duplicateLineInstance=sameMoveType && sameHandTile && sameWord && sameLineText && differentLineId;
-
-        moveComparison={
-          sameMoveType,
-          sameHandTile,
-          sameWord,
-          sameLineText,
-          differentLineId,
-          duplicateLineInstance
-        };
-
-        if(beforeSame && afterSame){
-          reason="DIAGNOSTIC_ALIGNMENT_DIFFERENCE";
-        }else if(!beforeSame){
-          reason="STATE_ALREADY_DIVERGED";
-        }else if(duplicateLineInstance){
-          reason="DUPLICATE_LINE_INSTANCE";
-        }else if(!sameMoveType || !sameHandTile || !sameWord || !sameLineText){
-          reason="DIFFERENT_LEGAL_MOVE";
-        }else if(!afterSame){
-          reason="RESULTING_STATE_DIFFERENT";
-        }
+        if(beforeSame && afterSame) reason="DIAGNOSTIC_ALIGNMENT_DIFFERENCE";
+        else if(!beforeSame) reason="STATE_ALREADY_DIVERGED";
+        else if(!afterSame) reason="RESULTING_STATE_DIFFERENT";
       }else{
         reason="ONE_PERSONA_HAS_NO_CORRESPONDING_MOVE";
       }
       return {
         identical:false,
-        comparedFields:["action","handIndex","word","key","lineId"],
+        comparedFields:["action","word","key","lineId"],
         decisionIndex:left?.decisionIndex ?? right?.decisionIndex ?? null,
         round:left?.round ?? right?.round ?? null,
         reason,
-        moveComparison,
         dolly:left,
         kenny:right
       };
@@ -301,11 +266,10 @@ function compareDecisionTraces(dollyTrial, kennyTrial){
   }
   return {
     identical:a.length===b.length,
-    comparedFields:["action","handIndex","word","key","lineId"],
+    comparedFields:["action","word","key","lineId"],
     decisionIndex:null,
     round:null,
     reason:a.length===b.length?"NO_DIVERGENCE":"ONE_PERSONA_HAS_ADDITIONAL_MOVES",
-    moveComparison:null,
     dolly:null,
     kenny:null
   };
@@ -381,12 +345,7 @@ async function runPairedRngComparison(){
     }else{
       const d=decisionDivergence;
       addLog(`DECISION DIVERGENCE: first difference at decision ${d.decisionIndex ?? "unknown"}, Round ${d.round ?? "unknown"}.`);
-      addLog(`  Classification: ${d.reason}.`);
-      if(d.reason==="DUPLICATE_LINE_INSTANCE"){
-        addLog(`  Same legal move type and same lyric text; different duplicate line instances were selected.`);
-      }else if(d.reason==="DIFFERENT_LEGAL_MOVE"){
-        addLog(`  The selected legal moves differ in action, hand tile, word, or lyric target.`);
-      }
+      addLog(`  Reason: ${d.reason}.`);
       addLog(`  Dolly: ${d.dolly?.action ?? "—"} ${d.dolly?.word ?? "—"} → line ${d.dolly?.lineId ?? "—"}.`);
       addLog(`  Kenny: ${d.kenny?.action ?? "—"} ${d.kenny?.word ?? "—"} → line ${d.kenny?.lineId ?? "—"}.`);
       addLog(`  Dolly available moves: ${d.dolly?.availableMoves?.length ?? 0}; Kenny available moves: ${d.kenny?.availableMoves?.length ?? 0}.`);

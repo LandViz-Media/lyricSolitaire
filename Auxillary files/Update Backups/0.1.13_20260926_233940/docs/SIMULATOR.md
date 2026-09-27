@@ -1,6 +1,6 @@
 # Simulator Lab
 
-**Simulator version: 0.1.13**
+**Simulator version: 0.1.12**
 
 ## Purpose
 
@@ -182,12 +182,3 @@ The comparison JSON contains `comparison.tileStream` and `comparison.roundTiming
 
 ### v0.1.12 — Decision Divergence Diagnostic
 The paired Dolly/Kenny comparison now records persona decisions, persona-specific available legal moves, and the resulting game state. The comparison reports the first differing selected move and preserves the separate tile-stream and round-timing diagnostics.
-
-
-### v0.1.13 — Decision Divergence Classification
-The paired decision comparison now distinguishes two important cases:
-
-- **`DIFFERENT_LEGAL_MOVE`** — the personas selected different legal moves, based on action, physical hand tile, word/key, or lyric target text.
-- **`DUPLICATE_LINE_INSTANCE`** — both selected the same move type using the same hand tile and word, and targeted identical lyric text, but selected different `lineId` values because the song contains duplicate lyric-line instances.
-
-The exported `comparison.decisionDivergence.moveComparison` record exposes these component comparisons explicitly. This prevents a duplicated lyric line from being reported as a fundamentally different move simply because its occurrence ID differs.

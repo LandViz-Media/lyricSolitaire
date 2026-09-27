@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.1.13
+- Refined the Dolly/Kenny decision divergence report to distinguish genuinely different legal moves from the same move applied to different duplicate lyric-line instances.
+- Decision comparison now includes `handIndex` in the selected-move identity.
+- Added `moveComparison` diagnostics showing whether the action, hand tile, word, lyric text, and line ID matched.
+- Added `DUPLICATE_LINE_INSTANCE` and `DIFFERENT_LEGAL_MOVE` classifications.
+- Preserved state-alignment and resulting-state diagnostics.
+
 ## v0.1.12
 - Added paired Dolly/Kenny decision divergence diagnostics.
 - Records each selected move with persona-specific available legal moves.

@@ -42,7 +42,7 @@
  *   Standard    : 10 rows, 40-tile hand, 10 rounds
  *   Hard        :  8 rows, 30-tile hand,  8 rounds
  *
- * RNG MODEL (v0.1.13):
+ * RNG MODEL (v0.1.12):
  *   Tile draws and player/persona decisions use separate deterministic streams.
  *   This prevents decision tie-breaks from changing future tile draws for a seeded trial.
  *
@@ -82,7 +82,7 @@
     };
 
     const CONFIG = {
-        version: "0.1.13",
+        version: "0.1.12",
         initialDraw: 12,
         defaultMode: "easy",
         modes: MODE_CONFIG,
