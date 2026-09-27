@@ -1,6 +1,6 @@
 # Simulator Lab
 
-**Simulator version: 0.1.16**
+**Simulator version: 0.1.15**
 
 ## Purpose
 
@@ -193,10 +193,7 @@ The paired decision comparison now distinguishes two important cases:
 The exported `comparison.decisionDivergence.moveComparison` record exposes these component comparisons explicitly. This prevents a duplicated lyric line from being reported as a fundamentally different move simply because its occurrence ID differs.
 
 
-### v0.1.16 — Blocked New-Line Opening Diagnostics
-
-The v0.1.16 diagnostic enumerates every hand tile that can open an inactive lyric line, including tiles that cannot currently play on an active line. Each opportunity records whether opening is allowed, blocked by persona policy, or blocked by row capacity. Gameplay, RNG consumption, and win logic are unchanged.
-
+### v0.1.15 — Strategic Opening Diagnostics
 
 The simulator records a terminal play-phase strategic opening audit for each persona. It identifies hand tiles that can both advance an existing active line and open an inactive lyric line, then simulates each candidate opening on cloned state to measure future physical-tile playability. This diagnostic does not change gameplay or RNG behavior.
 

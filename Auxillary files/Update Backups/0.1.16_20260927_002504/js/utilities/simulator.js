@@ -42,7 +42,7 @@
  *   Standard    : 10 rows, 40-tile hand, 10 rounds
  *   Hard        :  8 rows, 30-tile hand,  8 rounds
  *
- * RNG MODEL (v0.1.16):
+ * RNG MODEL (v0.1.15):
  *   Tile draws and player/persona decisions use separate deterministic streams.
  *   This prevents decision tie-breaks from changing future tile draws for a seeded trial.
  *
@@ -82,7 +82,7 @@
     };
 
     const CONFIG = {
-        version: "0.1.16",
+        version: "0.1.15",
         initialDraw: 12,
         defaultMode: "easy",
         modes: MODE_CONFIG,
@@ -494,6 +494,10 @@
             activeLines.length < gameConfig.maxRows
         );
 
+        const strategicOpeningDiagnostic = analyzeStrategicOpenings(
+            hand, activeLines, allLines, completedIds, gameConfig
+        );
+
         return {
             playedThisTurn,
             playedOnExistingLines,
@@ -599,41 +603,14 @@
      * IMPORTANT: This function only clones state. It never changes the actual
      * hand, active lines, completed lines, RNG state, or persona behavior.
      */
-    /*
-     * Enumerate every hand tile that can open an inactive lyric line,
-     * including tiles that cannot currently play on an active line.
-     *
-     * This is deliberately diagnostic-only. It does not change gameplay,
-     * RNG consumption, persona decisions, or win logic. Each opportunity
-     * records whether the opening is currently allowed, blocked by the
-     * persona policy, or blocked because the board has reached maxRows.
-     */
     function analyzeStrategicOpenings(
-        hand, activeLines, allLines, completedIds, gameConfig,
-        persona, round, openedThisRound
+        hand, activeLines, allLines, completedIds, gameConfig
     ) {
         const activeIds = new Set(activeLines.map(line => line.id));
         const basePlayability = countPlayableTiles(
-            hand, activeLines, allLines, completedIds,
-            activeLines.length < gameConfig.maxRows
+            hand, activeLines, allLines, completedIds, activeLines.length < gameConfig.maxRows
         );
-        const dualUseOpportunities = [];
-        const newLineOnlyOpportunities = [];
-        const allOpeningOpportunities = [];
-
-        const openingAllowed = mayOpenNewLine(persona, {
-            round,
-            handLength: hand.length,
-            gameConfig,
-            activeLines,
-            openedThisRound
-        });
-        const rowCapacityAvailable = activeLines.length < gameConfig.maxRows;
-        const blockedByRowCapacity = !rowCapacityAvailable;
-        const blockedByPersonaPolicy = rowCapacityAvailable && !openingAllowed;
-        const openingBlockReason = blockedByRowCapacity
-            ? "ROW_CAPACITY"
-            : (blockedByPersonaPolicy ? "PERSONA_POLICY" : null);
+        const opportunities = [];
 
         hand.forEach(function (tile, handIndex) {
             const canPlayExisting = activeLines.some(line => lineCanUseWord(line, tile.key));
@@ -642,6 +619,8 @@
                     !completedIds.has(line.id) &&
                     lineCanUseWord(line, tile.key);
             });
+
+            if (!canPlayExisting || !candidates.length) return;
 
             candidates.forEach(function (sourceLine) {
                 const hypotheticalHand = hand.filter((_, index) => index !== handIndex);
@@ -664,101 +643,47 @@
                     compacted.length < gameConfig.maxRows
                 );
 
-                const opportunity = {
+                opportunities.push({
                     handIndex,
                     word: tile.word,
                     key: tile.key,
-                    existingLinePlayable: canPlayExisting,
+                    existingLinePlayable: true,
                     action: "OPEN_LINE",
                     lineId: sourceLine.id,
                     lineText: sourceLine.text,
                     lineWordCount: sourceLine.wordCount,
                     linePlacedAfterOpening: target.placed,
                     lineRemainingAfterOpening: serializeLineState(target).remaining,
-                    openingAllowed,
-                    blockedByPersonaPolicy,
-                    blockedByRowCapacity,
-                    openingBlockReason,
                     futurePlayableTiles: future.total,
                     futurePlayableOnExistingLines: future.existingLine,
                     futurePlayableByOpeningNewLine: future.newLine,
                     baselinePlayableTiles: basePlayability.total,
                     futurePlayabilityDelta: future.total - basePlayability.total,
                     increasesFuturePlayability: future.total > basePlayability.total
-                };
-
-                allOpeningOpportunities.push(opportunity);
-                if (canPlayExisting) {
-                    dualUseOpportunities.push(opportunity);
-                } else {
-                    newLineOnlyOpportunities.push(opportunity);
-                }
+                });
             });
         });
 
-        function sortOpportunities(a, b) {
+        opportunities.sort(function (a, b) {
             return b.futurePlayabilityDelta - a.futurePlayabilityDelta ||
                 b.futurePlayableTiles - a.futurePlayableTiles ||
                 a.handIndex - b.handIndex ||
                 a.lineId - b.lineId;
-        }
+        });
 
-        dualUseOpportunities.sort(sortOpportunities);
-        newLineOnlyOpportunities.sort(sortOpportunities);
-        allOpeningOpportunities.sort(sortOpportunities);
-
-        const dualUseTiles = Array.from(new Set(
-            dualUseOpportunities.map(item => item.handIndex)
-        ));
-        const newLineOnlyTiles = Array.from(new Set(
-            newLineOnlyOpportunities.map(item => item.handIndex)
-        ));
-        const improvingDualUse = dualUseOpportunities.filter(
-            item => item.increasesFuturePlayability
-        );
-        const improvingNewLineOnly = newLineOnlyOpportunities.filter(
-            item => item.increasesFuturePlayability
-        );
-        const blockedNewLineOnly = newLineOnlyOpportunities.filter(
-            item => item.blockedByPersonaPolicy
-        );
+        const dualUseTiles = Array.from(new Set(opportunities.map(item => item.handIndex)));
+        const improving = opportunities.filter(item => item.increasesFuturePlayability);
 
         return {
             baselinePlayableTiles: basePlayability.total,
             baselinePlayableOnExistingLines: basePlayability.existingLine,
             baselinePlayableByOpeningNewLine: basePlayability.newLine,
-
-            // Existing v0.1.15 dual-use diagnostic.
             dualUseTileCount: dualUseTiles.length,
-            openingOpportunityCount: dualUseOpportunities.length,
-            improvingOpportunityCount: improvingDualUse.length,
-            hasDualUseOpenings: dualUseOpportunities.length > 0,
-            hasImprovingOpenings: improvingDualUse.length > 0,
-            opportunities: dualUseOpportunities,
-
-            // v0.1.16: all new-line opportunities, including new-line-only tiles.
-            openingPolicy: {
-                persona,
-                round,
-                activeLineCount: activeLines.length,
-                maxRows: gameConfig.maxRows,
-                handCount: hand.length,
-                openedThisRound,
-                openingAllowed,
-                blockedByPersonaPolicy,
-                blockedByRowCapacity,
-                openingBlockReason
-            },
-            newLineOnlyTileCount: newLineOnlyTiles.length,
-            newLineOnlyOpportunityCount: newLineOnlyOpportunities.length,
-            blockedNewLineOnlyTileCount: Array.from(new Set(
-                blockedNewLineOnly.map(item => item.handIndex)
-            )).length,
-            improvingNewLineOnlyOpportunityCount: improvingNewLineOnly.length,
-            hasNewLineOnlyOpenings: newLineOnlyOpportunities.length > 0,
-            hasBlockedNewLineOnlyOpenings: blockedNewLineOnly.length > 0,
-            newLineOnlyOpportunities,
-            allOpeningOpportunities
+            openingOpportunityCount: opportunities.length,
+            improvingOpportunityCount: improving.length,
+            hasDualUseOpenings: opportunities.length > 0,
+            hasImprovingOpenings: improving.length > 0,
+            opportunities
         };
     }
 
@@ -918,8 +843,7 @@
         );
 
         const strategicOpeningDiagnostic = analyzeStrategicOpenings(
-            hand, activeLines, allLines, completedIds, gameConfig,
-            persona, round, openedThisRound
+            hand, activeLines, allLines, completedIds, gameConfig
         );
 
         return {

@@ -1,3 +1,7 @@
+## 0.1.16 — Blocked New-Line Opening Diagnostics
+
+Added a diagnostic-only inventory of every new-line opening available from the current hand, including new-line-only tiles. Each opportunity records `openingAllowed`, `blockedByPersonaPolicy`, `blockedByRowCapacity`, and `openingBlockReason`. Existing v0.1.15 dual-use diagnostics remain unchanged.
+
 ## 0.1.15 — Strategic Opening Diagnostics
 
 Added a non-invasive terminal-state diagnostic that audits hand tiles which can both play on existing active lines and open inactive lyric lines. For each candidate opening it records future physical-tile playability and whether the hypothetical opening increases that playability. No gameplay, persona selection, RNG, or win logic was changed.

@@ -1,3 +1,7 @@
+## 2026-09-27 — v0.1.16 Blocked New-Line Opening Diagnostic
+
+Implemented a diagnostic-only extension of v0.1.15. At terminal play-phase states, the simulator now enumerates every hand tile that can open an inactive lyric line, including tiles that cannot currently play on an active line. Each opening records whether the opening is allowed, blocked by persona policy, or blocked by row capacity. The diagnostic preserves gameplay, RNG consumption, persona decisions, and win logic.
+
 # Simulator Lab
 
 **Simulator version: 0.1.7**

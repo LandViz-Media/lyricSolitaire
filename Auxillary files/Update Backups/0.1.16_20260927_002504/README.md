@@ -1,4 +1,4 @@
-# Lyric Solitaire — Separate RNG Streams v0.1.16
+# Lyric Solitaire — Separate RNG Streams v0.1.15
 
 This update separates the Simulator's deterministic random-number generation into two streams:
 
@@ -10,10 +10,10 @@ so player-decision RNG calls no longer advance the tile-draw stream.
 
 ## Install
 
-1. Double-click `Install_LyricSolitaire_RNG_Streams_v0.1.16.command`.
+1. Double-click `Install_LyricSolitaire_RNG_Streams_v0.1.15.command`.
 2. Select the local **Lyric Solitaire repository root** in the Finder dialog.
 3. The installer backs up every changed file under:
-   `Auxillary files/Update Backups/0.1.16_<timestamp>/`
+   `Auxillary files/Update Backups/0.1.12_<timestamp>/`
 4. Run the Simulator normally.
 
 The installer does **not** modify `song_library/` or its contents.
@@ -63,10 +63,7 @@ The paired Dolly/Kenny comparison now records persona decisions, persona-specifi
 The paired Dolly/Kenny comparison now distinguishes a genuinely different legal move from a move that is structurally the same but targets a different duplicate lyric-line instance. A duplicate-instance divergence has the same action, hand tile, word/key, and lyric text but a different `lineId`. The exported `decisionDivergence` record includes `reason` and `moveComparison` fields for this distinction.
 
 
-### v0.1.16 — Blocked New-Line Opening Diagnostics
-
-Enumerates every hand tile that can open an inactive lyric line, including new-line-only tiles, and records whether each opening is allowed, blocked by persona policy, or blocked by row capacity. This diagnostic does not alter gameplay or RNG behavior.
-
+### v0.1.15 — Strategic Opening Diagnostics
 
 Adds a non-invasive terminal-state audit for tiles that can both play on existing lines and open inactive lines. Each candidate opening reports hypothetical future physical-tile playability and whether the opening increases that playability.
 
