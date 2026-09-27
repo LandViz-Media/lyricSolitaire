@@ -206,8 +206,3 @@ Implemented v0.1.13 to refine the paired Dolly/Kenny divergence diagnostic. The 
 ## 2026-09-27 — v0.1.14 Consequential Divergence Diagnostic
 
 Implemented a follow-on diagnostic for the v0.1.13 duplicate-line-instance finding. The comparison preserves the first raw decision divergence, then scans later paired decisions for the first substantive move difference. It separately reports tile-consumption identity so the analysis can distinguish an equivalent duplicate-line target from the first point where Dolly and Kenny select different physical tiles.
-
-
-## 2026-09-27 — v0.1.15 Strategic Opening Diagnostic
-
-Added a non-invasive terminal-state diagnostic to identify hand tiles that can both play on existing active lines and open inactive lyric lines. Each hypothetical opening records future physical-tile playability and the change from the current state. Gameplay mechanics, persona behavior, RNG streams, and win logic are unchanged.

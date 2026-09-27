@@ -42,7 +42,7 @@
  *   Standard    : 10 rows, 40-tile hand, 10 rounds
  *   Hard        :  8 rows, 30-tile hand,  8 rounds
  *
- * RNG MODEL (v0.1.15):
+ * RNG MODEL (v0.1.14):
  *   Tile draws and player/persona decisions use separate deterministic streams.
  *   This prevents decision tie-breaks from changing future tile draws for a seeded trial.
  *
@@ -82,7 +82,7 @@
     };
 
     const CONFIG = {
-        version: "0.1.15",
+        version: "0.1.14",
         initialDraw: 12,
         defaultMode: "easy",
         modes: MODE_CONFIG,
@@ -494,10 +494,6 @@
             activeLines.length < gameConfig.maxRows
         );
 
-        const strategicOpeningDiagnostic = analyzeStrategicOpenings(
-            hand, activeLines, allLines, completedIds, gameConfig
-        );
-
         return {
             playedThisTurn,
             playedOnExistingLines,
@@ -585,106 +581,6 @@
     function recordDecisionState(diagnostic, payload) {
         if (!diagnostic) return;
         diagnostic.decisions.push(payload);
-    }
-
-    /*
-     * Audit strategic openings without changing the actual game state. This
-     * diagnostic deliberately ignores the persona's existing-line-first rule
-     * and asks a different question: if a hand tile opens a new lyric line,
-     * how many other physical tiles become playable afterward?
-     *
-     * The audit is performed at the terminal/stuck state of each play phase.
-     * A dual-use opportunity is a tile that can both advance an existing line
-     * and open at least one currently inactive line. `futurePlayableTiles` is
-     * measured after hypothetically consuming the opening tile and placing it
-     * on the candidate line. `futurePlayabilityDelta` compares that value with
-     * the number of playable physical tiles in the current state.
-     *
-     * IMPORTANT: This function only clones state. It never changes the actual
-     * hand, active lines, completed lines, RNG state, or persona behavior.
-     */
-    function analyzeStrategicOpenings(
-        hand, activeLines, allLines, completedIds, gameConfig
-    ) {
-        const activeIds = new Set(activeLines.map(line => line.id));
-        const basePlayability = countPlayableTiles(
-            hand, activeLines, allLines, completedIds, activeLines.length < gameConfig.maxRows
-        );
-        const opportunities = [];
-
-        hand.forEach(function (tile, handIndex) {
-            const canPlayExisting = activeLines.some(line => lineCanUseWord(line, tile.key));
-            const candidates = allLines.filter(function (line) {
-                return !activeIds.has(line.id) &&
-                    !completedIds.has(line.id) &&
-                    lineCanUseWord(line, tile.key);
-            });
-
-            if (!canPlayExisting || !candidates.length) return;
-
-            candidates.forEach(function (sourceLine) {
-                const hypotheticalHand = hand.filter((_, index) => index !== handIndex);
-                const hypotheticalActive = activeLines.map(cloneLine);
-                const target = cloneLine(sourceLine);
-
-                if (!playWordIntoLine(target, tile.key)) return;
-                hypotheticalActive.push(target);
-
-                const hypotheticalCompleted = new Set(completedIds);
-                const compacted = compactCompletedLines(
-                    hypotheticalActive, hypotheticalCompleted, []
-                );
-
-                const future = countPlayableTiles(
-                    hypotheticalHand,
-                    compacted,
-                    allLines,
-                    hypotheticalCompleted,
-                    compacted.length < gameConfig.maxRows
-                );
-
-                opportunities.push({
-                    handIndex,
-                    word: tile.word,
-                    key: tile.key,
-                    existingLinePlayable: true,
-                    action: "OPEN_LINE",
-                    lineId: sourceLine.id,
-                    lineText: sourceLine.text,
-                    lineWordCount: sourceLine.wordCount,
-                    linePlacedAfterOpening: target.placed,
-                    lineRemainingAfterOpening: serializeLineState(target).remaining,
-                    futurePlayableTiles: future.total,
-                    futurePlayableOnExistingLines: future.existingLine,
-                    futurePlayableByOpeningNewLine: future.newLine,
-                    baselinePlayableTiles: basePlayability.total,
-                    futurePlayabilityDelta: future.total - basePlayability.total,
-                    increasesFuturePlayability: future.total > basePlayability.total
-                });
-            });
-        });
-
-        opportunities.sort(function (a, b) {
-            return b.futurePlayabilityDelta - a.futurePlayabilityDelta ||
-                b.futurePlayableTiles - a.futurePlayableTiles ||
-                a.handIndex - b.handIndex ||
-                a.lineId - b.lineId;
-        });
-
-        const dualUseTiles = Array.from(new Set(opportunities.map(item => item.handIndex)));
-        const improving = opportunities.filter(item => item.increasesFuturePlayability);
-
-        return {
-            baselinePlayableTiles: basePlayability.total,
-            baselinePlayableOnExistingLines: basePlayability.existingLine,
-            baselinePlayableByOpeningNewLine: basePlayability.newLine,
-            dualUseTileCount: dualUseTiles.length,
-            openingOpportunityCount: opportunities.length,
-            improvingOpportunityCount: improving.length,
-            hasDualUseOpenings: opportunities.length > 0,
-            hasImprovingOpenings: improving.length > 0,
-            opportunities
-        };
     }
 
     function playHand(
@@ -842,16 +738,11 @@
             activeLines.length < gameConfig.maxRows
         );
 
-        const strategicOpeningDiagnostic = analyzeStrategicOpenings(
-            hand, activeLines, allLines, completedIds, gameConfig
-        );
-
         return {
             playedThisTurn,
             playedOnExistingLines,
             playedByOpeningNewLine,
             openedThisRound,
-            strategicOpeningDiagnostic,
             startingPlayableOnExistingLines: startingPlayability.existingLine,
             startingPlayableByOpeningNewLine: startingPlayability.newLine,
             playableTilesRemainingUnplayed: endingPlayability.total
@@ -943,8 +834,7 @@
                 playableByOpeningNewLine: playResult.startingPlayableByOpeningNewLine,
                 playedOnExistingLines: playResult.playedOnExistingLines,
                 playedByOpeningNewLine: playResult.playedByOpeningNewLine,
-                playableTilesRemainingUnplayed: playResult.playableTilesRemainingUnplayed,
-                strategicOpeningDiagnostic: playResult.strategicOpeningDiagnostic
+                playableTilesRemainingUnplayed: playResult.playableTilesRemainingUnplayed
             });
 
             if (pool.length === 0) break;

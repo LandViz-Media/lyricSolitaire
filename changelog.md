@@ -1,3 +1,7 @@
+## 0.1.15 — Strategic Opening Diagnostics
+
+Added a non-invasive terminal-state diagnostic that audits hand tiles which can both play on existing active lines and open inactive lyric lines. For each candidate opening it records future physical-tile playability and whether the hypothetical opening increases that playability. No gameplay, persona selection, RNG, or win logic was changed.
+
 # Changelog
 
 ## v0.1.13
@@ -207,4 +211,4 @@ The comparison JSON contains `comparison.tileStream` and `comparison.roundTiming
 
 ## 0.1.14 — Consequential Decision Divergence
 
-Implemented v0.1.14 to continue divergence analysis after a `DUPLICATE_LINE_INSTANCE` classification. The paired comparison now reports the first later consequential move difference and identifies the first decision where the selected physical tile differs between Dolly and Kenny. The diagnostic preserves the original first divergence and does not change simulator mechanics.
+Implemented v0.1.15 to continue divergence analysis after a `DUPLICATE_LINE_INSTANCE` classification. The paired comparison now reports the first later consequential move difference and identifies the first decision where the selected physical tile differs between Dolly and Kenny. The diagnostic preserves the original first divergence and does not change simulator mechanics.
