@@ -409,6 +409,12 @@
         const canOpen = activeLines.length < gameConfig.maxRows;
 
         hand.forEach(function (tile, handIndex) {
+            // Preserve the physical tile's original hand index when a
+            // hypothetical opening removes another tile and shifts the array.
+            const physicalHandIndex = Number.isInteger(tile.diagnosticOriginalHandIndex)
+                ? tile.diagnosticOriginalHandIndex
+                : handIndex;
+
             activeLines.forEach(function (line) {
                 if (!lineCanUseWord(line, tile.key)) return;
                 const missingAfter = countPotentialLineCompletions(line, hand, handIndex);
@@ -547,10 +553,16 @@
         });
 
         hand.forEach(function (tile, handIndex) {
+            // Preserve the physical tile's original hand index when a
+            // hypothetical opening removes another tile and shifts the array.
+            const physicalHandIndex = Number.isInteger(tile.diagnosticOriginalHandIndex)
+                ? tile.diagnosticOriginalHandIndex
+                : handIndex;
+
             activeLines.forEach(function (line) {
                 if (!lineCanUseWord(line, tile.key)) return;
                 moves.push({
-                    handIndex,
+                    handIndex: physicalHandIndex,
                     word: tile.word,
                     key: tile.key,
                     action: "PLAY_ACTIVE",
@@ -622,14 +634,14 @@
         hand.forEach(function (tile, handIndex) {
             // Preserve the physical tile's original hand index when a
             // hypothetical opening removes another tile and shifts the array.
-            const diagnosticHandIndex = Number.isInteger(tile.diagnosticOriginalHandIndex)
+            const physicalHandIndex = Number.isInteger(tile.diagnosticOriginalHandIndex)
                 ? tile.diagnosticOriginalHandIndex
                 : handIndex;
 
             activeLines.forEach(function (line) {
                 if (!lineCanUseWord(line, tile.key)) return;
                 opportunities.push({
-                    handIndex: diagnosticHandIndex,
+                    handIndex: physicalHandIndex,
                     word: tile.word,
                     key: tile.key,
                     lineId: line.id,
@@ -644,7 +656,7 @@
                 if (activeIds.has(line.id) || completedIds.has(line.id)) return;
                 if (!lineCanUseWord(line, tile.key)) return;
                 opportunities.push({
-                    handIndex: diagnosticHandIndex,
+                    handIndex: physicalHandIndex,
                     word: tile.word,
                     key: tile.key,
                     lineId: line.id,
@@ -697,6 +709,10 @@
             : (blockedByPersonaPolicy ? "PERSONA_POLICY" : null);
 
         hand.forEach(function (tile, handIndex) {
+            // Preserve the physical tile identity for v0.1.17 comparisons.
+            const physicalHandIndex = Number.isInteger(tile.diagnosticOriginalHandIndex)
+                ? tile.diagnosticOriginalHandIndex
+                : handIndex;
             const canPlayExisting = activeLines.some(line => lineCanUseWord(line, tile.key));
             const candidates = allLines.filter(function (line) {
                 return !activeIds.has(line.id) &&
@@ -760,7 +776,7 @@
                     });
 
                 const opportunity = {
-                    handIndex,
+                    handIndex: physicalHandIndex,
                     word: tile.word,
                     key: tile.key,
                     existingLinePlayable: canPlayExisting,

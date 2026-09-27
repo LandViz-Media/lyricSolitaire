@@ -219,3 +219,7 @@ Added a non-invasive terminal-state diagnostic to identify hand tiles that can b
 ## v0.1.17 — Opening Value Comparison
 
 The v0.1.17 diagnostic extends the blocked new-line opening analysis by identifying the exact physical hand tiles and lyric lines that become newly playable after each hypothetical opening. It compares the baseline playable opportunity set with the hypothetical post-opening set and reports newly available opportunities by word, physical hand index, lyric line ID/text, and whether the opportunity is on an active line or an inactive line opened by the hypothetical state. This is diagnostic-only and does not alter gameplay or RNG behavior.
+
+## v0.1.17 diagnostic fix
+
+Corrected the Opening Value Comparison diagnostic after a `physicalHandIndex is not defined` runtime error. The implementation no longer propagates a diagnostic-only index variable into normal Garth or human-style persona move generation. Hypothetical opening comparisons retain diagnostic-only physical tile identity via `diagnosticOriginalHandIndex`.
