@@ -10,10 +10,8 @@
  *
  * DIAGNOSTIC MODE:
  * Optional tile-draw diagnostics record the tile RNG seed and every physical
- * tile drawn, in order, with global and per-round draw indexes.
- * Optional decision diagnostics record each persona move, the persona-specific
- * legal moves available at that decision point, and the resulting state.
- * Diagnostic logging is opt-in so normal simulations remain compact.
+ * tile drawn, in order, with global and per-round draw indexes. Diagnostic
+ * logging is opt-in so normal simulations remain compact.
  *
  * PERSONAS:
  *   Dolly — Aggressive Row Filler
@@ -42,7 +40,7 @@
  *   Standard    : 10 rows, 40-tile hand, 10 rounds
  *   Hard        :  8 rows, 30-tile hand,  8 rounds
  *
- * RNG MODEL (v0.1.12):
+ * RNG MODEL (v0.1.10):
  *   Tile draws and player/persona decisions use separate deterministic streams.
  *   This prevents decision tie-breaks from changing future tile draws for a seeded trial.
  *
@@ -82,7 +80,7 @@
     };
 
     const CONFIG = {
-        version: "0.1.12",
+        version: "0.1.10",
         initialDraw: 12,
         defaultMode: "easy",
         modes: MODE_CONFIG,
@@ -505,94 +503,15 @@
         };
     }
 
-    function serializeLineState(line) {
-        const remaining = {};
-        line.remaining.forEach(function (count, key) { remaining[key] = count; });
-        return {
-            id: line.id,
-            section: line.section,
-            lineIndex: line.lineIndex,
-            text: line.text,
-            wordCount: line.wordCount,
-            placed: line.placed,
-            remaining
-        };
-    }
-
-    function serializeGameState(hand, activeLines, completedIds) {
-        return {
-            hand: hand.map(function (tile) { return { word: tile.word, key: tile.key }; }),
-            handCount: hand.length,
-            activeLines: activeLines.map(serializeLineState),
-            activeLineCount: activeLines.length,
-            completedLineIds: Array.from(completedIds).sort(function (a, b) {
-                return String(a).localeCompare(String(b));
-            }),
-            completedLineCount: completedIds.size
-        };
-    }
-
-    function buildPersonaAvailableMoves(
-        hand, activeLines, allLines, completedIds,
-        gameConfig, persona, round, openedThisRound
-    ) {
-        const moves = [];
-        const activeIds = new Set(activeLines.map(line => line.id));
-        const canOpen = mayOpenNewLine(persona, {
-            round,
-            handLength: hand.length,
-            gameConfig,
-            activeLines,
-            openedThisRound
-        });
-
-        hand.forEach(function (tile, handIndex) {
-            activeLines.forEach(function (line) {
-                if (!lineCanUseWord(line, tile.key)) return;
-                moves.push({
-                    handIndex,
-                    word: tile.word,
-                    key: tile.key,
-                    action: "PLAY_ACTIVE",
-                    lineId: line.id,
-                    lineText: line.text
-                });
-            });
-
-            if (canOpen && !activeLines.some(line => lineCanUseWord(line, tile.key))) {
-                allLines.forEach(function (line) {
-                    if (activeIds.has(line.id) || completedIds.has(line.id)) return;
-                    if (!lineCanUseWord(line, tile.key)) return;
-                    moves.push({
-                        handIndex,
-                        word: tile.word,
-                        key: tile.key,
-                        action: "OPEN_LINE",
-                        lineId: line.id,
-                        lineText: line.text
-                    });
-                });
-            }
-        });
-
-        return moves;
-    }
-
-    function recordDecisionState(diagnostic, payload) {
-        if (!diagnostic) return;
-        diagnostic.decisions.push(payload);
-    }
-
     function playHand(
         hand, activeLines, allLines, completedIds, completedLines,
-        random, gameConfig, persona, round, decisionDiagnostic
+        random, gameConfig, persona, round
     ) {
         let playedThisTurn = 0;
         let playedOnExistingLines = 0;
         let playedByOpeningNewLine = 0;
         let openedThisRound = 0;
         let changed = true;
-        let decisionIndex = 0;
 
         if (persona === "heuristic_reference") {
             return playGarthHand(
@@ -613,10 +532,6 @@
         while (changed) {
             changed = false;
 
-            if (decisionDiagnostic) {
-                decisionDiagnostic.currentRound = round;
-            }
-
             // Kenny's opening gambit: deliberately look for a hand word that
             // cannot advance an existing line so he can establish a broad
             // board early. If a word *can* advance an existing line, it is
@@ -634,15 +549,8 @@
                 }
                 if (openingIndex >= 0) {
                     const tile = hand[openingIndex];
-                    const beforeState = decisionDiagnostic
-                        ? serializeGameState(hand, activeLines, completedIds)
-                        : null;
-                    const availableMoves = decisionDiagnostic
-                        ? buildPersonaAvailableMoves(hand, activeLines, allLines, completedIds, gameConfig, persona, round, openedThisRound)
-                        : null;
                     const target = chooseNewLineWithForesight(allLines, activeLines, completedIds, tile.key, hand, random, 1.5);
                     if (target && playWordIntoLine(target, tile.key)) {
-                        const completedBefore = new Set(completedIds);
                         activeLines.push(target);
                         openedThisRound += 1;
                         hand.splice(openingIndex, 1);
@@ -652,23 +560,6 @@
                         const compacted = compactCompletedLines(activeLines, completedIds, completedLines);
                         activeLines.length = 0;
                         compacted.forEach(line => activeLines.push(line));
-                        if (decisionDiagnostic) {
-                            recordDecisionState(decisionDiagnostic, {
-                                decisionIndex: ++decisionIndex,
-                                round,
-                                action: "OPEN_LINE",
-                                handIndex: openingIndex,
-                                word: tile.word,
-                                key: tile.key,
-                                lineId: target.id,
-                                lineText: target.text,
-                                selectionReason: "KENNY_ROUND_1_OPENING_GAMBIT",
-                                availableMoves,
-                                completedLineIds: Array.from(completedIds).filter(id => !completedBefore.has(id)),
-                                stateBefore: beforeState,
-                                stateAfter: serializeGameState(hand, activeLines, completedIds)
-                            });
-                        }
                         continue;
                     }
                 }
@@ -676,14 +567,7 @@
 
             for (let handIndex = 0; handIndex < hand.length; handIndex += 1) {
                 const tile = hand[handIndex];
-                const originalHandIndex = handIndex;
                 const wordKey = tile.key;
-                const beforeState = decisionDiagnostic
-                    ? serializeGameState(hand, activeLines, completedIds)
-                    : null;
-                const availableMoves = decisionDiagnostic
-                    ? buildPersonaAvailableMoves(hand, activeLines, allLines, completedIds, gameConfig, persona, round, openedThisRound)
-                    : null;
 
                 // Every persona gives existing active lines first priority.
                 let target = chooseActiveLine(activeLines, wordKey, random);
@@ -709,27 +593,9 @@
                 else playedOnExistingLines += 1;
                 changed = true;
 
-                const completedBefore = new Set(completedIds);
                 const compacted = compactCompletedLines(activeLines, completedIds, completedLines);
                 activeLines.length = 0;
                 compacted.forEach(line => activeLines.push(line));
-                if (decisionDiagnostic) {
-                    recordDecisionState(decisionDiagnostic, {
-                        decisionIndex: ++decisionIndex,
-                        round,
-                        action: openedNewLineForPlay ? "OPEN_LINE" : "PLAY_ACTIVE",
-                        handIndex: originalHandIndex,
-                        word: tile.word,
-                        key: wordKey,
-                        lineId: target.id,
-                        lineText: target.text,
-                        selectionReason: openedNewLineForPlay ? "PERSONA_NEW_LINE_RULE" : "EXISTING_ACTIVE_LINE_PRIORITY",
-                        availableMoves,
-                        completedLineIds: Array.from(completedIds).filter(id => !completedBefore.has(id)),
-                        stateBefore: beforeState,
-                        stateAfter: serializeGameState(hand, activeLines, completedIds)
-                    });
-                }
             }
         }
 
@@ -773,7 +639,6 @@
         const pool = songBundle.pool.slice();
 
         const diagnosticEnabled = options.diagnosticTileDraws === true;
-        const decisionDiagnosticEnabled = options.decisionDiagnostic === true;
         const diagnostic = diagnosticEnabled ? {
             enabled: true,
             tileRngSeed: options.tileRngSeed ?? null,
@@ -781,12 +646,6 @@
             drawIndex: 0,
             shuffleRandomCalls: 0,
             draws: []
-        } : null;
-        const decisionDiagnostic = decisionDiagnosticEnabled ? {
-            enabled: true,
-            persona,
-            decisions: [],
-            currentRound: null
         } : null;
 
         if (diagnostic) {
@@ -817,7 +676,7 @@
 
             const playResult = playHand(
                 hand, activeLines, allLines, completedIds, completedLines,
-                decisionRandom, gameConfig, persona, round, decisionDiagnostic
+                decisionRandom, gameConfig, persona, round
             );
             const playedThisRound = playResult.playedThisTurn;
             totalPlayed += playedThisRound;
@@ -855,8 +714,7 @@
             totalDrawn, totalPlayed, held: hand.length,
             completedLines: completedLines.length, activeLines: activeLines.length,
             poolRemaining: pool.length, rounds,
-            ...(diagnostic ? { tileDrawDiagnostic: diagnostic } : {}),
-            ...(decisionDiagnostic ? { decisionDiagnostic } : {})
+            ...(diagnostic ? { tileDrawDiagnostic: diagnostic } : {})
         };
     }
 
@@ -910,7 +768,6 @@
                 mode,
                 persona,
                 diagnosticTileDraws: options?.diagnosticTileDraws === true,
-                decisionDiagnostic: options?.decisionDiagnostic === true,
                 tileRngSeed: options?.diagnosticTileDraws === true
                     ? ((Number(options?.seed) >>> 0) + i) >>> 0
                     : null

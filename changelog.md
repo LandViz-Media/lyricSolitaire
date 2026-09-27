@@ -1,3 +1,12 @@
+# Changelog
+
+## v0.1.12
+- Added paired Dolly/Kenny decision divergence diagnostics.
+- Records each selected move with persona-specific available legal moves.
+- Records state before and after each selected move.
+- Reports the first differing selected move, round, available-move counts, and resulting states.
+- Preserves the v0.1.11 tile-stream identity comparison and separate round-timing comparison.
+
 # Simulator Lab
 
 **Simulator version: 0.1.7**

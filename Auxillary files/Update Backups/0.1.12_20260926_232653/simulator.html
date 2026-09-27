@@ -57,10 +57,10 @@ pre{margin:0;background:#172026;color:#edf1f2;padding:12px;max-height:560px;over
 <label>Random Seed<input id="seed" type="number" value="12345"></label>
 <label style="display:flex;align-items:center;gap:8px;font-weight:600"><input id="tileRngDiagnostic" type="checkbox" style="width:auto"> Tile RNG Diagnostic</label>
 <div class="buttons"><button id="runButton">Run Simulation</button><button class="secondary" id="resetButton">Reset</button></div>
-<button id="pairedRngButton" class="secondary" style="width:100%;margin-top:8px">Run Dolly + Kenny Decision Comparison</button>
+<button id="pairedRngButton" class="secondary" style="width:100%;margin-top:8px">Run Dolly + Kenny Tile RNG Comparison</button>
 <button id="hankButton" class="secondary" style="width:100%;margin-top:8px" title="Open Hank in a separate tab and solve this exact seeded game">Solve This Game with Hank ↗</button>
 <p id="resetHelp" style="font-size:12px;color:#66727a;margin:8px 0 0">Reset is optional between tests. Run Simulation starts a fresh experiment.</p>
-<p style="font-size:12px;color:#66727a;margin:6px 0 0">Tile RNG Diagnostic logs every physical tile draw. The paired comparison also records each persona decision, available legal moves, and resulting state to locate the first behavioral divergence.</p>
+<p style="font-size:12px;color:#66727a;margin:6px 0 0">Tile RNG Diagnostic logs every physical tile draw, including the tile RNG seed and draw indexes. Use for diagnostic runs; exports can be substantially larger.</p>
 <p style="font-size:12px;color:#66727a;margin:6px 0 0">The paired comparison runs Dolly and Kenny independently from the same tile RNG seed and produces one comparison JSON.</p>
 <div id="status" class="status">Loading song catalog…</div>
 </div></aside>
@@ -105,8 +105,8 @@ pre{margin:0;background:#172026;color:#edf1f2;padding:12px;max-height:560px;over
 
 <script src="js/config/projectVersion.js?v=0.1.9"></script>
 <script src="js/data/songCatalog.js?v=0.1.9"></script>
-<script src="js/utilities/simulator.js?v=0.1.12"></script>
-<script src="js/utilities/testResultLogger.js?v=0.1.12"></script>
+<script src="js/utilities/simulator.js?v=0.1.10"></script>
+<script src="js/utilities/testResultLogger.js?v=0.1.10"></script>
 <script>
 /*
  * Simulator Lab Controller
@@ -193,6 +193,10 @@ function compareTileDraws(dollyTrial, kennyTrial){
   const a=dollyTrial?.tileDrawDiagnostic?.draws || [];
   const b=kennyTrial?.tileDrawDiagnostic?.draws || [];
   const length=Math.max(a.length,b.length);
+
+  // Tile-stream identity intentionally ignores round timing. These fields
+  // describe the physical random draw itself and must match for the same
+  // tile stream: draw index, tile identity, RNG value, and pool position.
   let firstTileDifference=null;
   for(let i=0;i<length;i+=1){
     const left=a[i] || null;
@@ -205,73 +209,59 @@ function compareTileDraws(dollyTrial, kennyTrial){
       && left.poolIndex===right.poolIndex
       && left.poolLengthBefore===right.poolLengthBefore;
     if(!same){
-      firstTileDifference={arrayIndex:i,drawIndex:left?.drawIndex ?? right?.drawIndex ?? null,dolly:left,kenny:right};
-      break;
-    }
-  }
-  let firstTimingDifference=null;
-  for(let i=0;i<length;i+=1){
-    const left=a[i] || null;
-    const right=b[i] || null;
-    const same=left&&right && left.round===right.round && left.roundDrawIndex===right.roundDrawIndex;
-    if(!same){
-      firstTimingDifference={arrayIndex:i,drawIndex:left?.drawIndex ?? right?.drawIndex ?? null,dolly:left?{round:left.round,roundDrawIndex:left.roundDrawIndex}:null,kenny:right?{round:right.round,roundDrawIndex:right.roundDrawIndex}:null};
-      break;
-    }
-  }
-  const tileStreamIdentical=firstTileDifference===null && a.length===b.length;
-  const roundTimingIdentical=firstTimingDifference===null && a.length===b.length;
-  return {
-    identical:tileStreamIdentical,
-    dollyDrawCount:a.length,
-    kennyDrawCount:b.length,
-    tileStream:{identical:tileStreamIdentical,comparedFields:["drawIndex","word","key","randomValue","poolIndex","poolLengthBefore"],ignoredFields:["round","roundDrawIndex"],firstDifference:firstTileDifference},
-    roundTiming:{identical:roundTimingIdentical,comparedFields:["round","roundDrawIndex"],firstDifference:firstTimingDifference},
-    firstDifference:firstTileDifference
-  };
-}
-function compareDecisionTraces(dollyTrial, kennyTrial){
-  const a=dollyTrial?.decisionDiagnostic?.decisions || [];
-  const b=kennyTrial?.decisionDiagnostic?.decisions || [];
-  const length=Math.max(a.length,b.length);
-  for(let i=0;i<length;i+=1){
-    const left=a[i] || null;
-    const right=b[i] || null;
-    const same=left&&right
-      && left.action===right.action
-      && left.word===right.word
-      && left.key===right.key
-      && left.lineId===right.lineId;
-    if(!same){
-      let reason="CHOSEN_MOVE_DIFFERENT";
-      if(left&&right){
-        const beforeSame=JSON.stringify(left.stateBefore)===JSON.stringify(right.stateBefore);
-        const afterSame=JSON.stringify(left.stateAfter)===JSON.stringify(right.stateAfter);
-        if(beforeSame && afterSame) reason="DIAGNOSTIC_ALIGNMENT_DIFFERENCE";
-        else if(!beforeSame) reason="STATE_ALREADY_DIVERGED";
-        else if(!afterSame) reason="RESULTING_STATE_DIFFERENT";
-      }else{
-        reason="ONE_PERSONA_HAS_NO_CORRESPONDING_MOVE";
-      }
-      return {
-        identical:false,
-        comparedFields:["action","word","key","lineId"],
-        decisionIndex:left?.decisionIndex ?? right?.decisionIndex ?? null,
-        round:left?.round ?? right?.round ?? null,
-        reason,
+      firstTileDifference={
+        arrayIndex:i,
+        drawIndex:left?.drawIndex ?? right?.drawIndex ?? null,
         dolly:left,
         kenny:right
       };
+      break;
     }
   }
+
+  // Round timing is a separate diagnostic. The same physical tile can occur
+  // at a different round/draw position because personas play different
+  // numbers of tiles between draw phases.
+  const timingLength=Math.max(a.length,b.length);
+  let firstTimingDifference=null;
+  for(let i=0;i<timingLength;i+=1){
+    const left=a[i] || null;
+    const right=b[i] || null;
+    const same=left&&right
+      && left.round===right.round
+      && left.roundDrawIndex===right.roundDrawIndex;
+    if(!same){
+      firstTimingDifference={
+        arrayIndex:i,
+        drawIndex:left?.drawIndex ?? right?.drawIndex ?? null,
+        dolly:left ? {round:left.round,roundDrawIndex:left.roundDrawIndex} : null,
+        kenny:right ? {round:right.round,roundDrawIndex:right.roundDrawIndex} : null
+      };
+      break;
+    }
+  }
+
+  const tileStreamIdentical=firstTileDifference===null && a.length===b.length;
+  const roundTimingIdentical=firstTimingDifference===null && a.length===b.length;
+
   return {
-    identical:a.length===b.length,
-    comparedFields:["action","word","key","lineId"],
-    decisionIndex:null,
-    round:null,
-    reason:a.length===b.length?"NO_DIVERGENCE":"ONE_PERSONA_HAS_ADDITIONAL_MOVES",
-    dolly:null,
-    kenny:null
+    // Backward-compatible top-level result: `identical` means the physical
+    // tile streams are identical, not that round timing is identical.
+    identical:tileStreamIdentical,
+    dollyDrawCount:a.length,
+    kennyDrawCount:b.length,
+    tileStream:{
+      identical:tileStreamIdentical,
+      comparedFields:["drawIndex","word","key","randomValue","poolIndex","poolLengthBefore"],
+      ignoredFields:["round","roundDrawIndex"],
+      firstDifference:firstTileDifference
+    },
+    roundTiming:{
+      identical:roundTimingIdentical,
+      comparedFields:["round","roundDrawIndex"],
+      firstDifference:firstTimingDifference
+    },
+    firstDifference:firstTileDifference
   };
 }
 function downloadJson(filename,data){
@@ -307,23 +297,23 @@ async function runPairedRngComparison(){
       bundle,
       trials,
       trialIndex=>createTrialRandomStreams(seed+trialIndex),
-      {mode,persona:personaId,seed,diagnosticTileDraws:true,decisionDiagnostic:true}
+      {mode,persona:personaId,seed,diagnosticTileDraws:true}
     );
     const dollyResult=makeRun("aggressive_row_filler");
     const kennyResult=makeRun("gambler");
     const comparison=compareTileDraws(dollyResult.trials[0],kennyResult.trials[0]);
     const payload={
       schemaVersion:"1.0.0",
-      tool:"Lyric Solitaire Decision Divergence Comparison",
+      tool:"Lyric Solitaire Tile RNG Paired Comparison",
       simulatorVersion:window.LyricSolitaireProject.simulatorVersion,
       timestamp:new Date().toISOString(),
       parameters:{song:{id:song.id,title:song.title,artist:song.artist},mode,modeLabel:engine.getModeConfig(mode).label,seed,trials:1},
       rngModel:"separate_tile_and_decision_streams",
       personas:{dolly:dollyResult.trials[0],kenny:kennyResult.trials[0]},
-      comparison:{...comparison,decisionDivergence}
+      comparison
     };
     const stamp=new Date().toISOString().replace(/[:.]/g,"-");
-    downloadJson(`lyric-solitaire-decision-divergence-${song.title.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")}-${seed}-${stamp}.json`,payload);
+    downloadJson(`lyric-solitaire-tile-rng-comparison-${song.title.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")}-${seed}-${stamp}.json`,payload);
     if(comparison.tileStream.identical){
       addLog(`TILE STREAM: IDENTICAL — ${comparison.dollyDrawCount} tile draws matched on all physical-draw fields.`);
     }else{
@@ -338,16 +328,6 @@ async function runPairedRngComparison(){
       if(t){
         addLog(`  Dolly: Round ${t.dolly?.round ?? "—"}, draw ${t.dolly?.roundDrawIndex ?? "—"}; Kenny: Round ${t.kenny?.round ?? "—"}, draw ${t.kenny?.roundDrawIndex ?? "—"}.`);
       }
-    }
-    if(decisionDivergence.identical){
-      addLog("DECISION TRACE: IDENTICAL — no differing selected move was found.");
-    }else{
-      const d=decisionDivergence;
-      addLog(`DECISION DIVERGENCE: first difference at decision ${d.decisionIndex ?? "unknown"}, Round ${d.round ?? "unknown"}.`);
-      addLog(`  Reason: ${d.reason}.`);
-      addLog(`  Dolly: ${d.dolly?.action ?? "—"} ${d.dolly?.word ?? "—"} → line ${d.dolly?.lineId ?? "—"}.`);
-      addLog(`  Kenny: ${d.kenny?.action ?? "—"} ${d.kenny?.word ?? "—"} → line ${d.kenny?.lineId ?? "—"}.`);
-      addLog(`  Dolly available moves: ${d.dolly?.availableMoves?.length ?? 0}; Kenny available moves: ${d.kenny?.availableMoves?.length ?? 0}.`);
     }
     if(comparison.tileStream.identical){
       setStatus(comparison.roundTiming.identical

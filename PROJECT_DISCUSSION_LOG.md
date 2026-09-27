@@ -192,3 +192,8 @@ The comparison JSON contains `comparison.tileStream` and `comparison.roundTiming
 ## 2026-09-27 — Paired RNG Comparison Refinement
 
 The first paired comparison showed a false distinction: Dolly and Kenny had identical physical tile data at draw 66, but the diagnostic reported a difference because the personas reached that tile in different rounds. The comparison workflow was refined so physical tile-stream identity ignores `round` and `roundDrawIndex` and compares only `drawIndex`, `word`, `key`, `randomValue`, `poolIndex`, and `poolLengthBefore`. Round timing remains valuable diagnostic information and is now reported separately, including its first difference. This keeps the investigation focused on whether persona decision RNG consumption changes the tile RNG stream.
+
+
+## 2026-09-27 — v0.1.12 Decision Divergence Diagnostic
+
+Implemented v0.1.12 to locate the first behavioral divergence between Dolly and Kenny after establishing that the tile RNG stream is identical through the common draw sequence. The paired comparison now records each persona's selected move, persona-specific legal moves available at that decision point, and state before/after the move. The export reports the first differing selected move separately from tile-stream identity and round timing.
