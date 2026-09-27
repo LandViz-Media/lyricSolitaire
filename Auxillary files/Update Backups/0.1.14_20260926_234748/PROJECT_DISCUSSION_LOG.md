@@ -201,8 +201,3 @@ Implemented v0.1.12 to locate the first behavioral divergence between Dolly and 
 
 ## 2026-09-27 — v0.1.13 Decision Divergence Classification
 Implemented v0.1.13 to refine the paired Dolly/Kenny divergence diagnostic. The comparison now distinguishes a genuinely different legal move from the same move type applied to different duplicate lyric-line instances. Selected-move identity includes action, handIndex, word/key, and lineId; when the line IDs differ but action, hand tile, word/key, and line text match, the divergence is classified as `DUPLICATE_LINE_INSTANCE`. Other substantive move differences are classified as `DIFFERENT_LEGAL_MOVE`. The export also includes `moveComparison` details so the distinction is machine-readable.
-
-
-## 2026-09-27 — v0.1.14 Consequential Divergence Diagnostic
-
-Implemented a follow-on diagnostic for the v0.1.13 duplicate-line-instance finding. The comparison preserves the first raw decision divergence, then scans later paired decisions for the first substantive move difference. It separately reports tile-consumption identity so the analysis can distinguish an equivalent duplicate-line target from the first point where Dolly and Kenny select different physical tiles.

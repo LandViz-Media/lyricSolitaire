@@ -1,3 +1,19 @@
+# Changelog
+
+## v0.1.13
+- Refined the Dolly/Kenny decision divergence report to distinguish genuinely different legal moves from the same move applied to different duplicate lyric-line instances.
+- Decision comparison now includes `handIndex` in the selected-move identity.
+- Added `moveComparison` diagnostics showing whether the action, hand tile, word, lyric text, and line ID matched.
+- Added `DUPLICATE_LINE_INSTANCE` and `DIFFERENT_LEGAL_MOVE` classifications.
+- Preserved state-alignment and resulting-state diagnostics.
+
+## v0.1.12
+- Added paired Dolly/Kenny decision divergence diagnostics.
+- Records each selected move with persona-specific available legal moves.
+- Records state before and after each selected move.
+- Reports the first differing selected move, round, available-move counts, and resulting states.
+- Preserves the v0.1.11 tile-stream identity comparison and separate round-timing comparison.
+
 # Simulator Lab
 
 **Simulator version: 0.1.7**
@@ -187,22 +203,3 @@ The comparison JSON contains `comparison.tileStream` and `comparison.roundTiming
 - `round` and `roundDrawIndex` are now excluded from tile-stream identity.
 - Added separate round-timing comparison and first timing difference reporting.
 - Preserved top-level `comparison.identical` as the physical tile-stream identity result.
-
-
-## 2026-09-27 — Paired RNG Comparison Refinement
-
-The first paired comparison showed a false distinction: Dolly and Kenny had identical physical tile data at draw 66, but the diagnostic reported a difference because the personas reached that tile in different rounds. The comparison workflow was refined so physical tile-stream identity ignores `round` and `roundDrawIndex` and compares only `drawIndex`, `word`, `key`, `randomValue`, `poolIndex`, and `poolLengthBefore`. Round timing remains valuable diagnostic information and is now reported separately, including its first difference. This keeps the investigation focused on whether persona decision RNG consumption changes the tile RNG stream.
-
-
-## 2026-09-27 — v0.1.12 Decision Divergence Diagnostic
-
-Implemented v0.1.12 to locate the first behavioral divergence between Dolly and Kenny after establishing that the tile RNG stream is identical through the common draw sequence. The paired comparison now records each persona's selected move, persona-specific legal moves available at that decision point, and state before/after the move. The export reports the first differing selected move separately from tile-stream identity and round timing.
-
-
-## 2026-09-27 — v0.1.13 Decision Divergence Classification
-Implemented v0.1.13 to refine the paired Dolly/Kenny divergence diagnostic. The comparison now distinguishes a genuinely different legal move from the same move type applied to different duplicate lyric-line instances. Selected-move identity includes action, handIndex, word/key, and lineId; when the line IDs differ but action, hand tile, word/key, and line text match, the divergence is classified as `DUPLICATE_LINE_INSTANCE`. Other substantive move differences are classified as `DIFFERENT_LEGAL_MOVE`. The export also includes `moveComparison` details so the distinction is machine-readable.
-
-
-## 2026-09-27 — v0.1.14 Consequential Divergence Diagnostic
-
-Implemented a follow-on diagnostic for the v0.1.13 duplicate-line-instance finding. The comparison preserves the first raw decision divergence, then scans later paired decisions for the first substantive move difference. It separately reports tile-consumption identity so the analysis can distinguish an equivalent duplicate-line target from the first point where Dolly and Kenny select different physical tiles.

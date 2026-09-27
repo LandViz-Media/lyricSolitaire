@@ -1,6 +1,6 @@
 # Simulator Lab
 
-**Simulator version: 0.1.13**
+**Simulator version: 0.1.14**
 
 ## Purpose
 
@@ -191,3 +191,8 @@ The paired decision comparison now distinguishes two important cases:
 - **`DUPLICATE_LINE_INSTANCE`** — both selected the same move type using the same hand tile and word, and targeted identical lyric text, but selected different `lineId` values because the song contains duplicate lyric-line instances.
 
 The exported `comparison.decisionDivergence.moveComparison` record exposes these component comparisons explicitly. This prevents a duplicated lyric line from being reported as a fundamentally different move simply because its occurrence ID differs.
+
+
+### v0.1.14 — Consequential Decision Divergence
+
+When the first decision divergence is `DUPLICATE_LINE_INSTANCE`, the paired diagnostic continues through the later decision trace. `comparison.firstConsequentialDivergence` identifies the first later substantive move difference and reports the physical tile selected by each persona. This makes it possible to distinguish the initial structural duplicate-line difference from the first consequential behavioral difference and the first change in tile-consumption identity.

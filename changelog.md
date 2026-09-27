@@ -203,3 +203,8 @@ The comparison JSON contains `comparison.tileStream` and `comparison.roundTiming
 - `round` and `roundDrawIndex` are now excluded from tile-stream identity.
 - Added separate round-timing comparison and first timing difference reporting.
 - Preserved top-level `comparison.identical` as the physical tile-stream identity result.
+
+
+## 0.1.14 — Consequential Decision Divergence
+
+Implemented v0.1.14 to continue divergence analysis after a `DUPLICATE_LINE_INSTANCE` classification. The paired comparison now reports the first later consequential move difference and identifies the first decision where the selected physical tile differs between Dolly and Kenny. The diagnostic preserves the original first divergence and does not change simulator mechanics.

@@ -103,10 +103,10 @@ pre{margin:0;background:#172026;color:#edf1f2;padding:12px;max-height:560px;over
 
 <footer>Lyric Solitaire Simulator <span id="footerVersion">v—</span> — Experimental results may change as the game model evolves.</footer>
 
-<script src="js/config/projectVersion.js?v=0.1.14"></script>
-<script src="js/data/songCatalog.js?v=0.1.14"></script>
-<script src="js/utilities/simulator.js?v=0.1.14"></script>
-<script src="js/utilities/testResultLogger.js?v=0.1.14"></script>
+<script src="js/config/projectVersion.js?v=0.1.13"></script>
+<script src="js/data/songCatalog.js?v=0.1.13"></script>
+<script src="js/utilities/simulator.js?v=0.1.13"></script>
+<script src="js/utilities/testResultLogger.js?v=0.1.13"></script>
 <script>
 /*
  * Simulator Lab Controller
@@ -292,8 +292,6 @@ function compareDecisionTraces(dollyTrial, kennyTrial){
         comparedFields:["action","handIndex","word","key","lineId"],
         decisionIndex:left?.decisionIndex ?? right?.decisionIndex ?? null,
         round:left?.round ?? right?.round ?? null,
-        diagnosticSequenceIndex:i,
-        decisionArrayIndex:i,
         reason,
         moveComparison,
         dolly:left,
@@ -306,114 +304,12 @@ function compareDecisionTraces(dollyTrial, kennyTrial){
     comparedFields:["action","handIndex","word","key","lineId"],
     decisionIndex:null,
     round:null,
-    diagnosticSequenceIndex:null,
-    decisionArrayIndex:null,
     reason:a.length===b.length?"NO_DIVERGENCE":"ONE_PERSONA_HAS_ADDITIONAL_MOVES",
     moveComparison:null,
     dolly:null,
     kenny:null
   };
 }
-function compareConsequentialDecisionDivergence(dollyTrial, kennyTrial, firstDecisionDivergence){
-  // Responsibility: Find the first later decision whose selected move differs
-  // in a way that can change physical tile consumption, while treating a
-  // duplicate-line-instance difference as the upstream structural divergence.
-  const a=dollyTrial?.decisionDiagnostic?.decisions || [];
-  const b=kennyTrial?.decisionDiagnostic?.decisions || [];
-
-  if(!firstDecisionDivergence || firstDecisionDivergence.identical){
-    return {
-      found:false,
-      reason:"NO_PRIOR_DIVERGENCE",
-      firstDecisionIndex:null,
-      firstSequenceIndex:null,
-      dolly:null,
-      kenny:null,
-      moveComparison:null,
-      tileConsumption:null
-    };
-  }
-
-  const divergenceSequenceIndex=firstDecisionDivergence.diagnosticSequenceIndex;
-  const startIndex=Number.isInteger(divergenceSequenceIndex)
-    ? divergenceSequenceIndex+1
-    : Math.max(0, (firstDecisionDivergence.decisionArrayIndex ?? -1)+1);
-  const length=Math.max(a.length,b.length);
-
-  for(let i=startIndex;i<length;i+=1){
-    const left=a[i] || null;
-    const right=b[i] || null;
-    if(!left || !right){
-      return {
-        found:true,
-        reason:"ONE_PERSONA_HAS_NO_CORRESPONDING_MOVE",
-        firstDecisionIndex:left?.decisionIndex ?? right?.decisionIndex ?? null,
-        firstSequenceIndex:i+1,
-        dolly:left,
-        kenny:right,
-        moveComparison:null,
-        tileConsumption:{
-          changed:true,
-          dollyConsumedTile:left ? {handIndex:left.handIndex,word:left.word,key:left.key} : null,
-          kennyConsumedTile:right ? {handIndex:right.handIndex,word:right.word,key:right.key} : null,
-          sameConsumedTile:false
-        }
-      };
-    }
-
-    const sameAction=left.action===right.action;
-    const sameHandTile=left.handIndex===right.handIndex;
-    const sameWord=left.word===right.word && left.key===right.key;
-    const sameLineText=left.lineText===right.lineText;
-    const differentLineId=left.lineId!==right.lineId;
-    const moveDiff=!sameAction || !sameHandTile || !sameWord || !sameLineText || differentLineId;
-
-    // A consequential divergence is the first later decision that is no
-    // longer merely another duplicate-line-instance representation. In
-    // particular, a different physical tile selected from the hand is the
-    // first point where tile consumption identity changes.
-    const sameConsumedTile=sameHandTile && sameWord;
-    const consumptionChanged=!sameConsumedTile;
-
-    if(moveDiff && (!sameAction || !sameHandTile || !sameWord || !sameLineText)){
-      return {
-        found:true,
-        reason:"FIRST_CONSEQUENTIAL_MOVE_DIFFERENCE",
-        firstDecisionIndex:left.decisionIndex ?? right.decisionIndex ?? null,
-        firstSequenceIndex:i+1,
-        round:left.round ?? right.round ?? null,
-        dolly:left,
-        kenny:right,
-        moveComparison:{
-          sameMoveType:sameAction,
-          sameHandTile,
-          sameWord,
-          sameLineText,
-          differentLineId,
-          duplicateLineInstance:false
-        },
-        tileConsumption:{
-          changed:consumptionChanged,
-          dollyConsumedTile:{handIndex:left.handIndex,word:left.word,key:left.key},
-          kennyConsumedTile:{handIndex:right.handIndex,word:right.word,key:right.key},
-          sameConsumedTile
-        }
-      };
-    }
-  }
-
-  return {
-    found:false,
-    reason:"NO_LATER_CONSEQUENTIAL_DIVERGENCE",
-    firstDecisionIndex:null,
-    firstSequenceIndex:null,
-    dolly:null,
-    kenny:null,
-    moveComparison:null,
-    tileConsumption:null
-  };
-}
-
 function downloadJson(filename,data){
   const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
   const url=URL.createObjectURL(blob);
@@ -453,11 +349,6 @@ async function runPairedRngComparison(){
     const kennyResult=makeRun("gambler");
     const comparison=compareTileDraws(dollyResult.trials[0],kennyResult.trials[0]);
     const decisionDivergence=compareDecisionTraces(dollyResult.trials[0],kennyResult.trials[0]);
-    const firstConsequentialDivergence=compareConsequentialDecisionDivergence(
-      dollyResult.trials[0],
-      kennyResult.trials[0],
-      decisionDivergence
-    );
     const payload={
       schemaVersion:"1.0.0",
       tool:"Lyric Solitaire Decision Divergence Comparison",
@@ -466,7 +357,7 @@ async function runPairedRngComparison(){
       parameters:{song:{id:song.id,title:song.title,artist:song.artist},mode,modeLabel:engine.getModeConfig(mode).label,seed,trials:1},
       rngModel:"separate_tile_and_decision_streams",
       personas:{dolly:dollyResult.trials[0],kenny:kennyResult.trials[0]},
-      comparison:{...comparison,decisionDivergence,firstConsequentialDivergence}
+      comparison:{...comparison,decisionDivergence}
     };
     const stamp=new Date().toISOString().replace(/[:.]/g,"-");
     downloadJson(`lyric-solitaire-decision-divergence-${song.title.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")}-${seed}-${stamp}.json`,payload);
@@ -499,17 +390,6 @@ async function runPairedRngComparison(){
       addLog(`  Dolly: ${d.dolly?.action ?? "—"} ${d.dolly?.word ?? "—"} → line ${d.dolly?.lineId ?? "—"}.`);
       addLog(`  Kenny: ${d.kenny?.action ?? "—"} ${d.kenny?.word ?? "—"} → line ${d.kenny?.lineId ?? "—"}.`);
       addLog(`  Dolly available moves: ${d.dolly?.availableMoves?.length ?? 0}; Kenny available moves: ${d.kenny?.availableMoves?.length ?? 0}.`);
-    }
-    if(firstConsequentialDivergence.found){
-      const c=firstConsequentialDivergence;
-      addLog(`CONSEQUENTIAL DIVERGENCE: first later move difference at decision ${c.firstDecisionIndex ?? "unknown"}, Round ${c.round ?? "unknown"}.`);
-      if(c.tileConsumption?.changed){
-        addLog(`  TILE CONSUMPTION DIVERGENCE: Dolly consumed ${c.tileConsumption.dollyConsumedTile?.word ?? "—"} (hand index ${c.tileConsumption.dollyConsumedTile?.handIndex ?? "—"}); Kenny consumed ${c.tileConsumption.kennyConsumedTile?.word ?? "—"} (hand index ${c.tileConsumption.kennyConsumedTile?.handIndex ?? "—"}).`);
-      }else{
-        addLog("  The selected physical tile is the same; the consequential difference is in the move/target behavior.");
-      }
-    }else{
-      addLog(`CONSEQUENTIAL DIVERGENCE: ${firstConsequentialDivergence.reason}.`);
     }
     if(comparison.tileStream.identical){
       setStatus(comparison.roundTiming.identical

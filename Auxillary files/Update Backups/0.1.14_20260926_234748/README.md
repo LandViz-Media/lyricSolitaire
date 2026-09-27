@@ -1,4 +1,4 @@
-# Lyric Solitaire — Separate RNG Streams v0.1.14
+# Lyric Solitaire — Separate RNG Streams v0.1.13
 
 This update separates the Simulator's deterministic random-number generation into two streams:
 
@@ -10,7 +10,7 @@ so player-decision RNG calls no longer advance the tile-draw stream.
 
 ## Install
 
-1. Double-click `Install_LyricSolitaire_RNG_Streams_v0.1.14.command`.
+1. Double-click `Install_LyricSolitaire_RNG_Streams_v0.1.13.command`.
 2. Select the local **Lyric Solitaire repository root** in the Finder dialog.
 3. The installer backs up every changed file under:
    `Auxillary files/Update Backups/0.1.12_<timestamp>/`
@@ -59,12 +59,5 @@ The JSON retains the top-level `comparison.identical` field for compatibility; i
 The paired Dolly/Kenny comparison now records persona decisions, persona-specific available legal moves, and the resulting game state. The comparison reports the first differing selected move and preserves the separate tile-stream and round-timing diagnostics.
 
 
-### v0.1.14 — Decision Divergence Classification
+### v0.1.13 — Decision Divergence Classification
 The paired Dolly/Kenny comparison now distinguishes a genuinely different legal move from a move that is structurally the same but targets a different duplicate lyric-line instance. A duplicate-instance divergence has the same action, hand tile, word/key, and lyric text but a different `lineId`. The exported `decisionDivergence` record includes `reason` and `moveComparison` fields for this distinction.
-
-
-### v0.1.14 — Consequential Decision Divergence
-
-The paired Dolly/Kenny comparison now continues past the first decision divergence when that divergence is classified as `DUPLICATE_LINE_INSTANCE`. It reports the first later consequential move difference, rather than treating the duplicate line ID alone as the behavioral cause. The diagnostic also reports the first decision where the personas consume different physical tiles, including each tile's hand index, word, and key.
-
-The new `comparison.firstConsequentialDivergence` record is diagnostic only and does not alter game rules or RNG behavior.
