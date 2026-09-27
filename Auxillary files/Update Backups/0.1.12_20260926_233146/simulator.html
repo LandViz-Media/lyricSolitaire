@@ -312,7 +312,6 @@ async function runPairedRngComparison(){
     const dollyResult=makeRun("aggressive_row_filler");
     const kennyResult=makeRun("gambler");
     const comparison=compareTileDraws(dollyResult.trials[0],kennyResult.trials[0]);
-    const decisionDivergence=compareDecisionTraces(dollyResult.trials[0],kennyResult.trials[0]);
     const payload={
       schemaVersion:"1.0.0",
       tool:"Lyric Solitaire Decision Divergence Comparison",
