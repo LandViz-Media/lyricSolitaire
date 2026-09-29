@@ -1,13 +1,3 @@
-# Changelog
-
-## v0.1.18
-
-- Added the Chain Value Diagnostic to every hypothetical opening.
-- Follows subsequent playable physical hand tiles across active lyric lines through bounded, deterministic hypothetical branches.
-- Reports chain counts, maximum chain depth, nodes explored, truncation, newly playable content, and top chains.
-- Diagnostic uses cloned state only and consumes no gameplay RNG.
-- Updated simulator version/cache-busting references to 0.1.18.
-
 ## 0.1.17 — Opening Value Comparison Diagnostics
 
 - Added exact before/after playable-opportunity enumeration for every hypothetical new-line opening.

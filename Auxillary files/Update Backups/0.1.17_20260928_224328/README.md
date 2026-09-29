@@ -1,4 +1,4 @@
-# Lyric Solitaire — Separate RNG Streams v0.1.18
+# Lyric Solitaire — Separate RNG Streams v0.1.17
 
 This update separates the Simulator's deterministic random-number generation into two streams:
 
@@ -10,7 +10,7 @@ so player-decision RNG calls no longer advance the tile-draw stream.
 
 ## Install
 
-1. Double-click `Install_LyricSolitaire_RNG_Streams_v0.1.18.command`.
+1. Double-click `Install_LyricSolitaire_RNG_Streams_v0.1.17.command`.
 2. Select the local **Lyric Solitaire repository root** in the Finder dialog.
 3. The installer backs up every changed file under:
    `Auxillary files/Update Backups/0.1.17_<timestamp>/`
@@ -63,7 +63,7 @@ The paired Dolly/Kenny comparison now records persona decisions, persona-specifi
 The paired Dolly/Kenny comparison now distinguishes a genuinely different legal move from a move that is structurally the same but targets a different duplicate lyric-line instance. A duplicate-instance divergence has the same action, hand tile, word/key, and lyric text but a different `lineId`. The exported `decisionDivergence` record includes `reason` and `moveComparison` fields for this distinction.
 
 
-### v0.1.18 — Opening Value Comparison Diagnostics
+### v0.1.17 — Opening Value Comparison Diagnostics
 
 Adds a diagnostic-only before/after comparison for every hypothetical new-line opening. Each opening now records the specific physical hand tiles, words, and lyric lines that become newly playable after the opening. The diagnostic distinguishes opportunities on existing active lines from opportunities on newly available inactive lines, while preserving the v0.1.16 blocked-opening and aggregate playability metrics.
 
@@ -87,8 +87,3 @@ Adds a non-invasive terminal-state audit for tiles that can both play on existin
 The paired Dolly/Kenny comparison now continues past the first decision divergence when that divergence is classified as `DUPLICATE_LINE_INSTANCE`. It reports the first later consequential move difference, rather than treating the duplicate line ID alone as the behavioral cause. The diagnostic also reports the first decision where the personas consume different physical tiles, including each tile's hand index, word, and key.
 
 The new `comparison.firstConsequentialDivergence` record is diagnostic only and does not alter game rules or RNG behavior.
-
-
-### v0.1.18 — Chain Value Diagnostic
-
-Adds a diagnostic-only bounded chain explorer to every hypothetical new-line opening. After the opening, it follows subsequent playable physical hand tiles across active lyric lines through deterministic hypothetical branches. It reports chain depth, path steps, newly playable content, node counts, truncation, and top chains. It does not alter gameplay, persona decisions, or either RNG stream.

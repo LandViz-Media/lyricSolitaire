@@ -223,3 +223,8 @@ The v0.1.17 diagnostic extends the blocked new-line opening analysis by identify
 ## v0.1.17 diagnostic fix
 
 Corrected the Opening Value Comparison diagnostic after a `physicalHandIndex is not defined` runtime error. The implementation no longer propagates a diagnostic-only index variable into normal Garth or human-style persona move generation. Hypothetical opening comparisons retain diagnostic-only physical tile identity via `diagnosticOriginalHandIndex`.
+
+
+## v0.1.18 — Chain Value Diagnostic
+
+Added a diagnostic-only chain explorer to distinguish broad opening opportunity counts from actual multi-step cascades. Each hypothetical opening is followed through subsequent playable physical tiles on active lyric lines using cloned state. The search is bounded (depth 4, 5,000 nodes), deterministic, and consumes no RNG. Gameplay and persona behavior are unchanged.

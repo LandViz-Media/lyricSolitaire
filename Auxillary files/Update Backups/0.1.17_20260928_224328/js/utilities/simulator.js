@@ -42,7 +42,7 @@
  *   Standard    : 10 rows, 40-tile hand, 10 rounds
  *   Hard        :  8 rows, 30-tile hand,  8 rounds
  *
- * RNG MODEL (v0.1.18):
+ * RNG MODEL (v0.1.17):
  *   Tile draws and player/persona decisions use separate deterministic streams.
  *   This prevents decision tie-breaks from changing future tile draws for a seeded trial.
  *
@@ -82,7 +82,7 @@
     };
 
     const CONFIG = {
-        version: "0.1.18",
+        version: "0.1.17",
         initialDraw: 12,
         defaultMode: "easy",
         modes: MODE_CONFIG,
@@ -794,16 +794,7 @@
                         lineId: item.lineId,
                         lineText: item.lineText,
                         source: item.source
-                    })),
-                    // v0.1.18: follow this opening into deterministic chains of
-                    // subsequent playable physical tiles on active lyric lines.
-                    // The bounded search is diagnostic-only and consumes no RNG.
-                    chainValue: analyzeChainValueFromOpening(
-                        hand, activeLines, allLines, completedIds, gameConfig,
-                        { handIndex, key: tile.key, lineId: sourceLine.id },
-                        4,
-                        1000
-                    )
+                    }))
                 };
 
                 allOpeningOpportunities.push(opportunity);
@@ -887,230 +878,8 @@
                 ).length,
                 totalNewlyPlayableOpportunityCount: allOpeningOpportunities.reduce(
                     (sum, item) => sum + item.newlyPlayableOpportunityCount, 0
-                ),
-                // v0.1.18 chain-value summary.
-                openingsWithChainContent: allOpeningOpportunities.filter(
-                    item => item.chainValue && item.chainValue.chainCount > 0
-                ).length,
-                openingsWithMultiStepChains: allOpeningOpportunities.filter(
-                    item => item.chainValue && item.chainValue.maxChainLength > 1
-                ).length,
-                longestChainLength: allOpeningOpportunities.reduce(
-                    (max, item) => Math.max(max, item.chainValue ? item.chainValue.maxChainLength : 0), 0
-                ),
-                totalChainNodesExplored: allOpeningOpportunities.reduce(
-                    (sum, item) => sum + (item.chainValue ? item.chainValue.nodesExplored : 0), 0
                 )
             }
-        };
-    }
-
-    /*
-     * v0.1.18 Chain Value Diagnostic
-     * --------------------------------
-     * Follow each hypothetical new-line opening through subsequent playable
-     * physical hand tiles and active lyric-line states. The explorer branches
-     * over legal PLAY_ACTIVE moves only after the root opening; it never uses
-     * either RNG stream, never changes the real game state, and never applies
-     * persona decisions. This makes the result a structural/value diagnostic,
-     * not an alternate gameplay simulation.
-     *
-     * The search is deliberately bounded so a highly connected lyric/hand
-     * state cannot create an enormous tree. Branch ordering is deterministic:
-     * physical hand index first, then lyric line id. A state signature prevents
-     * revisiting an equivalent hypothetical state at the same depth.
-     */
-    function analyzeChainValueFromOpening(
-        hand, activeLines, allLines, completedIds, gameConfig, rootOpportunity,
-        maxDepth, maxNodes
-    ) {
-        const rootHand = hand
-            .filter((_, index) => index !== rootOpportunity.handIndex)
-            .map((tile, originalIndex) => ({
-                ...tile,
-                diagnosticOriginalHandIndex: originalIndex >= rootOpportunity.handIndex
-                    ? originalIndex + 1
-                    : originalIndex
-            }));
-        const rootActive = activeLines.map(cloneLine);
-        const rootTarget = allLines.find(line => line.id === rootOpportunity.lineId);
-        if (!rootTarget) return null;
-
-        const openedLine = cloneLine(rootTarget);
-        if (!playWordIntoLine(openedLine, rootOpportunity.key)) return null;
-        rootActive.push(openedLine);
-
-        const rootCompleted = new Set(completedIds);
-        const rootCompacted = compactCompletedLines(rootActive, rootCompleted, []);
-
-        // Chain exploration only follows PLAY_ACTIVE opportunities. A second
-        // OPEN_LINE would be a separate strategic opening, not a continuation
-        // of the value created by this opening.
-        function activePlayableOpportunities(stateHand, stateLines) {
-            const opportunities = [];
-            stateHand.forEach(function (tile, physicalIndex) {
-                const handIndex = Number.isInteger(tile.diagnosticOriginalHandIndex)
-                    ? tile.diagnosticOriginalHandIndex
-                    : physicalIndex;
-                stateLines.forEach(function (line) {
-                    if (!lineCanUseWord(line, tile.key)) return;
-                    opportunities.push({
-                        handIndex,
-                        physicalIndex,
-                        word: tile.word,
-                        key: tile.key,
-                        lineId: line.id,
-                        lineText: line.text,
-                        source: "ACTIVE_LINE"
-                    });
-                });
-            });
-            return opportunities.sort(function (a, b) {
-                return a.handIndex - b.handIndex || a.lineId - b.lineId;
-            });
-        }
-
-        function opportunityKey(item) {
-            return `${item.handIndex}|${item.lineId}|${item.source}`;
-        }
-
-        const rootBaseline = analyzeOpeningPlayableOpportunities(
-            hand, activeLines, allLines, completedIds,
-            activeLines.length < gameConfig.maxRows
-        );
-        const rootBaselineKeys = new Set(rootBaseline.map(opportunityKey));
-        const rootPlayable = activePlayableOpportunities(rootHand, rootCompacted);
-        const rootNew = rootPlayable.filter(item => !rootBaselineKeys.has(opportunityKey(item)));
-
-        const queue = [];
-        const visited = new Set();
-        const chains = [];
-        let nodesExplored = 0;
-        let truncated = false;
-
-        rootNew.forEach(function (move) {
-            queue.push({
-                hand: rootHand,
-                active: rootCompacted,
-                completed: rootCompleted,
-                depth: 0,
-                path: [],
-                candidate: move,
-                priorPlayableKeys: new Set(rootPlayable.map(opportunityKey))
-            });
-        });
-
-        function stateSignature(stateHand, stateLines, stateCompleted) {
-            const handSig = stateHand.map(tile =>
-                `${Number.isInteger(tile.diagnosticOriginalHandIndex) ? tile.diagnosticOriginalHandIndex : "?"}:${tile.key}`
-            ).join(",");
-            const lineSig = stateLines.map(line => {
-                const rem = Array.from(line.remaining.entries())
-                    .sort((a, b) => a[0].localeCompare(b[0]))
-                    .map(item => `${item[0]}:${item[1]}`).join(",");
-                return `${line.id}:${line.placed}:${rem}`;
-            }).join("|");
-            return `${handSig}||${lineSig}||${Array.from(stateCompleted).sort((a,b)=>a-b).join(",")}`;
-        }
-
-        while (queue.length && nodesExplored < maxNodes) {
-            const state = queue.shift();
-            const move = state.candidate;
-            const nextHand = state.hand.filter((_, index) => index !== move.physicalIndex);
-            const nextActive = state.active.map(cloneLine);
-            const target = nextActive.find(line => line.id === move.lineId);
-            if (!target || !playWordIntoLine(target, move.key)) continue;
-
-            const nextCompleted = new Set(state.completed);
-            const compacted = compactCompletedLines(nextActive, nextCompleted, []);
-            const nextDepth = state.depth + 1;
-            const step = {
-                depth: nextDepth,
-                handIndex: move.handIndex,
-                word: move.word,
-                key: move.key,
-                action: "PLAY_ACTIVE",
-                lineId: move.lineId,
-                lineText: move.lineText,
-                lineCompleted: nextCompleted.has(move.lineId)
-            };
-            const path = state.path.concat(step);
-            nodesExplored += 1;
-
-            const nextPlayable = activePlayableOpportunities(nextHand, compacted);
-            const nextPlayableKeys = new Set(nextPlayable.map(opportunityKey));
-            const newlyPlayable = nextPlayable.filter(item =>
-                !state.priorPlayableKeys.has(opportunityKey(item))
-            );
-
-            chains.push({
-                depth: nextDepth,
-                path,
-                pathLength: path.length,
-                newlyPlayableOpportunityCount: newlyPlayable.length,
-                newlyPlayableWords: Array.from(new Set(newlyPlayable.map(item => item.word))),
-                newlyPlayableLines: newlyPlayable.map(item => ({
-                    handIndex: item.handIndex,
-                    word: item.word,
-                    key: item.key,
-                    lineId: item.lineId,
-                    lineText: item.lineText,
-                    source: item.source
-                }))
-            });
-
-            if (nextDepth < maxDepth && newlyPlayable.length) {
-                const signature = stateSignature(nextHand, compacted, nextCompleted);
-                if (!visited.has(signature)) {
-                    visited.add(signature);
-                    newlyPlayable.forEach(function (nextMove) {
-                        queue.push({
-                            hand: nextHand,
-                            active: compacted,
-                            completed: nextCompleted,
-                            depth: nextDepth,
-                            path,
-                            candidate: nextMove,
-                            priorPlayableKeys: nextPlayableKeys
-                        });
-                    });
-                }
-            }
-        }
-
-        if (nodesExplored >= maxNodes && queue.length) truncated = true;
-
-        chains.sort(function (a, b) {
-            return b.pathLength - a.pathLength ||
-                b.newlyPlayableOpportunityCount - a.newlyPlayableOpportunityCount ||
-                a.path.map(step => step.handIndex).join(",").localeCompare(
-                    b.path.map(step => step.handIndex).join(",")
-                );
-        });
-
-        const topChains = chains.slice(0, 25);
-        const maxNewlyPlayableOpportunityCount = chains.reduce(
-            (max, chain) => Math.max(max, chain.newlyPlayableOpportunityCount), 0
-        );
-        const chainsReachingDepth = Array.from({ length: maxDepth }, (_, index) =>
-            chains.filter(chain => chain.depth === index + 1).length
-        );
-
-        return {
-            maxDepth,
-            maxNodes,
-            nodesExplored,
-            truncated,
-            maxChainLength: chains.reduce((max, chain) => Math.max(max, chain.pathLength), 0),
-            chainCount: chains.length,
-            chainsReachingDepth,
-            chainsWithNewlyPlayableContent: chains.filter(
-                chain => chain.newlyPlayableOpportunityCount > 0
-            ).length,
-            maxNewlyPlayableOpportunityCount,
-            rootNewlyPlayableOpportunityCount: rootNew.length,
-            rootNewlyPlayableWords: Array.from(new Set(rootNew.map(item => item.word))),
-            topChains
         };
     }
 

@@ -1,6 +1,6 @@
 # Simulator Lab
 
-**Simulator version: 0.1.17**
+**Simulator version: 0.1.18**
 
 ## Purpose
 
@@ -204,8 +204,15 @@ The simulator records a terminal play-phase strategic opening audit for each per
 
 When the first decision divergence is `DUPLICATE_LINE_INSTANCE`, the paired diagnostic continues through the later decision trace. `comparison.firstConsequentialDivergence` identifies the first later substantive move difference and reports the physical tile selected by each persona. This makes it possible to distinguish the initial structural duplicate-line difference from the first consequential behavioral difference and the first change in tile-consumption identity.
 
-### v0.1.17 — Opening Value Comparison
+### v0.1.18 — Opening Value Comparison
 
-The v0.1.17 diagnostic compares the exact playable opportunity set before and after every hypothetical new-line opening. For each opening it records the physical hand tile, word, lyric line ID/text, and whether the newly playable opportunity is on an existing active line (`ACTIVE_LINE`) or an inactive line available in the hypothetical state (`NEW_LINE`). The comparison preserves original physical hand indices when the opening removes a tile, so duplicate word tiles remain distinguishable.
+The v0.1.18 diagnostic compares the exact playable opportunity set before and after every hypothetical new-line opening. For each opening it records the physical hand tile, word, lyric line ID/text, and whether the newly playable opportunity is on an existing active line (`ACTIVE_LINE`) or an inactive line available in the hypothetical state (`NEW_LINE`). The comparison preserves original physical hand indices when the opening removes a tile, so duplicate word tiles remain distinguishable.
 
 The diagnostic also reports `newlyPlayableOpportunityCount`, `newlyPlayableWords`, `newlyPlayableLines`, and an `openingValueComparison` aggregate summary. It remains diagnostic-only and does not alter gameplay, RNG consumption, persona decisions, or win logic.
+
+
+## v0.1.18 Chain Value Diagnostic
+
+The Chain Value Diagnostic extends the opening-value comparison by following each hypothetical opening into subsequent playable physical hand tiles on active lyric lines. The search is deterministic and diagnostic-only. It uses cloned hand/line/completion state, does not call the tile RNG or decision RNG, and does not invoke persona policy.
+
+Each opening reports a bounded `chainValue` object with a maximum depth of 4 and a maximum of 1,000 explored nodes. The report includes `chainCount`, `chainsReachingDepth`, `maxChainLength`, `chainsWithNewlyPlayableContent`, `maxNewlyPlayableOpportunityCount`, and up to 25 `topChains`. Each chain records the physical hand index, word, lyric line, depth, completion status, and newly playable word/line opportunities observed after that step.

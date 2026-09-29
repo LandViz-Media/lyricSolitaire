@@ -1,45 +1,6 @@
-# Changelog
+## 2026-09-27 — v0.1.16 Blocked New-Line Opening Diagnostic
 
-## v0.1.18
-
-- Added the Chain Value Diagnostic to every hypothetical opening.
-- Follows subsequent playable physical hand tiles across active lyric lines through bounded, deterministic hypothetical branches.
-- Reports chain counts, maximum chain depth, nodes explored, truncation, newly playable content, and top chains.
-- Diagnostic uses cloned state only and consumes no gameplay RNG.
-- Updated simulator version/cache-busting references to 0.1.18.
-
-## 0.1.17 — Opening Value Comparison Diagnostics
-
-- Added exact before/after playable-opportunity enumeration for every hypothetical new-line opening.
-- Records which physical hand tiles, words, and lyric lines become newly playable after each opening.
-- Distinguishes `ACTIVE_LINE` and `NEW_LINE` sources.
-- Preserves original physical hand indices through hypothetical tile removal so duplicate word tiles remain traceable.
-- Added `openingValueComparison` aggregate summary.
-- Diagnostic remains non-invasive: no gameplay, RNG, persona behavior, or win logic changes.
-
-## 0.1.16 — Blocked New-Line Opening Diagnostics
-
-Added a diagnostic-only inventory of every new-line opening available from the current hand, including new-line-only tiles. Each opportunity records `openingAllowed`, `blockedByPersonaPolicy`, `blockedByRowCapacity`, and `openingBlockReason`. Existing v0.1.15 dual-use diagnostics remain unchanged.
-
-## 0.1.15 — Strategic Opening Diagnostics
-
-Added a non-invasive terminal-state diagnostic that audits hand tiles which can both play on existing active lines and open inactive lyric lines. For each candidate opening it records future physical-tile playability and whether the hypothetical opening increases that playability. No gameplay, persona selection, RNG, or win logic was changed.
-
-# Changelog
-
-## v0.1.13
-- Refined the Dolly/Kenny decision divergence report to distinguish genuinely different legal moves from the same move applied to different duplicate lyric-line instances.
-- Decision comparison now includes `handIndex` in the selected-move identity.
-- Added `moveComparison` diagnostics showing whether the action, hand tile, word, lyric text, and line ID matched.
-- Added `DUPLICATE_LINE_INSTANCE` and `DIFFERENT_LEGAL_MOVE` classifications.
-- Preserved state-alignment and resulting-state diagnostics.
-
-## v0.1.12
-- Added paired Dolly/Kenny decision divergence diagnostics.
-- Records each selected move with persona-specific available legal moves.
-- Records state before and after each selected move.
-- Reports the first differing selected move, round, available-move counts, and resulting states.
-- Preserves the v0.1.11 tile-stream identity comparison and separate round-timing comparison.
+Implemented a diagnostic-only extension of v0.1.15. At terminal play-phase states, the simulator now enumerates every hand tile that can open an inactive lyric line, including tiles that cannot currently play on an active line. Each opening records whether the opening is allowed, blocked by persona policy, or blocked by row capacity. The diagnostic preserves gameplay, RNG consumption, persona decisions, and win logic.
 
 # Simulator Lab
 
@@ -232,10 +193,33 @@ The comparison JSON contains `comparison.tileStream` and `comparison.roundTiming
 - Preserved top-level `comparison.identical` as the physical tile-stream identity result.
 
 
-## 0.1.14 — Consequential Decision Divergence
+## 2026-09-27 — Paired RNG Comparison Refinement
 
-Implemented v0.1.15 to continue divergence analysis after a `DUPLICATE_LINE_INSTANCE` classification. The paired comparison now reports the first later consequential move difference and identifies the first decision where the selected physical tile differs between Dolly and Kenny. The diagnostic preserves the original first divergence and does not change simulator mechanics.
+The first paired comparison showed a false distinction: Dolly and Kenny had identical physical tile data at draw 66, but the diagnostic reported a difference because the personas reached that tile in different rounds. The comparison workflow was refined so physical tile-stream identity ignores `round` and `roundDrawIndex` and compares only `drawIndex`, `word`, `key`, `randomValue`, `poolIndex`, and `poolLengthBefore`. Round timing remains valuable diagnostic information and is now reported separately, including its first difference. This keeps the investigation focused on whether persona decision RNG consumption changes the tile RNG stream.
 
-## v0.1.17 — Opening Value Comparison diagnostic fix
 
-Fixed a scope error in the v0.1.17 opening-value comparison implementation. Physical hand-index tracking is now isolated to the diagnostic's hypothetical-state comparison and is not used by normal persona move generation. The diagnostic continues to preserve physical tile identity when comparing before/after hypothetical openings.
+## 2026-09-27 — v0.1.12 Decision Divergence Diagnostic
+
+Implemented v0.1.12 to locate the first behavioral divergence between Dolly and Kenny after establishing that the tile RNG stream is identical through the common draw sequence. The paired comparison now records each persona's selected move, persona-specific legal moves available at that decision point, and state before/after the move. The export reports the first differing selected move separately from tile-stream identity and round timing.
+
+
+## 2026-09-27 — v0.1.13 Decision Divergence Classification
+Implemented v0.1.13 to refine the paired Dolly/Kenny divergence diagnostic. The comparison now distinguishes a genuinely different legal move from the same move type applied to different duplicate lyric-line instances. Selected-move identity includes action, handIndex, word/key, and lineId; when the line IDs differ but action, hand tile, word/key, and line text match, the divergence is classified as `DUPLICATE_LINE_INSTANCE`. Other substantive move differences are classified as `DIFFERENT_LEGAL_MOVE`. The export also includes `moveComparison` details so the distinction is machine-readable.
+
+
+## 2026-09-27 — v0.1.14 Consequential Divergence Diagnostic
+
+Implemented a follow-on diagnostic for the v0.1.13 duplicate-line-instance finding. The comparison preserves the first raw decision divergence, then scans later paired decisions for the first substantive move difference. It separately reports tile-consumption identity so the analysis can distinguish an equivalent duplicate-line target from the first point where Dolly and Kenny select different physical tiles.
+
+
+## 2026-09-27 — v0.1.15 Strategic Opening Diagnostic
+
+Added a non-invasive terminal-state diagnostic to identify hand tiles that can both play on existing active lines and open inactive lyric lines. Each hypothetical opening records future physical-tile playability and the change from the current state. Gameplay mechanics, persona behavior, RNG streams, and win logic are unchanged.
+
+## v0.1.17 — Opening Value Comparison
+
+The v0.1.17 diagnostic extends the blocked new-line opening analysis by identifying the exact physical hand tiles and lyric lines that become newly playable after each hypothetical opening. It compares the baseline playable opportunity set with the hypothetical post-opening set and reports newly available opportunities by word, physical hand index, lyric line ID/text, and whether the opportunity is on an active line or an inactive line opened by the hypothetical state. This is diagnostic-only and does not alter gameplay or RNG behavior.
+
+## v0.1.17 diagnostic fix
+
+Corrected the Opening Value Comparison diagnostic after a `physicalHandIndex is not defined` runtime error. The implementation no longer propagates a diagnostic-only index variable into normal Garth or human-style persona move generation. Hypothetical opening comparisons retain diagnostic-only physical tile identity via `diagnosticOriginalHandIndex`.
