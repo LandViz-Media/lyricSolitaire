@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.1.18 — Chain Value Diagnostic (compact output)
+## v0.1.18
 
 - Added the Chain Value Diagnostic to every hypothetical opening.
 - Follows subsequent playable physical hand tiles across active lyric lines through bounded, deterministic hypothetical branches.
@@ -235,12 +235,6 @@ The comparison JSON contains `comparison.tileStream` and `comparison.roundTiming
 ## 0.1.14 — Consequential Decision Divergence
 
 Implemented v0.1.15 to continue divergence analysis after a `DUPLICATE_LINE_INSTANCE` classification. The paired comparison now reports the first later consequential move difference and identifies the first decision where the selected physical tile differs between Dolly and Kenny. The diagnostic preserves the original first divergence and does not change simulator mechanics.
-
-### Compact-output revision
-- Each opening now stores only compact chain metrics.
-- Detailed chain paths are stored once per persona and round in `detailedChains`, limited to the strongest 25 chains for that round.
-- Each catalog entry identifies its originating hypothetical opening.
-- Gameplay, decision logic, and RNG behavior are unchanged.
 
 ## v0.1.17 — Opening Value Comparison diagnostic fix
 

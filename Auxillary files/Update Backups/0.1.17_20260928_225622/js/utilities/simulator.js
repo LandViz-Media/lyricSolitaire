@@ -759,13 +759,6 @@
                             a.source.localeCompare(b.source);
                     });
 
-                const chainAnalysis = analyzeChainValueFromOpening(
-                    hand, activeLines, allLines, completedIds, gameConfig,
-                    { handIndex, key: tile.key, lineId: sourceLine.id },
-                    4,
-                    1000
-                );
-
                 const opportunity = {
                     handIndex,
                     word: tile.word,
@@ -805,13 +798,12 @@
                     // v0.1.18: follow this opening into deterministic chains of
                     // subsequent playable physical tiles on active lyric lines.
                     // The bounded search is diagnostic-only and consumes no RNG.
-                    // v0.1.18 compact chain metrics. Detailed chain paths are
-                    // collected once at the round/persona level below rather
-                    // than duplicated inside every opening.
-                    chainValue: chainAnalysis ? chainAnalysis.metrics : null,
-                    // Internal-only detail used to build the round/persona
-                    // catalog. It is removed before the diagnostic is returned.
-                    _chainAnalysis: chainAnalysis
+                    chainValue: analyzeChainValueFromOpening(
+                        hand, activeLines, allLines, completedIds, gameConfig,
+                        { handIndex, key: tile.key, lineId: sourceLine.id },
+                        4,
+                        1000
+                    )
                 };
 
                 allOpeningOpportunities.push(opportunity);
@@ -849,42 +841,6 @@
         const blockedNewLineOnly = newLineOnlyOpportunities.filter(
             item => item.blockedByPersonaPolicy
         );
-
-        // v0.1.18 compact-output design: keep detailed chain paths once per
-        // persona/round. This prevents the same chain/path data from being
-        // repeated inside every hypothetical opening. The catalog is bounded
-        // to the strongest 25 chains for this persona/round.
-        const detailedChains = allOpeningOpportunities
-            .flatMap(function(item) {
-                const result = item._chainAnalysis;
-                if (!result || !result.chains) return [];
-                return result.chains.map(function(chain) {
-                    return {
-                        handIndex: item.handIndex,
-                        word: item.word,
-                        key: item.key,
-                        lineId: item.lineId,
-                        lineText: item.lineText,
-                        openingBlockedReason: item.openingBlockReason,
-                        depth: chain.depth,
-                        path: chain.path,
-                        pathLength: chain.pathLength,
-                        newlyPlayableOpportunityCount: chain.newlyPlayableOpportunityCount,
-                        newlyPlayableWords: chain.newlyPlayableWords,
-                        newlyPlayableLines: chain.newlyPlayableLines
-                    };
-                });
-            })
-            .sort(function(a, b) {
-                return b.pathLength - a.pathLength ||
-                    b.newlyPlayableOpportunityCount - a.newlyPlayableOpportunityCount ||
-                    a.handIndex - b.handIndex ||
-                    a.lineId - b.lineId;
-            })
-            .slice(0, 25);
-
-        // Never serialize the internal per-opening chain tree.
-        allOpeningOpportunities.forEach(function(item) { delete item._chainAnalysis; });
 
         return {
             baselinePlayableTiles: basePlayability.total,
@@ -924,8 +880,6 @@
             allOpeningOpportunities,
             // v0.1.17 summary counts make it easy to compare opening value
             // without parsing every opportunity object.
-            // v0.1.18: detailed paths are stored once for this persona/round.
-            detailedChains,
             openingValueComparison: {
                 opportunityCount: allOpeningOpportunities.length,
                 opportunitiesWithNewlyPlayableContent: allOpeningOpportunities.filter(
@@ -1134,6 +1088,7 @@
                 );
         });
 
+        const topChains = chains.slice(0, 25);
         const maxNewlyPlayableOpportunityCount = chains.reduce(
             (max, chain) => Math.max(max, chain.newlyPlayableOpportunityCount), 0
         );
@@ -1142,24 +1097,20 @@
         );
 
         return {
-            metrics: {
-                maxDepth,
-                maxNodes,
-                nodesExplored,
-                truncated,
-                maxChainLength: chains.reduce((max, chain) => Math.max(max, chain.pathLength), 0),
-                chainCount: chains.length,
-                chainsReachingDepth,
-                chainsWithNewlyPlayableContent: chains.filter(
-                    chain => chain.newlyPlayableOpportunityCount > 0
-                ).length,
-                maxNewlyPlayableOpportunityCount,
-                rootNewlyPlayableOpportunityCount: rootNew.length,
-                rootNewlyPlayableWords: Array.from(new Set(rootNew.map(item => item.word)))
-            },
-            // Returned to the caller only as an internal catalog source; it is
-            // never serialized per opening.
-            chains
+            maxDepth,
+            maxNodes,
+            nodesExplored,
+            truncated,
+            maxChainLength: chains.reduce((max, chain) => Math.max(max, chain.pathLength), 0),
+            chainCount: chains.length,
+            chainsReachingDepth,
+            chainsWithNewlyPlayableContent: chains.filter(
+                chain => chain.newlyPlayableOpportunityCount > 0
+            ).length,
+            maxNewlyPlayableOpportunityCount,
+            rootNewlyPlayableOpportunityCount: rootNew.length,
+            rootNewlyPlayableWords: Array.from(new Set(rootNew.map(item => item.word))),
+            topChains
         };
     }
 
