@@ -1,4 +1,4 @@
-# Lyric Solitaire — Separate RNG Streams v0.1.18
+# Lyric Solitaire — Separate RNG Streams v0.1.18.1
 
 This update separates the Simulator's deterministic random-number generation into two streams:
 

@@ -1,6 +1,13 @@
+## v0.1.18.1 — Authoritative New-Line Opportunity Output
+
+- Removed `allOpeningOpportunities` from diagnostic output.
+- `newLineOnlyOpportunities` is now the authoritative opening-opportunity list for the chain diagnostic.
+- Centralized `detailedChains` and compact per-opening `chainValue` metrics are preserved.
+- Gameplay logic and both tile/decision RNG streams are unchanged.
+
 # Changelog
 
-## v0.1.18 — Chain Value Diagnostic (compact output)
+## v0.1.18.1 — Compact Chain Output Cleanup
 
 - Added the Chain Value Diagnostic to every hypothetical opening.
 - Follows subsequent playable physical hand tiles across active lyric lines through bounded, deterministic hypothetical branches.

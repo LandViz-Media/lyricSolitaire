@@ -668,7 +668,6 @@
         );
         const dualUseOpportunities = [];
         const newLineOnlyOpportunities = [];
-        const allOpeningOpportunities = [];
 
         // v0.1.17 baseline: retain the exact physical tile/line opportunities
         // so each hypothetical opening can report what becomes newly playable.
@@ -814,7 +813,6 @@
                     _chainAnalysis: chainAnalysis
                 };
 
-                allOpeningOpportunities.push(opportunity);
                 if (canPlayExisting) {
                     dualUseOpportunities.push(opportunity);
                 } else {
@@ -832,7 +830,6 @@
 
         dualUseOpportunities.sort(sortOpportunities);
         newLineOnlyOpportunities.sort(sortOpportunities);
-        allOpeningOpportunities.sort(sortOpportunities);
 
         const dualUseTiles = Array.from(new Set(
             dualUseOpportunities.map(item => item.handIndex)
@@ -854,7 +851,7 @@
         // persona/round. This prevents the same chain/path data from being
         // repeated inside every hypothetical opening. The catalog is bounded
         // to the strongest 25 chains for this persona/round.
-        const detailedChains = allOpeningOpportunities
+        const detailedChains = newLineOnlyOpportunities
             .flatMap(function(item) {
                 const result = item._chainAnalysis;
                 if (!result || !result.chains) return [];
@@ -884,7 +881,8 @@
             .slice(0, 25);
 
         // Never serialize the internal per-opening chain tree.
-        allOpeningOpportunities.forEach(function(item) { delete item._chainAnalysis; });
+        dualUseOpportunities.forEach(function(item) { delete item._chainAnalysis; });
+        newLineOnlyOpportunities.forEach(function(item) { delete item._chainAnalysis; });
 
         return {
             baselinePlayableTiles: basePlayability.total,
@@ -921,30 +919,29 @@
             hasNewLineOnlyOpenings: newLineOnlyOpportunities.length > 0,
             hasBlockedNewLineOnlyOpenings: blockedNewLineOnly.length > 0,
             newLineOnlyOpportunities,
-            allOpeningOpportunities,
             // v0.1.17 summary counts make it easy to compare opening value
             // without parsing every opportunity object.
             // v0.1.18: detailed paths are stored once for this persona/round.
             detailedChains,
             openingValueComparison: {
-                opportunityCount: allOpeningOpportunities.length,
-                opportunitiesWithNewlyPlayableContent: allOpeningOpportunities.filter(
+                opportunityCount: newLineOnlyOpportunities.length,
+                opportunitiesWithNewlyPlayableContent: newLineOnlyOpportunities.filter(
                     item => item.newlyPlayableOpportunityCount > 0
                 ).length,
-                totalNewlyPlayableOpportunityCount: allOpeningOpportunities.reduce(
+                totalNewlyPlayableOpportunityCount: newLineOnlyOpportunities.reduce(
                     (sum, item) => sum + item.newlyPlayableOpportunityCount, 0
                 ),
                 // v0.1.18 chain-value summary.
-                openingsWithChainContent: allOpeningOpportunities.filter(
+                openingsWithChainContent: newLineOnlyOpportunities.filter(
                     item => item.chainValue && item.chainValue.chainCount > 0
                 ).length,
-                openingsWithMultiStepChains: allOpeningOpportunities.filter(
+                openingsWithMultiStepChains: newLineOnlyOpportunities.filter(
                     item => item.chainValue && item.chainValue.maxChainLength > 1
                 ).length,
-                longestChainLength: allOpeningOpportunities.reduce(
+                longestChainLength: newLineOnlyOpportunities.reduce(
                     (max, item) => Math.max(max, item.chainValue ? item.chainValue.maxChainLength : 0), 0
                 ),
-                totalChainNodesExplored: allOpeningOpportunities.reduce(
+                totalChainNodesExplored: newLineOnlyOpportunities.reduce(
                     (sum, item) => sum + (item.chainValue ? item.chainValue.nodesExplored : 0), 0
                 )
             }

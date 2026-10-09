@@ -211,7 +211,7 @@ The v0.1.18 diagnostic compares the exact playable opportunity set before and af
 The diagnostic also reports `newlyPlayableOpportunityCount`, `newlyPlayableWords`, `newlyPlayableLines`, and an `openingValueComparison` aggregate summary. It remains diagnostic-only and does not alter gameplay, RNG consumption, persona decisions, or win logic.
 
 
-## v0.1.18 Chain Value Diagnostic
+## v0.1.18.1 Chain Value Diagnostic
 
 The Chain Value Diagnostic extends the opening-value comparison by following each hypothetical opening into subsequent playable physical hand tiles on active lyric lines. The search is deterministic and diagnostic-only. It uses cloned hand/line/completion state, does not call the tile RNG or decision RNG, and does not invoke persona policy.
 
